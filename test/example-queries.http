@@ -1,0 +1,113 @@
+# # Get Postgrest API description
+# GET http://localhost:3030/
+
+
+# # Get a user_id if the user/pass combo is correct.
+# POST http://localhost:3030/rpc/login_user
+# Content-Type: application/json
+
+# {
+#     "username": "patrick2000",
+#     "password": "Traffic123!"
+# }
+
+# # new login function
+# POST http://localhost:3030/rpc/create_session
+# Content-Type: application/json
+# {
+#     "username_text": "ppseafield",
+#     "password_text": "Traffic123!"
+# }
+
+
+
+
+
+# # Start a new session.
+# POST http://localhost:3030/pd_sessions
+# Content-Type: application/json
+# Prefer: return=representation
+
+# {
+#     "user_id": "018d52c4-cfa7-c656-36dc-aba060d5ad39"
+# }
+
+# # Query tasks
+# GET http://localhost:3030/tasks?archived_at=is.null
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicGlsZWRyaXZlcl91c2VyIiwidXNlcl9pZCI6IjAxOTA3MDEwLTcxODYtOTg2MS0xMDA5LTY2MTU5NjQwMWQwNiIsInNlc3Npb25faWQiOiIwMTkwNzViMy03MWQ3LWE4YmYtYjQ4My03MmQwM2M4OWQ0MTgiLCJpYXQiOjE3MTk5NjE2MTIsImV4cCI6MTcxOTk2NTIxMn0.U6YQ_1y9RSBlp0IXJCWfhR90V4R1fH83iFByufkW8CY
+# Content-Type: application/json
+
+# # Query tasks filtered
+
+# GET http://localhost:3030/vw_tasks?order=created_at.desc.nullsfirst&or=%28completed_at.is.null%2Ccompleted_at.gte.2024-06-02%29
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicGlsZWRyaXZlcl91c2VyIiwidXNlcl9pZCI6IjAxOTA3MDEwLTcxODYtOTg2MS0xMDA5LTY2MTU5NjQwMWQwNiIsInNlc3Npb25faWQiOiIwMTkwNzViMy03MWQ3LWE4YmYtYjQ4My03MmQwM2M4OWQ0MTgiLCJpYXQiOjE3MTk5NjE2MTIsImV4cCI6MTcxOTk2NTIxMn0.U6YQ_1y9RSBlp0IXJCWfhR90V4R1fH83iFByufkW8CY
+# Content-Type: application/json
+
+
+
+
+# # Update task
+# # TODO: Why patch not work??? SEND BODY?!
+# PATCH http://localhost:3030/tasks?id=eq.019012ba-4234-827c-2662-5d999e9b4619
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicGlsZWRyaXZlcl91c2VyIiwidXNlcl9pZCI6IjAxOGY0YTRiLWY5MTEtNzY3MS1iNWIwLThiNzg5ZmE0NjY0MiIsInNlc3Npb25faWQiOiIwMTkwNGM4OC1iM2ZmLWNiOWUtZjhkOC04MzI4YTJlYzk0MTIiLCJpYXQiOjE3MTkyNzA5NDUsImV4cCI6MTcxOTI3NDU0NX0.XlC-_-PUo8PdB5LRuy2gHXlKazeEFV6fTTvajwzNKQ4
+# Content-Type: application/json
+# {
+# "id": "019012ba-4234-827c-2662-5d999e9b4619",
+# created_by: "018f4a4b-f911-7671-b5b0-8b789fa46642",
+# created_at: "2024-06-13T17:51:50.867+00:00",
+# completed_at: "2024-06-18T11:53:25.072-07:00",
+# archived_at: null,
+# title: "awesome",
+# details: null
+# }
+
+# # Update task: upsert
+# POST http://localhost:3030/vw_tasks
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicGlsZWRyaXZlcl91c2VyIiwidXNlcl9pZCI6IjAxOTA3MDEwLTcxODYtOTg2MS0xMDA5LTY2MTU5NjQwMWQwNiIsInNlc3Npb25faWQiOiIwMTkwNzVjZC04ZTdjLWQ1MDEtNzM0Ni00NWMzMmJmMWRkNjIiLCJpYXQiOjE3MTk5NjMzMjQsImV4cCI6MTcxOTk2NjkyNH0.nQoCWXg_am-zGZzD9Wz3E8Z3qffm5LWrOkFGULWHj1M
+# Content-Type: application/json
+# Prefer: return=representation, resolution=merge-duplicates
+# { "id": "01907013-a50d-8a7c-df41-45b8b408a7ee",
+#   "created_by": "01907010-7186-9861-1009-661596401d06",
+#   "created_at": "2024-07-01T20:54:10.257+00:00",
+#   "completed_at": "2024-07-02T16:32:21.084-07:00",
+#   "archived_at": null,
+#   "task_order": null,
+#   "title": "my task 1",
+#   "details": null }
+
+
+# # Unjournaled tasks
+# GET http://localhost:3030/vw_tasks?journaled_by=is.null
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicGlsZWRyaXZlcl91c2VyIiwidXNlcl9pZCI6IjAxOTA3MDEwLTcxODYtOTg2MS0xMDA5LTY2MTU5NjQwMWQwNiIsInNlc3Npb25faWQiOiIwMTkxNzM3YS05MjM5LTZjMDEtZDlmOC1jY2UzZmQ1MGM1MjMiLCJpYXQiOjE3MjQyMTkyOTgsImV4cCI6MTcyNDgyNDA5OH0.N7rWwXmwKx1cNEQ2Tfmq2SGSs2JLgT4VrBOwtTAdXhA
+# Content-Type: application/json
+
+
+# # Update tasks
+# POST http://localhost:3030/vw_tasks
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicGlsZWRyaXZlcl91c2VyIiwidXNlcl9pZCI6IjAxOTA3MDEwLTcxODYtOTg2MS0xMDA5LTY2MTU5NjQwMWQwNiIsInNlc3Npb25faWQiOiIwMTkxNzM3YS05MjM5LTZjMDEtZDlmOC1jY2UzZmQ1MGM1MjMiLCJpYXQiOjE3MjQyMTkyOTgsImV4cCI6MTcyNDgyNDA5OH0.N7rWwXmwKx1cNEQ2Tfmq2SGSs2JLgT4VrBOwtTAdXhA
+# Content-Type: application/json
+# Prefer: return=representation, resolution=merge-duplicates
+# [ { "id": "01907013-bb04-1694-b34e-79baef178884",
+#     "journaled_by": "01918ba6-4eab-0eb8-9960-f2f4d92dc863",
+#     "created_by": "01907010-7186-9861-1009-661596401d06" },
+#   { "id": "01907013-a50d-8a7c-df41-45b8b408a7ee",
+#     "journaled_by": "01918ba6-4eab-0eb8-9960-f2f4d92dc863",
+#     "created_by": "01907010-7186-9861-1009-661596401d06" },
+#   { "id": "01907acb-4838-341f-3bc2-db9c0b0334d4",
+#     "journaled_by": "01918ba6-4eab-0eb8-9960-f2f4d92dc863",
+#     "created_by": "01907010-7186-9861-1009-661596401d06" } ]
+
+# # Fetch single journal
+# GET http://localhost:3030/vw_journals?id=eq.01919aed-2476-70eb-c174-36447fdf93e1
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicGlsZWRyaXZlcl91c2VyIiwidXNlcl9pZCI6IjAxOTA3MDEwLTcxODYtOTg2MS0xMDA5LTY2MTU5NjQwMWQwNiIsInNlc3Npb25faWQiOiIwMTkxOWFlOC1mYjIyLTk1N2MtMDMwYy03MjI1MjRkOTExZmEiLCJpYXQiOjE3MjQ4ODA4NDUsImV4cCI6MTcyNTQ4NTY0NX0.iBHeCC72l9OntUTjIu5gqJJrU7mcATIDDmC8VGe4TYw
+# Content-Type: application/json
+
+
+# GET http://localhost:3030/vw_goals?order=title&select=id%2Ccreated_by%2Ccreated_at%2Carchived_at%2Ctitle%2Cdescription%2Cgoal_activities%28id%2Cgoal_id%2Ccreated_by%2Ccreated_at%2Carchived_at%2Ctitle%2Cdescription%29
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicGlsZWRyaXZlcl91c2VyIiwidXNlcl9pZCI6IjAxOTA3MDEwLTcxODYtOTg2MS0xMDA5LTY2MTU5NjQwMWQwNiIsInNlc3Npb25faWQiOiIwMTkyMjA0Yi1jNDJkLTdmMDUtNjdiYy0zYjEzZTVhNWU1ZDIiLCJpYXQiOjE3MjcxMTg2ODksImV4cCI6MTcyNzcyMzQ4OX0.AuKRqHub263trdlwUY9G5mGJI2Lx1AZjLXLMQDiIQ_M
+# Content-Type: application/javascript
+
+
+GET https://piledriver.app:3030/rpc/restore_session
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicGlsZWRyaXZlcl91c2VyIiwidXNlcl9pZCI6IjAxOTA3MDEwLTcxODYtOTg2MS0xMDA5LTY2MTU5NjQwMWQwNiIsInNlc3Npb25faWQiOiIwMTkyODJiMS1iZjdiLTVlNDktN2JiOC0wZWM3OTcxMDYzY2YiLCJpYXQiOjE3Mjg3Njk1MzksImV4cCI6MTcyOTM3NDMzOX0.suUxLokcVDkv6xYQuoKvrBV7ErVFegLoXRX_9bLDBKo
+Content-Type: application/json

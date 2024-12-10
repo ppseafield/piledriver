@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: pd_postgresql
+    restart: always
+    command: -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      PGRST_AUTHENTICATOR_PASSWORD: $PGRST_AUTHENTICATOR_PASSWORD
+    volumes:
+      - ./containers/postgresql-17/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./containers/postgresql-17/data:/var/lib/postgresql/data
+      - ./backups:/mnt/backups
+
+  postgrest:
+    image: postgrest/postgrest
+    container_name: pd_postgrest
+    restart: always
+    ports:
+      - "3030:3000"
+    depends_on:
+      - postgres
+    environment:
+      PGRST_DB_URI: $PGRST_DB_URI
+      PGRST_DB_SCHEMAS: $PGRST_DB_SCHEMAS
+      PGRST_DB_ANON_ROLE: $PGRST_DB_ANON_ROLE
+      PGRST_JWT_SECRET: $PGRST_JWT_SECRET
+      PGRST_LOG_LEVEL: $PGRST_LOG_LEVEL
+
+  pg-hero:
+    image: ankane/pghero
+    container_name: pd_pghero
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: $PGHERO_DATABASE_URL
+
+  swagger:
+    image: swaggerapi/swagger-ui
+    container_name: pd_swagger
+    ports:
+    - "9090:8080"
+    depends_on:
+      - postgrest
+    environment:
+      SWAGGER_JSON_URL: "http://localhost:3030"

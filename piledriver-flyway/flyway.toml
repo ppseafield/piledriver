@@ -1,0 +1,28 @@
+databaseType = "PostgreSql"
+id = "fa7c5b25-ac16-4844-830d-d7de6345043f"
+name = "piledriver-flyway"
+
+[flyway]
+locations = [ "filesystem:migrations" ]
+mixed = true
+outOfOrder = true
+validateMigrationNaming = true
+
+  [flyway.check]
+  majorTolerance = 0
+
+[flywayDesktop]
+developmentEnvironment = "development"
+schemaModel = "schema-model"
+shadowEnvironment = "shadow"
+
+[redgateCompare]
+filterFile = "filter.rgf"
+
+[redgateCompare.postgresql.options.ignores]
+ignoreNewlinesInTextObjects = "off"
+
+[environments.target1]
+url = "jdbc:postgresql://localhost/postgres"
+schemas = [ "piledriver", "public" ]
+displayName = "postgres-docker"
