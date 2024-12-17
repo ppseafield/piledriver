@@ -14,9 +14,14 @@ export default defineNuxtConfig({
     '@nuxtjs/html-validator',
     '@nuxt/eslint',
     '@nuxt/image',
-    '@nuxt/content'
+    '@nuxt/content',
+    '@nuxt/fonts'
   ],
   devtools: { enabled: true },
+
+  colorMode: {
+    preference: 'light'
+  },
   runtimeConfig: {
     postgrestUrl: '',
     jwtSecret: ''
@@ -34,6 +39,15 @@ export default defineNuxtConfig({
     config: {
       stylistic: true
     }
+  },
+
+  fonts: {
+    provider: 'local',
+    families: [
+      { name: 'Montserrat', provider: 'local' },
+      { name: 'MontserratAlternatives', provider: 'local' },
+      { name: 'Atkinson-Hyperlegible', provider: 'local' }
+    ]
   },
   security: {
     // todo
