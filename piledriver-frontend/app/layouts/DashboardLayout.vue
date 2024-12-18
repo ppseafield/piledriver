@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useSessionStore } from '~~/layers/auth/stores/session'
+// import { useSessionStore } from '~~/layers/auth/stores/session'
 
-const session = useSessionStore()
+// const session = useSessionStore()
 const route = useRoute()
-
+/*
 onMounted(async () => {
   try {
     const [restoredUser] = await $fetch<User[]>('/api/restore-session')
@@ -13,7 +13,7 @@ onMounted(async () => {
     console.log('failed to restore', e)
     session.setUser(null)
   }
-})
+}) */
 const dasbhoardLinks = computed(() => {
   const linkActive = (parentPath: string): boolean => {
     return route.path.indexOf(parentPath) === 0
@@ -24,6 +24,12 @@ const dasbhoardLinks = computed(() => {
       to: '/dashboard',
       active: linkActive('/dashboard'),
       icon: 'i-heroicons-inbox-stack' // 'i-heroicons-computer-desktop', // 'i-heroicons-inbox-stack'
+    },
+    {
+      label: 'Projects',
+      to: '/projects',
+      active: linkActive('/projects'),
+      icon: 'i-heroicons-map' // 'i-heroicons-presentation-chart-line' // ''
     },
     {
       label: 'Goals',
