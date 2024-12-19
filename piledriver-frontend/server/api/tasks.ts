@@ -1,4 +1,4 @@
-import { taskSchema } from '~~/shared/utils/validation/task'
+import { taskArraySchema, taskSchema } from '~~/shared/utils/validation/task'
 
 const fields = [
   'id',
@@ -30,7 +30,7 @@ const tasksResource = new PostgRESTResource({
   fields,
   allowAnonymous: true,
   embeddedResources: { subtasks },
-  validator: taskSchema.parse
+  schema: taskArraySchema
 })
 
 export default defineEventHandler(async (event) => {

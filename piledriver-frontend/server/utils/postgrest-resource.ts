@@ -1,4 +1,5 @@
 import type { H3Event, EventHandlerRequest, HTTPMethod } from 'h3'
+import type { z } from 'zod'
 
 interface RequestError {
   statusCode: number
@@ -10,19 +11,19 @@ interface PostgRESTResourceDescription<TSchema> {
   fields: string[]
   allowAnonymous: boolean | Record<HTTPMethod, boolean>
   embeddedResources: Record<string, string[]>
-  validator: TSchema
+  schema: TSchema
 }
 
 function defaultAllowAnonymous(allow: boolean = false) {
   return { GET: allow, HEAD: allow, POST: allow, PUT: allow, DELETE: allow, PATCH: allow }
 }
 
-export class PostgRESTResource<T, TSchema> {
+export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
   url: string
   fields: string[]
   embeddedResources: Record<string, string[]>
   allowAnonymous: Record<string, boolean>
-  validator: TSchema
+  schema: TSchema
 
   constructor(config: PostgRESTResourceDescription<TSchema>) {
     const runtimeConfig = useRuntimeConfig()
@@ -33,7 +34,7 @@ export class PostgRESTResource<T, TSchema> {
       this.allowAnonymous = Object.assign(defaultAllowAnonymous(), config.allowAnonymous)
     }
     this.embeddedResources = config.embeddedResources
-    this.validator = config.validator
+    this.schema = config.schema
     this.url = `${runtimeConfig.postgrestUrl}/${config.endpoint}`
   }
 
@@ -95,8 +96,30 @@ export class PostgRESTResource<T, TSchema> {
   }
 
   async post(event: H3Event<EventHandlerRequest>): Promise<T[] | RequestError> {
-    setResponseStatus(event, 501, 'Not implemented')
-    return []
+    const jwt = getCookie(event, 'session') ?? null
+    if (jwt == null && !this.allowAnonymous.GET) {
+      setResponseStatus(event, 401)
+      return {
+        statusCode: 401,
+        message: 'Unauthorized request'
+      }
+    }
+    const body = await readValidatedBody(event, this.schema.parse)
+
+    return await $fetch<T[]>(`${this.url}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Prefer': 'missing=default, return=representation',
+        'Authorization': `Bearer ${jwt}`
+      },
+      body
+    }).catch((e) => {
+      return {
+        statusCode: e.statusCode,
+        message: e.message
+      }
+    })
   }
 
   async put(event: H3Event<EventHandlerRequest>): Promise<T[] | RequestError> {

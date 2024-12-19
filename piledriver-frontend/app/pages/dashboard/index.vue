@@ -1,17 +1,17 @@
 <script setup lang="ts">
+import { useTaskStore } from '~~/layers/dashboard/stores/tasks'
+
 definePageMeta({
   layout: 'dashboard-layout'
 })
 
-const { data, refresh } = useFetch<Task[]>('/api/tasks')
+const t = useTaskStore()
+await t.get()
 </script>
 
 <template>
   <div>
     <p>dashboard</p>
-    <UButton @click="refresh">
-      Refresh
-    </UButton>
-    <pre>{{ data }}</pre>
+    <pre>{{ t.items }}</pre>
   </div>
 </template>

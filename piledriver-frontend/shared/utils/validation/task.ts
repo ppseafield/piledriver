@@ -30,3 +30,6 @@ export const subtaskSchema = z.object({
   task_order: z.number(),
   title: z.string().min(3, { message: 'Title is required' })
 })
+
+export const taskArraySchema = z.array(taskSchema)
+export const subtaskArraySchema = z.array(subtaskSchema)
