@@ -1,0 +1,56 @@
+services:
+  postgres:
+    image: postgres
+    container_name: pd_postgresql
+    restart: always
+    command: -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all
+    # ports:
+    #   - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      PGRST_AUTHENTICATOR_PASSWORD: $PGRST_AUTHENTICATOR_PASSWORD
+    volumes:
+      - ./containers/postgresql/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./containers/postgresql/data:/var/lib/postgresql/data
+
+  postgrest:
+    image: postgrest/postgrest
+    container_name: pd_postgrest
+    restart: always
+    # ports:
+    #   - "3030:3000"
+    depends_on:
+      - postgres
+    environment:
+      PGRST_DB_URI: $PGRST_DB_URI
+      PGRST_DB_SCHEMAS: $PGRST_DB_SCHEMAS
+      PGRST_DB_ANON_ROLE: $PGRST_DB_ANON_ROLE
+      PGRST_JWT_SECRET: $PGRST_JWT_SECRET
+      PGRST_LOG_LEVEL: $PGRST_LOG_LEVEL
+
+  piledriver-server:
+    image: registry.digitalocean.com/ppseafield/piledriver-server
+    container_name: pd_server
+    # ports:
+    #   - "3000:3000"
+    depends_on:
+      - postgres
+      - postgrest
+    environment:
+      NUXT_PILEDRIVER_API_URL: $NUXT_PILEDRIVER_API_URL
+      NUXT_JWT_SECRET: $NUXT_JWT_SECRET
+
+  caddy:
+    image: caddy:latest
+    container_name: pd_caddy
+    depends_on:
+      - piledriver-server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./site:/srv
+      - ./caddy/data:/data
+      - ./caddy/config:/config
