@@ -1,0 +1,14 @@
+GET http://localhost:3030/
+
+POST http://localhost:3030/rpc/create_session
+Content-Type: application/json
+
+{
+    "username_text": "ppseafield",
+    "password_text": "Traffic123!"
+}
+
+
+GET http://localhost:3030/tasks
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoicGlsZWRyaXZlcl91c2VyIiwidXNlcl9pZCI6IjAxOTNlNmE4LWY2ZTYtNGI3YS0xZGY2LTU1OWRmYjZhNTdhMSIsInNlc3Npb25faWQiOiIwMTkzZTZiMC0xOTM4LTliMGUtNWU0NS1iODEwZGU3ZjM4NzkiLCJpYXQiOjE3MzQ3NDIxMjAsImV4cCI6MTczNTM0NjkyMH0.VnvoA86DDFgpnniAaHXPABPwOdHBbOPXxvGNoe_N-wg
+Content-Type: application/json

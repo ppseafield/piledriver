@@ -2,16 +2,14 @@ import type { H3Event, EventHandlerRequest } from 'h3'
 import type { LoginSuccess } from '~~/shared/types'
 import { loginRequestSchema } from '~~/shared/utils/validation/session'
 
-const productionEnvironment = process.env['NODE_ENV'] === 'production'
-const postgrestURL: string = process.env['NUXT_PILEDRIVER_API_URL'] ?? ''
-
 export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) => {
-  const loginUrl = `${postgrestURL}/rpc/create_session`
+  const config = useRuntimeConfig()
+  const loginUrl = `${config.postgrestUrl}/rpc/create_session`
   const loginRequest = await readValidatedBody(event, loginRequestSchema.parse)
   // console.log('POSTING to postgrest:', loginUrl, body);
 
   let loginResponse
-
+  console.log('HEADERS:', getHeaders(event))
   // eslint-disable @typescript-eslint/no-explicit-any
   try {
     loginResponse = await $fetch<LoginSuccess[]>(loginUrl, {
@@ -32,12 +30,13 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
         maxAge,
         httpOnly: true,
         sameSite: 'strict',
-        secure: productionEnvironment
+        secure: config.nodeEnv === 'production'
       })
       return login
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
+    console.log('Login failed:', e)
     setResponseStatus(e.statusCode)
     return {
       error: 'LOGIN_FAILED',

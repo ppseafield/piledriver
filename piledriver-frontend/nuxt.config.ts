@@ -24,7 +24,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     postgrestUrl: '',
-    jwtSecret: ''
+    jwtSecret: '',
+    nodeEnv: process.env.NODE_ENV
   },
   future: {
     compatibilityVersion: 4

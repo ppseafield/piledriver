@@ -7,4 +7,3 @@ export default defineVitestConfig({
     environment: 'happy-dom'
   }
 })
-

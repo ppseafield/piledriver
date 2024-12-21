@@ -49,7 +49,6 @@ export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
   }
 
   async handle(event: H3Event<EventHandlerRequest>): Promise<T[] | RequestError> {
-    console.log('Got request to path:', event.path)
     switch (event.method) {
       case 'GET':
         return await this.get(event)
@@ -69,24 +68,22 @@ export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
   }
 
   async get(event: H3Event<EventHandlerRequest>): Promise<T[] | RequestError> {
+    // TODO: Move to isAuthenticated() method
     const jwt = getCookie(event, 'session') ?? null
     if (jwt == null && !this.allowAnonymous.GET) {
-      setResponseStatus(event, 401)
-      return {
-        statusCode: 401,
-        message: 'Unauthorized request'
-      }
+      throw createError({ statusCode: 401, statusMessage: 'Unauthorized request' })
     }
     const params = new URLSearchParams([
       ['select', this.computedFields()]
     ])
+    const headers = {
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation',
+      'Authorization': `Bearer ${jwt}`
+    }
     return await $fetch<T[]>(`${this.url}?${params}`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation',
-        'Authorization': `Bearer ${jwt}`
-      }
+      headers
     }).catch((e) => {
       return {
         statusCode: e.statusCode,

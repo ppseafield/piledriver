@@ -28,7 +28,7 @@ const subtasks = [
 const tasksResource = new PostgRESTResource({
   endpoint: 'tasks',
   fields,
-  allowAnonymous: true,
+  allowAnonymous: false,
   embeddedResources: { subtasks },
   schema: taskArraySchema
 })
