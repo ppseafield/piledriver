@@ -18,12 +18,20 @@ export function defineStoreForResource<T, E>(endpoint: string, extend: (rsc: Res
     const items = shallowRef<T[]>([])
     const currentItem = shallowRef<T | null>(null)
     const currentError = shallowRef<Error | null>(null)
+
+    const requestFetch = useRequestFetch()
     const get = async (filters: string[]) => {
       console.log('filters todo:', filters)
-      const response = await $fetch<T[]>(`/api/${endpoint}`)
-      items.value = response
+      const response = await requestFetch<T[]>(`/api/${endpoint}`).catch(e => console.log('error:', e))
+      if (response !== undefined && response !== null) {
+        items.value = response
+      } else {
+        // TODO handle error
+        items.value = []
+      }
     }
     const post = async (items: T[]) => {
+      // TODO: move to useFetch
       const response = await $fetch<T[]>(`/api/${endpoint}`, {
         method: 'POST',
         body: JSON.stringify(items)
@@ -32,6 +40,7 @@ export function defineStoreForResource<T, E>(endpoint: string, extend: (rsc: Res
       console.log('posted items:', response)
     }
     const put = async (items: T[]) => {
+      // TODO: move to useFetch
       const response = await $fetch<T[]>(`/api/${endpoint}`, {
         method: 'PUT',
         body: JSON.stringify(items)
@@ -40,6 +49,7 @@ export function defineStoreForResource<T, E>(endpoint: string, extend: (rsc: Res
       console.log('put items:', response)
     }
     const archive = async (items: T[]) => {
+      // TODO: move to useFetch
       const response = await $fetch<T[]>(`/api/${endpoint}`, {
         method: 'DELETE',
         body: items
