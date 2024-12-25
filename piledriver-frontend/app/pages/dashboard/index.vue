@@ -1,17 +1,23 @@
 <script setup lang="ts">
-import { useTaskStore } from '~~/layers/dashboard/stores/tasks'
-import TaskList from '~~/layers/dashboard/components/TaskList.vue'
+import { useTaskStore } from '~/stores/tasks'
+import TaskList from '~/components/dashboard/TaskList.vue'
+import { useSessionStore } from '~~/layers/auth/stores/session'
 
 definePageMeta({
   layout: 'dashboard-layout'
 })
 
+const s = useSessionStore()
 const t = useTaskStore()
 await t.get()
 
 function prependNewTask() {
-  console.log('todo: prepend new task')
+  t.addTask(s.user?.user_id)
 }
+
+const newTaskPresent = computed(() => {
+  return t.items?.[0]?.id === undefined
+})
 </script>
 
 <template>
@@ -20,14 +26,12 @@ function prependNewTask() {
       <UDashboardNavbar title="Dashboard" />
 
       <UDashboardToolbar>
-        <template #left>
-          <span> </span>
-        </template>
         <template #right>
           <UButtonGroup>
             <UButton
               color="primary"
               label="Add New Task"
+              :disabled="newTaskPresent"
               @click="prependNewTask"
             />
             <UDropdown :items="[[{ label: 'No Routines available.' }]]">

@@ -11,6 +11,7 @@ interface PostgRESTResourceDescription<TSchema> {
   fields: string[]
   allowAnonymous: boolean | Record<HTTPMethod, boolean>
   embeddedResources: Record<string, string[]>
+  additionalParams?: Partial<Record<HTTPMethod, string[][]>>
   schema: TSchema
 }
 
@@ -23,6 +24,7 @@ export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
   fields: string[]
   embeddedResources: Record<string, string[]>
   allowAnonymous: Record<string, boolean>
+  additionalParams: Partial<Record<HTTPMethod, string[][]>>
   schema: TSchema
 
   constructor(config: PostgRESTResourceDescription<TSchema>) {
@@ -34,6 +36,8 @@ export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
       this.allowAnonymous = Object.assign(defaultAllowAnonymous(), config.allowAnonymous)
     }
     this.embeddedResources = config.embeddedResources
+    //                                                          typescript, infer thy self!
+    this.additionalParams = config.additionalParams ?? ({ GET: ([] as string[][]) } as Record<HTTPMethod, string[][]>)
     this.schema = config.schema
     this.url = `${runtimeConfig.postgrestUrl}/${config.endpoint}`
   }
@@ -46,6 +50,23 @@ export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
       fields += `,${resource}(${resourceFields.join(',')})`
     }
     return fields
+  }
+
+  // Check that the request either is authenticated or allows anonymous access, then
+  // return the headers to be used in the PostgREST request
+  getAuthenticatedHeaders(event: H3Event<EventHandlerRequest>): Record<string, string> {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation'
+    } as Record<string, string>
+
+    const jwt = getCookie(event, 'session') ?? null
+    if (jwt == null && !this.allowAnonymous[event.method]) {
+      throw createError({ statusCode: 401, statusMessage: 'Unauthorized request' })
+    } else if (jwt !== null) {
+      headers['Authorization'] = `Bearer ${jwt}`
+    }
+    return headers
   }
 
   async handle(event: H3Event<EventHandlerRequest>): Promise<T[] | RequestError> {
@@ -68,60 +89,38 @@ export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
   }
 
   async get(event: H3Event<EventHandlerRequest>): Promise<T[] | RequestError> {
-    // TODO: Move to isAuthenticated() method
-    const jwt = getCookie(event, 'session') ?? null
-    if (jwt == null && !this.allowAnonymous.GET) {
-      throw createError({ statusCode: 401, statusMessage: 'Unauthorized request' })
-    }
+    const headers = this.getAuthenticatedHeaders(event)
     const params = new URLSearchParams([
-      ['select', this.computedFields()]
+      ['select', this.computedFields()],
+      ...(this.additionalParams.GET ?? [])
     ])
-    const headers = {
-      'Content-Type': 'application/json',
-      'Prefer': 'return=representation',
-      'Authorization': `Bearer ${jwt}`
-    }
     return await $fetch<T[]>(`${this.url}?${params}`, {
       method: 'GET',
       headers
-    }).catch((e) => {
-      return {
-        statusCode: e.statusCode,
-        message: e.message
-      }
     })
   }
 
   async post(event: H3Event<EventHandlerRequest>): Promise<T[] | RequestError> {
-    const jwt = getCookie(event, 'session') ?? null
-    if (jwt == null && !this.allowAnonymous.GET) {
-      setResponseStatus(event, 401)
-      return {
-        statusCode: 401,
-        message: 'Unauthorized request'
-      }
-    }
+    const headers = this.getAuthenticatedHeaders(event)
     const body = await readValidatedBody(event, this.schema.parse)
 
     return await $fetch<T[]>(`${this.url}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Prefer': 'missing=default, return=representation',
-        'Authorization': `Bearer ${jwt}`
-      },
+      method: 'POST',
+      headers,
       body
-    }).catch((e) => {
-      return {
-        statusCode: e.statusCode,
-        message: e.message
-      }
     })
   }
 
   async put(event: H3Event<EventHandlerRequest>): Promise<T[] | RequestError> {
-    setResponseStatus(event, 501, 'Not implemented')
-    return []
+    const headers = this.getAuthenticatedHeaders(event)
+    // Request that PostgREST upsert the records.
+    headers['Prefer'] = 'return=representation, resolution=merge-duplicates'
+    const body = await readValidatedBody(event, this.schema.parse)
+    return await $fetch<T[]>(this.url, {
+      method: 'POST',
+      headers,
+      body
+    })
   }
 
   async delete(event: H3Event<EventHandlerRequest>): Promise<T[] | RequestError> {
