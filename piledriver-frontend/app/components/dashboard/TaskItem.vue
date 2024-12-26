@@ -29,19 +29,23 @@ const editTask = () => {
   console.log('todo: edit task')
   editing.value = true
 }
-const saveTask = async() => {
-  // TODO: handle completion
+const saveTask = async () => {
   const updatedTask = { ...props.task, title: titleText.value }
   delete updatedTask.subtasks
-  await t.put([updatedTask])
-
+  if (updatedTask.id === undefined) {
+    const [savedTask] = await t.add([updatedTask])
+    t.updateAtIndex(0, savedTask)
+  } else {
+    await t.put([updatedTask])
+  }
   editing.value = false
 }
 const cancelEdit = () => {
-  console.log('todo: cancel edit')
-  editing.value = false
   if (props.task.id === undefined) {
-    t.removeTask(props.task)
+    t.removeTask(props.task) // goodbye
+  } else {
+    titleText.value = props.task.title
+    editing.value = false
   }
 }
 const deleteTask = () => {

@@ -1,4 +1,4 @@
-import type { AuthStatus, LoginRequest } from '~~/shared/types'
+import type { AuthStatus, LoginRequest, User } from '~~/shared/types'
 
 export const useSessionStore = defineStore('session', () => {
   const user = ref<User | null>(null)
@@ -10,6 +10,7 @@ export const useSessionStore = defineStore('session', () => {
   }
 
   async function login(loginRequest: LoginRequest): Promise<boolean> {
+    // TODO: check if User[] is the actual return type
     const loginResponse = await $fetch<User>('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -24,5 +25,14 @@ export const useSessionStore = defineStore('session', () => {
     }
   }
 
-  return { user, authStatus, setUser, login }
+  async function restore(): Promise<void> {
+    const restoreResponse = await $fetch<User[]>('/api/restore-session')
+    if (restoreResponse.length > 0) {
+      setUser(restoreResponse[0] as User)
+    } else {
+      setUser(null)
+    }
+  }
+
+  return { user, authStatus, setUser, login, restore }
 })

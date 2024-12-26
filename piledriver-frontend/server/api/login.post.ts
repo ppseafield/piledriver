@@ -6,11 +6,8 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
   const config = useRuntimeConfig()
   const loginUrl = `${config.postgrestUrl}/rpc/create_session`
   const loginRequest = await readValidatedBody(event, loginRequestSchema.parse)
-  // console.log('POSTING to postgrest:', loginUrl, body);
 
   let loginResponse
-  console.log('HEADERS:', getHeaders(event))
-  // eslint-disable @typescript-eslint/no-explicit-any
   try {
     loginResponse = await $fetch<LoginSuccess[]>(loginUrl, {
       method: 'POST',
@@ -36,14 +33,12 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
-    console.log('Login failed:', e)
     setResponseStatus(e.statusCode)
     return {
       error: 'LOGIN_FAILED',
       cool: 'awesome',
       status: e.status,
-      message: e.statusMessage,
-      loginResponse
+      message: e.statusMessage
     }
   }
 })

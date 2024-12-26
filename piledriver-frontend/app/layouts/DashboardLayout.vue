@@ -1,19 +1,12 @@
 <script setup lang="ts">
-// import { useSessionStore } from '~~/layers/auth/stores/session'
+import { useSessionStore } from '~~/layers/auth/stores/session'
 
-// const session = useSessionStore()
+// Attempt to restore the user's session on page first load.
+const session = useSessionStore()
+await session.restore()
+
 const route = useRoute()
-/*
-onMounted(async () => {
-  try {
-    const [restoredUser] = await $fetch<User[]>('/api/restore-session')
-    console.log('restored user:', restoredUser)
-    session.setUser(restoredUser ?? null)
-  } catch (e) {
-    console.log('failed to restore', e)
-    session.setUser(null)
-  }
-}) */
+
 const dasbhoardLinks = computed(() => {
   const linkActive = (parentPath: string): boolean => {
     return route.path.indexOf(parentPath) === 0

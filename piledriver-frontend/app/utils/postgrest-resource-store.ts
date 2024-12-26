@@ -10,9 +10,10 @@ export interface ResourceStoreCore<T extends HasID> {
   currentItem: ShallowRef<T | null>
   selectItem: (item: T | null) => void
   get: (filters: string[]) => Promise<void>
-  post: (items: T[]) => Promise<void>
-  put: (items: T[]) => Promise<void>
+  post: (items: T[]) => Promise<T[]>
+  put: (items: T[]) => Promise<T[]>
   archive: (items: T[]) => Promise<void>
+  updateAtIndex: (index: number, item: T) => void
 }
 
 type ResourceStore<T extends HasID, E> = ResourceStoreCore<T> & E
@@ -33,6 +34,10 @@ export function defineStoreForResource<T extends HasID, E>(endpoint: string, ext
       }
       triggerRef(items)
     }
+    const updateAtIndex = (index: number, item: T) => {
+      items.value[index] = item
+      triggerRef(items)
+    }
 
     const requestFetch = useRequestFetch()
     const get = async (filters: string[]) => {
@@ -45,33 +50,41 @@ export function defineStoreForResource<T extends HasID, E>(endpoint: string, ext
         items.value = []
       }
     }
-    const post = async (items: T[]) => {
-      // TODO: move to useFetch
-      const response = await $fetch<T[]>(`/api/${endpoint}`, {
+    const post = async (itemsToCreate: T[]): Promise<T[]> => {
+      const response = await requestFetch<T[]>(`/api/${endpoint}`, {
         method: 'POST',
-        body: JSON.stringify(items)
+        body: itemsToCreate
       })
-      // TODO update items inline
-      console.log('posted items:', response)
+      // TODO: some way to update items inline (the don't have ids yet)
+      return response as T[]
     }
-    const put = async (itemsToUpdate: T[]) => {
+    const put = async (itemsToUpdate: T[]): Promise<T[]> => {
       const response = await requestFetch<T[]>(`/api/${endpoint}`, {
         method: 'PUT',
         body: itemsToUpdate
       })
       updateItemsFromResponse(response)
+      return response as T[]
     }
-    const archive = async (items: T[]) => {
-      // TODO: move to useFetch
-      const response = await $fetch<T[]>(`/api/${endpoint}`, {
+    const archive = async (itemsToDelete: T[]) => {
+      const response = await requestFetch<T[]>(`/api/${endpoint}`, {
         method: 'DELETE',
-        body: items
+        body: itemsToDelete
       })
-      // TODO update items inline
-      console.log('archived items:', response)
+      const removedIDs = response.map(i => i.id)
+      items.value = items.value.filter(i => !removedIDs.includes(i?.id))
     }
 
-    const store: ResourceStoreCore<T> = { items, currentItem, selectItem, get, post, put, archive }
+    const store: ResourceStoreCore<T> = {
+      items,
+      currentItem,
+      selectItem,
+      get,
+      post,
+      put,
+      archive,
+      updateAtIndex
+    }
     return {
       ...store,
       ...(extend(store))
