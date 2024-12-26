@@ -10,9 +10,15 @@ export const subtaskSchema = z.object({
   created_at: z.string().datetime({ offset: true }),
   completed_at: z.nullable(z.string().datetime({ offset: true })),
   archived_at: z.nullable(z.string().datetime({ offset: true })),
-  task_order: z.number(),
+  task_order: z.optional(z.number()),
   title: z.string().min(3, { message: 'Title is required' })
-})
+}).refine(
+  ({ id, task_order }) => !(id !== undefined && task_order === undefined),
+  {
+    message: 'Task order is required.',
+    path: ['task_order']
+  }
+)
 
 export const subtaskArraySchema = z.array(subtaskSchema)
 
@@ -24,14 +30,21 @@ export const taskSchema = z.object({
   created_at: z.string().datetime({ offset: true }),
   completed_at: z.nullable(z.string().datetime({ offset: true })),
   archived_at: z.nullable(z.string().datetime({ offset: true })),
-  task_order: z.nullable(z.number()),
+  task_order: z.optional(z.nullable(z.number())),
   title: z.string().min(3, { message: 'Title is required' }),
   subtasks: z.optional(subtaskArraySchema)
 }).refine(
-  data => !(data.completed_at === null && data.task_order === null),
+  ({ id, completed_at, task_order }) => {
+    if (id !== undefined) {
+      return completed_at !== null || task_order !== null
+    } else {
+      return true
+    }
+  },
   {
     message: 'Task order is required if task is not completed',
     path: ['task_order']
-  })
+  }
+)
 
 export const taskArraySchema = z.array(taskSchema)

@@ -20,14 +20,13 @@ export const useTaskStore = defineStoreForResource<Task, TaskStore>('tasks', (rs
   }
 
   const addTask = (created_by: UUID) => {
-    rsc.items.value.unshift({
+    rsc.items.value.push({
       created_by,
       journaled_by: null,
       routine_from: null,
       created_at: nowTemporal(),
       completed_at: null,
       archived_at: null,
-      task_order: 0,
       title: ''
     })
     triggerRef(rsc.items)

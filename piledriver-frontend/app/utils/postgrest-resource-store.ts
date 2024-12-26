@@ -35,7 +35,8 @@ export function defineStoreForResource<T extends HasID, E>(endpoint: string, ext
       triggerRef(items)
     }
     const updateAtIndex = (index: number, item: T) => {
-      items.value[index] = item
+      const i = index < 0 ? items.value.length + index : index
+      items.value[i] = item
       triggerRef(items)
     }
 

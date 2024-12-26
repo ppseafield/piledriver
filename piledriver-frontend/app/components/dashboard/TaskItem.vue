@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { useTaskStore } from '~/stores/tasks'
 import { orderClass } from '~/utils/task-helpers'
+import { useSessionStore } from '~~/layers/auth/stores/session'
 
 const props = defineProps<{
   task: Task
   index: number
 }>()
 
+const session = useSessionStore()
 const t = useTaskStore()
 
 const editing = ref<boolean>(false)
@@ -33,12 +35,20 @@ const saveTask = async () => {
   const updatedTask = { ...props.task, title: titleText.value }
   delete updatedTask.subtasks
   if (updatedTask.id === undefined) {
-    const [savedTask] = await t.add([updatedTask])
-    t.updateAtIndex(0, savedTask)
+    const [savedTask] = await t.post([updatedTask])
+    t.updateAtIndex(-1, savedTask)
   } else {
     await t.put([updatedTask])
   }
   editing.value = false
+}
+const saveTaskAndAddNew = async () => {
+  await saveTask()
+  if (props.task.id === undefined) {
+    setTimeout(() => {
+      t.addTask(session.user?.user_id)
+    }, 40)
+  }
 }
 const cancelEdit = () => {
   if (props.task.id === undefined) {
@@ -59,9 +69,11 @@ const deleteTask = () => {
       <template v-if="editing">
         <UInput
           v-model="titleText"
+          autofocus
           class="grow ms-5"
           :ui="{ default: { size: textStyles.label } }"
-          @keydown.enter="saveTask"
+          @keydown.enter.prevent="saveTask"
+          @keydown.shift.enter.prevent="saveTaskAndAddNew"
         />
         <UButtonGroup size="sm">
           <UButton
