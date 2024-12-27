@@ -11,13 +11,22 @@ interface TaskStore {
   moveTask: (task: Task, move_task_order: number) => Promise<void>
 }
 
+const sortTasks = (a: Task, b: Task): number => {
+  if (a.task_order === b.task_order) {
+    return 0
+  } else if (a.task_order && b.task_order) {
+    return a.task_order - b.task_order
+  } else if (!a.task_order) {
+    // sort nulls last
+    return 1
+  } else {
+    return -1
+  }
+}
+
 export const useTaskStore = defineStoreForResource<Task, TaskStore>('tasks', (rsc) => {
   // TODO: project filters
-  const waiting = computed(() =>
-    rsc.items.value
-      .filter(t => !t.completed_at)
-      .sort((a, b) => (a.task_order as number) - (b.task_order as number))
-  )
+  const waiting = computed(() => rsc.items.value.filter(t => !t.completed_at))
   const completed = computed(() => rsc.items.value.filter(t => t.completed_at))
 
   const requestFetch = useRequestFetch()
@@ -63,12 +72,13 @@ export const useTaskStore = defineStoreForResource<Task, TaskStore>('tasks', (rs
       updatedOrders[task_id] = updated_order
     }
     console.log('updatedOrders:', updatedOrders)
-    rsc.items.value.forEach((t) => {
+    for (const t of rsc.items.value) {
       if (t.id !== undefined && updatedOrders[t.id] !== undefined) {
         console.log('updating task order:', t.id, ' changes ', t.task_order, ' => ', updatedOrders[t.id])
         t.task_order = updatedOrders[t.id]
       }
-    })
+    }
+    rsc.items.value.sort(sortTasks)
     triggerRef(rsc.items)
   }
 
