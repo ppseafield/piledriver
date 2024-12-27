@@ -4,12 +4,24 @@ import TaskItem from './TaskItem.vue'
 import { useTaskStore } from '~/stores/tasks'
 
 const ts = useTaskStore()
+
+const getChildPayload = (index: number) => {
+  return ts.items[index]
+}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const onDrop = async (e: any) => {
+  ts.moveTask(e.payload, e.addedIndex + 1)
+}
 </script>
 
 <template>
-  <Container :tag="{ value: 'ol' }">
+  <Container
+    :tag="{ value: 'ol' }"
+    :get-child-payload="getChildPayload"
+    @drop="onDrop"
+  >
     <Draggable
-      v-for="(task, index) in ts.items"
+      v-for="(task, index) in ts.waiting"
       :key="task.id"
       :tag="{ value: 'li' }"
     >
