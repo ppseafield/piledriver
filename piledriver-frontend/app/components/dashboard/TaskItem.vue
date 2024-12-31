@@ -19,6 +19,9 @@ const titleText = ref<string>(props.task.title)
 watch(props, () => {
   titleText.value = props.task.title
 })
+const isChecked = computed<boolean>(() => {
+  return props.task.completed_at !== null
+})
 
 onMounted(() => {
   if (props.task.title === '') {
@@ -61,6 +64,12 @@ const cancelEdit = () => {
 const deleteTask = () => {
   t.removeTask(props.task)
 }
+
+const updateCompleted = (completed: boolean) => {
+  // Hmm, this happens annoyingly enough times; should address it.
+  const { subtasks, ...taskOnly } = props.task
+  t.updateCompletion(taskOnly, completed)
+}
 </script>
 
 <template>
@@ -99,6 +108,8 @@ const deleteTask = () => {
       </template>
       <template v-else>
         <UCheckbox
+          :model-value="isChecked"
+          @update:model-value="updateCompleted"
           :ui="{ wrapper: 'grow', label: textStyles.label, form: textStyles.form }"
           :label="props.task.title"
         />

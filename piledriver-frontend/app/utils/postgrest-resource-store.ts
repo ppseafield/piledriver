@@ -4,8 +4,12 @@ import type { StoreDefinition } from 'pinia'
 interface HasID {
   id?: UUID
 }
+export interface ResourceStoreOptional<T> {
+  // optional
+  sortItems?: (a: T, b: T) => number
+}
 
-export interface ResourceStoreCore<T extends HasID> {
+export interface ResourceStoreCore<T extends HasID> extends ResourceStoreOptional<T> {
   items: ShallowRef<T[]>
   currentItem: ShallowRef<T | null>
   selectItem: (item: T | null) => void
@@ -18,7 +22,11 @@ export interface ResourceStoreCore<T extends HasID> {
 
 type ResourceStore<T extends HasID, E> = ResourceStoreCore<T> & E
 
-export function defineStoreForResource<T extends HasID, E>(endpoint: string, extend: (rsc: ResourceStoreCore<T>) => E): StoreDefinition {
+export function defineStoreForResource<T extends HasID, E>(
+  endpoint: string,
+  extend: (rsc: ResourceStoreCore<T>) => E,
+  optional: ResourceStoreOptional<T> = {}
+): StoreDefinition {
   return defineStore<string, ResourceStore<T, E>>(endpoint, () => {
     const items = shallowRef<T[]>([])
     const currentItem: ShallowRef<T | null> = shallowRef<T | null>(null)
@@ -29,8 +37,12 @@ export function defineStoreForResource<T extends HasID, E>(endpoint: string, ext
       for (const item of items.value) {
         const index = response.findIndex(i => i.id === item.id)
         if (index !== -1 && items.value[index] !== undefined) {
-          Object.assign(items.value[index], response[index])
+          console.log('updating item:', { ...items.value[index] }, ' with: ', response[index])
+          Object.assign(item, response[index])
         }
+      }
+      if (optional.sortItems) {
+        items.value.sort(optional.sortItems)
       }
       triggerRef(items)
     }
