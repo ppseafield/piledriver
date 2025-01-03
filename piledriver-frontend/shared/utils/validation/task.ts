@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const subtaskSchema = z.object({
+const baseSubtaskSchema = z.object({
   id: z.optional(z.string().uuid({ message: 'ID is required' })),
   task_id: z.string().uuid({ message: 'Task ID is required' }),
   parent_subtask_id: z.nullable(z.string().uuid()),
@@ -12,6 +12,10 @@ export const subtaskSchema = z.object({
   archived_at: z.nullable(z.string().datetime({ offset: true })),
   task_order: z.optional(z.number()),
   title: z.string().min(3, { message: 'Title is required' })
+})
+
+const subtaskSchema = baseSubtaskSchema.extend({
+  subtasks: z.optional(baseSubtaskSchema.array())
 }).refine(
   ({ id, task_order }) => !(id !== undefined && task_order === undefined),
   {
@@ -22,7 +26,7 @@ export const subtaskSchema = z.object({
 
 export const subtaskArraySchema = z.array(subtaskSchema)
 
-export const taskSchema = z.object({
+const baseTaskSchema = z.object({
   id: z.optional(z.string().uuid({ message: 'ID is required' })),
   created_by: z.string().uuid({ message: 'Created by is required' }),
   journaled_by: z.nullable(z.string().uuid()),
@@ -33,8 +37,10 @@ export const taskSchema = z.object({
   task_order: z.optional(z.nullable(z.number())),
   title: z.string().min(3, { message: 'Title is required' }),
   subtasks: z.optional(subtaskArraySchema)
-}).refine(
-  ({ id, completed_at, task_order }) => {
+})
+
+export const taskSchema = baseTaskSchema.refine(
+  ({ id, completed_at, task_order }: z.infer<typeof baseTaskSchema>) => {
     if (id !== undefined) {
       return completed_at !== null || task_order !== null
     } else {

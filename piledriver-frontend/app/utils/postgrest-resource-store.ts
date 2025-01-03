@@ -4,9 +4,14 @@ import type { StoreDefinition } from 'pinia'
 interface HasID {
   id?: UUID
 }
+// optional paramaters for resource stores
 export interface ResourceStoreOptional<T> {
-  // optional
+  // sort by this after get/put/post
   sortItems?: (a: T, b: T) => number
+  // get items ready to send to the server
+  prepare?: (item: T[]) => T[]
+  // process the items after requests
+  mapResponse?: (response: T[]) => T[]
 }
 
 export interface ResourceStoreCore<T extends HasID> extends ResourceStoreOptional<T> {
@@ -53,32 +58,40 @@ export function defineStoreForResource<T extends HasID, E>(
     }
 
     const requestFetch = useRequestFetch()
+
     const get = async (filters: string[]) => {
       console.log('filters todo:', filters)
       const response = await requestFetch<T[]>(`/api/${endpoint}`).catch(e => console.log('error:', e))
       if (response !== undefined && response !== null) {
-        items.value = response
+        items.value = optional.mapResponse ? optional.mapResponse(response) : response
       } else {
         // TODO handle error
         items.value = []
       }
     }
+
     const post = async (itemsToCreate: T[]): Promise<T[]> => {
       const response = await requestFetch<T[]>(`/api/${endpoint}`, {
         method: 'POST',
-        body: itemsToCreate
+        body: optional.prepare ? optional.prepare(itemsToCreate) : itemsToCreate
       })
       // TODO: some way to update items inline (the don't have ids yet)
-      return response as T[]
+      // items.value.push(...mappedResponse)
+      // items.value.sort(optional.sortItems)
+      // triggerRef(items)
+      return (optional.mapResponse ? optional.mapResponse(response) : response) as T[]
     }
+
     const put = async (itemsToUpdate: T[]): Promise<T[]> => {
       const response = await requestFetch<T[]>(`/api/${endpoint}`, {
         method: 'PUT',
         body: itemsToUpdate
       })
-      updateItemsFromResponse(response)
-      return response as T[]
+      const mapped: T[] = optional.mapResponse ? optional.mapResponse(response) : response
+      updateItemsFromResponse(mapped)
+      return mapped
     }
+
     const archive = async (itemsToDelete: T[]) => {
       const response = await requestFetch<T[]>(`/api/${endpoint}`, {
         method: 'DELETE',

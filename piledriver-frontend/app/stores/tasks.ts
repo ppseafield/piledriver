@@ -1,6 +1,7 @@
 import { defineStoreForResource } from '~/utils/postgrest-resource-store'
 import { nowTemporal } from '~~/shared/utils/temporal-helpers'
 import type { MoveTaskResponse, Task } from '~~/shared/types/tasks'
+import { makeSubtaskTree } from '~/utils/task-helpers'
 
 interface TaskStore {
   waiting: ComputedRef<Task[]>
@@ -23,6 +24,16 @@ const sortTasks = (a: Task, b: Task): number => {
   } else {
     return -1
   }
+}
+
+const prepareTasks = (tasks: Task[]): Task[] => {
+  // omit subtasks, since they are not part of the task table
+  return tasks.map(t => ({ ...t, subtasks: undefined }))
+}
+
+const mapResponseTasks = (tasks: Task[]): Task[] => {
+  // Turn a flat subtask list into a tree of subtasks
+  return tasks.map(t => ({ ...t, subtasks: makeSubtaskTree(t.subtasks ?? []) }))
 }
 
 export const useTaskStore = defineStoreForResource<Task, TaskStore>(
@@ -105,5 +116,9 @@ export const useTaskStore = defineStoreForResource<Task, TaskStore>(
       nextOrder
     }
   },
-  { sortItems: sortTasks }
+  {
+    sortItems: sortTasks,
+    prepare: prepareTasks,
+    mapResponse: mapResponseTasks
+  }
 )

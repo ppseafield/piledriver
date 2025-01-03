@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SubtaskList from './SubtaskList.vue'
 import { useTaskStore } from '~/stores/tasks'
 import { orderClass } from '~/utils/task-helpers'
 import { useSessionStore } from '~~/layers/auth/stores/session'
@@ -122,6 +123,15 @@ const updateCompleted = (completed: boolean) => {
           @click="editTask"
         />
       </template>
+    </div>
+
+    <SubtaskList
+      v-if="task.subtasks && task.subtasks.length > 0"
+      :task="task"
+      :subtasks="task.subtasks"
+    />
+    <div v-else>
+      no subtasks here
     </div>
   </div>
 </template>

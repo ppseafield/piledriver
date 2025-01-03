@@ -15,3 +15,22 @@ export function orderClass(index: number): { label: string, form: string } {
     return orderSizes[7] as { label: string, form: string }
   }
 }
+
+export function makeSubtaskTree(subtasks: Subtask[]): Subtask[] {
+  const subtaskMap = new Map<string, Subtask>(subtasks.map(st => [st.id, st]))
+
+  for (const subtask of subtasks) {
+    if (subtask.parent_subtask_id) {
+      const parent = subtaskMap.get(subtask.parent_subtask_id)
+      if (parent) {
+        if (!parent.subtasks) {
+          parent.subtasks = []
+        }
+        parent.subtasks.push(subtask)
+      }
+    }
+  }
+  return Array.from(
+    subtaskMap.values().filter((st: Subtask) => st.parent_subtask_id === null)
+  )
+}
