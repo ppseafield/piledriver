@@ -10,7 +10,7 @@ interface PostgRESTResourceDescription<TSchema> {
   endpoint: string
   fields: string[]
   allowAnonymous: boolean | Record<HTTPMethod, boolean>
-  embeddedResources: Record<string, string[]>
+  embeddedResources?: Record<string, string[]>
   additionalParams?: Partial<Record<HTTPMethod, string[][]>>
   schema: TSchema
 }
@@ -35,11 +35,12 @@ export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
     } else {
       this.allowAnonymous = Object.assign(defaultAllowAnonymous(), config.allowAnonymous)
     }
-    this.embeddedResources = config.embeddedResources
+    this.embeddedResources = config.embeddedResources ?? {}
     //                                                          typescript, infer thy self!
     this.additionalParams = config.additionalParams ?? ({ GET: ([] as string[][]) } as Record<HTTPMethod, string[][]>)
     this.schema = config.schema
     this.url = `${runtimeConfig.postgrestUrl}/${config.endpoint}`
+    this.handle = this.handle.bind(this)
   }
 
   computedFields(): string {

@@ -2,15 +2,17 @@ import { defineStoreForResource } from '~/utils/postgrest-resource-store'
 import { nowTemporal } from '~~/shared/utils/temporal-helpers'
 import type { MoveTaskResponse, Task } from '~~/shared/types/tasks'
 import { makeSubtaskTree } from '~/utils/task-helpers'
+import { useSessionStore } from '~~/layers/auth/stores/session'
 
 interface TaskStore {
   waiting: ComputedRef<Task[]>
   completed: ComputedRef<Task[]>
   updateCompletion: (task: Task, completed: boolean) => void
-  addTask: (created_by: UUID) => void
+  addBlankTask: () => void
   removeTask: (task: Task) => void
   moveTask: (task: Task, move_task_order: number) => Promise<void>
   nextOrder: ComputedRef<number>
+  splitCompleted: (task: Task) => void
 }
 
 const sortTasks = (a: Task, b: Task): number => {
@@ -39,6 +41,7 @@ const mapResponseTasks = (tasks: Task[]): Task[] => {
 export const useTaskStore = defineStoreForResource<Task, TaskStore>(
   'tasks',
   (rsc) => {
+    const session = useSessionStore()
     // TODO: project filters
     const waiting = computed(() => rsc.items.value.filter(t => t.completed_at === null))
     const completed = computed(() => rsc.items.value.filter(t => t.completed_at))
@@ -59,9 +62,9 @@ export const useTaskStore = defineStoreForResource<Task, TaskStore>(
       }
     }
 
-    const addTask = (created_by: UUID) => {
+    const addBlankTask = () => {
       rsc.items.value.push({
-        created_by,
+        created_by: session.user?.user_id as UUID,
         journaled_by: null,
         routine_from: null,
         created_at: nowTemporal(),
@@ -105,15 +108,19 @@ export const useTaskStore = defineStoreForResource<Task, TaskStore>(
       rsc.items.value.sort(sortTasks)
       triggerRef(rsc.items)
     }
+    const splitCompleted = (task: Task) => {
+      console.log('TODO - splitting task:', task)
+    }
 
     return {
       waiting,
       completed,
       updateCompletion,
-      addTask,
+      addBlankTask,
       removeTask,
       moveTask,
-      nextOrder
+      nextOrder,
+      splitCompleted
     }
   },
   {

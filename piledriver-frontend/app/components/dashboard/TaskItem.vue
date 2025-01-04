@@ -9,12 +9,12 @@ const props = defineProps<{
   index: number
 }>()
 
-const session = useSessionStore()
 const t = useTaskStore()
+const st = useSubtaskStore()
 
 const editing = ref<boolean>(false)
 const textStyles = computed(() => {
-  return orderClass(props.index)
+  return orderClass(props.task.completed_at === null ? props.index : 7)
 })
 const titleText = ref<string>(props.task.title)
 watch(props, () => {
@@ -32,7 +32,6 @@ onMounted(() => {
 
 // Edit, Save, and Cancel task edit
 const editTask = () => {
-  console.log('todo: edit task')
   editing.value = true
 }
 const saveTask = async () => {
@@ -50,7 +49,7 @@ const saveTaskAndAddNew = async () => {
   await saveTask()
   if (props.task.id === undefined) {
     setTimeout(() => {
-      t.addTask(session.user?.user_id)
+      t.addBlankTask()
     }, 40)
   }
 }
@@ -71,11 +70,43 @@ const updateCompleted = (completed: boolean) => {
   const { subtasks, ...taskOnly } = props.task
   t.updateCompletion(taskOnly, completed)
 }
+
+const dropdownItems = computed(() => {
+    const items = [
+      [
+        { 
+          label: 'Edit',
+          icon: 'i-heroicons-pencil',
+          click: editTask
+        },
+        { 
+          label: 'Add subtask',
+          icon: 'i-heroicons-plus',
+          click: () => st.addBlankSubtask(props.task)
+        }
+      ],
+      [
+        { 
+          label: 'Delete',
+          icon: 'i-heroicons-trash',
+          click: deleteTask
+        }
+      ]
+    ]
+    if (props.task.subtasks && props.task.subtasks.length > 0) {
+      items.push([{ 
+        label: 'Split Completed',
+        icon: 'i-heroicons-chevron-up-down',
+        click: () => t.splitCompleted(props.task)
+      }])
+    }
+  return items
+})
 </script>
 
 <template>
-  <div class="ps-2 hover:bg-tango-300 py-1">
-    <div class="flex">
+  <div class="ps-2">
+    <div class="flex hover:bg-tango-200 py-1">
       <template v-if="editing">
         <UInput
           v-model="titleText"
@@ -84,6 +115,7 @@ const updateCompleted = (completed: boolean) => {
           :ui="{ default: { size: textStyles.label } }"
           @keydown.enter.prevent="saveTask"
           @keydown.shift.enter.prevent="saveTaskAndAddNew"
+          @keydown.esc="cancelEdit"
         />
         <UButtonGroup size="sm">
           <UButton
@@ -98,13 +130,6 @@ const updateCompleted = (completed: boolean) => {
             icon="i-heroicons-x-mark"
             @click="cancelEdit"
           />
-          <UButton
-            v-if="props.task.id !== undefined"
-            color="primary"
-            variant="ghost"
-            icon="i-heroicons-trash"
-            @click="deleteTask"
-          />
         </UButtonGroup>
       </template>
       <template v-else>
@@ -114,14 +139,18 @@ const updateCompleted = (completed: boolean) => {
           :ui="{ wrapper: 'grow', label: textStyles.label, form: textStyles.form }"
           :label="props.task.title"
         />
-        <UButton
-          type="button"
-          icon="i-heroicons-pencil-square"
-          color="primary"
-          variant="ghost"
-          size="sm"
-          @click="editTask"
-        />
+        <!-- toggle visibility of subtasks -->
+         <template v-if="!isChecked">
+          <UDropdown :items="dropdownItems">
+            <UButton
+              type="button"
+              icon="i-heroicons-ellipsis-vertical"
+              color="primary"
+              variant="outline"
+              size="sm"
+            />
+          </UDropdown>
+         </template>
       </template>
     </div>
 
@@ -129,9 +158,7 @@ const updateCompleted = (completed: boolean) => {
       v-if="task.subtasks && task.subtasks.length > 0"
       :task="task"
       :subtasks="task.subtasks"
+      :level="1"
     />
-    <div v-else>
-      no subtasks here
-    </div>
   </div>
 </template>

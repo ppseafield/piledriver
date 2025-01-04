@@ -17,6 +17,7 @@ const onDrop = async (e: any) => {
 <template>
   <Container
     :tag="{ value: 'ol' }"
+    group-name="tasks"
     :get-child-payload="getChildPayload"
     @drop="onDrop"
   >
@@ -31,7 +32,7 @@ const onDrop = async (e: any) => {
       />
     </Draggable>
   </Container>
-  <UDivider label="Completed" />
+  <UDivider label="Completed" class="my-3"/>
   <ul>
     <li
       v-for="(task, index) in ts.completed"

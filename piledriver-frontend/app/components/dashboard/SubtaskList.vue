@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { clamp } from 'es-toolkit'
 import { Container, Draggable } from 'vue3-smooth-dnd'
 import SubtaskItem from './SubtaskItem.vue'
 
 const props = defineProps<{
   task: Task
   subtasks: Subtask[]
+  level: number
 }>()
 const getChildPayload = (index: number) => {
   return props.subtasks[index]
@@ -26,6 +28,7 @@ const containerProps = {
         value: 'ol',
         props: containerProps
       }"
+      group-name="subtasks"
       :get-child-payload="getChildPayload"
       @drop="onDrop"
     >
@@ -37,6 +40,7 @@ const containerProps = {
         <SubtaskItem
           :subtask="subtask"
           :task="task"
+          :level="level"
         />
       </Draggable>
     </Container>
