@@ -6,12 +6,30 @@ interface RequestError {
   message: string
 }
 
+/**
+ * Describes any number of named PostgREST parameters. Placing them in the server
+ * resource definition means a Resource can send multiple kinds of requests to the
+ * PostgREST server without pulling and sending raw request parameters from the client.
+ *
+ * @example
+ * {
+ *   GET: {
+ *     'default': [['order', 'task_order.asc']],
+ *     'unjournaled': [
+ *       ['completed_at', 'not.is.null'],
+ *       ['journaled_by', 'is.null']
+ *     ]
+ *   }
+ * }
+ */
+type ResourceAdditionalParams = Partial<Record<HTTPMethod, Record<string, string[][]>>>
+
 interface PostgRESTResourceDescription<TSchema> {
   endpoint: string
   fields: string[]
   allowAnonymous: boolean | Record<HTTPMethod, boolean>
   embeddedResources?: Record<string, string[]>
-  additionalParams?: Partial<Record<HTTPMethod, string[][]>>
+  additionalParams?: ResourceAdditionalParams
   schema: TSchema
 }
 
@@ -24,7 +42,7 @@ export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
   fields: string[]
   embeddedResources: Record<string, string[]>
   allowAnonymous: Record<string, boolean>
-  additionalParams: Partial<Record<HTTPMethod, string[][]>>
+  additionalParams: ResourceAdditionalParams
   schema: TSchema
 
   constructor(config: PostgRESTResourceDescription<TSchema>) {
@@ -36,8 +54,8 @@ export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
       this.allowAnonymous = Object.assign(defaultAllowAnonymous(), config.allowAnonymous)
     }
     this.embeddedResources = config.embeddedResources ?? {}
-    //                                                          typescript, infer thy self!
-    this.additionalParams = config.additionalParams ?? ({ GET: ([] as string[][]) } as Record<HTTPMethod, string[][]>)
+    this.additionalParams = config.additionalParams ?? {} as ResourceAdditionalParams
+    // this.paramValidator = TODO()
     this.schema = config.schema
     this.url = `${runtimeConfig.postgrestUrl}/${config.endpoint}`
     this.handle = this.handle.bind(this)
@@ -70,6 +88,16 @@ export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
     return headers
   }
 
+  buildPostgRESTParams(event: H3Event<EventHandlerRequest>): URLSearchParams {
+    const query = getQuery(event)
+    if (query?.['queryType']) {
+      const queryType = query['queryType'] as string
+      return new URLSearchParams(this.additionalParams?.[event.method]?.[queryType] ?? [])
+    } else {
+      return new URLSearchParams(this.additionalParams?.[event.method]?.['default'] ?? [])
+    }
+  }
+
   async handle(event: H3Event<EventHandlerRequest>): Promise<T[] | RequestError> {
     switch (event.method) {
       case 'GET':
@@ -91,10 +119,7 @@ export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
 
   async get(event: H3Event<EventHandlerRequest>): Promise<T[] | RequestError> {
     const headers = this.getAuthenticatedHeaders(event)
-    const params = new URLSearchParams([
-      ['select', this.computedFields()],
-      ...(this.additionalParams.GET ?? [])
-    ])
+    const params = this.buildPostgRESTParams(event)
     return await $fetch<T[]>(`${this.url}?${params}`, {
       method: 'GET',
       headers

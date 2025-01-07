@@ -10,10 +10,10 @@ const orderSizes: Record<number, { label: string, form: string }> = {
 }
 /**
  * Used to determine the text size for task text.
- * 
+ *
  * @remarks
  * The task list is intended to emphasize the first task the most, then the next few tasks.
- * 
+ *
  * @param index - The position in the top-level task list
  * @returns text sizes/margins to pass to the `ui` prop
  */
@@ -27,7 +27,7 @@ export function orderClass(index: number): { label: string, form: string } {
 
 /** Recursively sort subtasks */
 function sortSubtaskTree(subtasks: Subtask[]): void {
-  subtasks.sort((a: Subtask, b: Subtask) => { return a.task_order - b.task_order })
+  subtasks.sort((a: Subtask, b: Subtask) => a.task_order - b.task_order)
 
   for (const subtask of subtasks) {
     if (subtask?.subtasks?.length > 0) {
@@ -38,10 +38,10 @@ function sortSubtaskTree(subtasks: Subtask[]): void {
 
 /**
  * Transforms a flat list of subtasks into a nested tree of subtasks.
- * 
+ *
  * @remarks
  * This is intended for the `task.subtasks` array, which comes from the PostgREST API via resource embedding.
- * 
+ *
  * @param subtasks - A flat list of subtasks
  * @returns A nested tree of subtasks
 */

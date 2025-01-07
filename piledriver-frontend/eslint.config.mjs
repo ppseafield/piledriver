@@ -13,7 +13,7 @@ export default withNuxt(
       }
     ],
     '@stylistic/comma-dangle': ['error', 'never'],
-    '@vue/comma-dangle': ['error', 'never'],
+    'vue/comma-dangle': ['error', 'never'],
     'vue/no-multiple-template-root': ['off']
   }
 })

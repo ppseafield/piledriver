@@ -14,15 +14,20 @@ export interface ResourceStoreOptional<T> {
   mapResponse?: (response: T[]) => T[]
 }
 
+export interface StoreRequestOptions {
+  queryType?: string
+}
+
 export interface ResourceStoreCore<T extends HasID> extends ResourceStoreOptional<T> {
   items: ShallowRef<T[]>
   currentItem: ShallowRef<T | null>
   selectItem: (item: T | null) => void
-  get: (filters: string[]) => Promise<void>
+  get: (options: StoreRequestOptions | undefined) => Promise<void>
   post: (items: T[]) => Promise<T[]>
   put: (items: T[]) => Promise<T[]>
   archive: (items: T[]) => Promise<void>
   updateAtIndex: (index: number, item: T) => void
+  ensureCurrent: (id: UUID) => Promise<void>
 }
 
 type ResourceStore<T extends HasID, E> = ResourceStoreCore<T> & E
@@ -59,9 +64,9 @@ export function defineStoreForResource<T extends HasID, E>(
 
     const requestFetch = useRequestFetch()
 
-    const get = async (filters: string[]) => {
-      console.log('filters todo:', filters)
-      const response = await requestFetch<T[]>(`/api/${endpoint}`).catch(e => console.log('error:', e))
+    const get = async (options: StoreRequestOptions | undefined) => {
+      const url = `/api/${endpoint}${options?.queryType ? `?queryType${options.queryType}` : ''}`
+      const response = await requestFetch<T[]>(url)
       if (response !== undefined && response !== null) {
         items.value = optional.mapResponse ? optional.mapResponse(response) : response
       } else {
@@ -100,6 +105,17 @@ export function defineStoreForResource<T extends HasID, E>(
       const removedIDs = response.map(i => i.id)
       items.value = items.value.filter(i => !removedIDs.includes(i?.id))
     }
+    const ensureCurrent = async (id: UUID) => {
+      currentItem.value = null
+      const item = items.value.find(i => i.id === id)
+      if (item) {
+        currentItem.value = item
+      } else {
+        // TODO: fetch the item and set current to it
+        // await get([`id=eq.${id}`])
+        // currentItem.value = items.value.find(i => i.id === id) ?? null
+      }
+    }
 
     const store: ResourceStoreCore<T> = {
       items,
@@ -109,7 +125,8 @@ export function defineStoreForResource<T extends HasID, E>(
       post,
       put,
       archive,
-      updateAtIndex
+      updateAtIndex,
+      ensureCurrent
     }
     return {
       ...store,

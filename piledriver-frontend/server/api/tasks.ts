@@ -1,7 +1,7 @@
 import { twoWeeksAgo } from '~~/shared/utils/temporal-helpers'
 import { taskArraySchema } from '~~/shared/utils/validation/task'
 
-const fields = [
+export const fields = [
   'id',
   'created_by',
   'journaled_by',
@@ -32,10 +32,16 @@ const tasksResource = new PostgRESTResource({
   allowAnonymous: false,
   embeddedResources: { subtasks },
   additionalParams: {
-    GET: [
-      ['order', 'task_order.asc'],
-      ['or', `(completed_at.is.null,and(completed_at.gte.${twoWeeksAgo()},journaled_by.is.null))`]
-    ]
+    GET: {
+      default: [
+        ['order', 'task_order.asc'],
+        ['or', `(completed_at.is.null,and(completed_at.gte.${twoWeeksAgo()},journaled_by.is.null))`]
+      ],
+      unjournaled: [
+        ['order', 'completed_at.asc'],
+        ['and', '(completed_at.not.is.null,journaled_by.is.null)']
+      ]
+    }
   },
   schema: taskArraySchema
 })

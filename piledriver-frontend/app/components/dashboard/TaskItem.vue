@@ -2,7 +2,6 @@
 import SubtaskList from './SubtaskList.vue'
 import { useTaskStore } from '~/stores/tasks'
 import { orderClass } from '~/utils/task-helpers'
-import { useSessionStore } from '~~/layers/auth/stores/session'
 
 const props = defineProps<{
   task: Task
@@ -72,34 +71,34 @@ const updateCompleted = (completed: boolean) => {
 }
 
 const dropdownItems = computed(() => {
-    const items = [
-      [
-        { 
-          label: 'Edit',
-          icon: 'i-heroicons-pencil',
-          click: editTask
-        },
-        { 
-          label: 'Add subtask',
-          icon: 'i-heroicons-plus',
-          click: () => st.addBlankSubtask(props.task)
-        }
-      ],
-      [
-        { 
-          label: 'Delete',
-          icon: 'i-heroicons-trash',
-          click: deleteTask
-        }
-      ]
+  const items = [
+    [
+      {
+        label: 'Edit',
+        icon: 'i-heroicons-pencil',
+        click: editTask
+      },
+      {
+        label: 'Add subtask',
+        icon: 'i-heroicons-plus',
+        click: () => st.addBlankSubtask(props.task)
+      }
+    ],
+    [
+      {
+        label: 'Delete',
+        icon: 'i-heroicons-trash',
+        click: deleteTask
+      }
     ]
-    if (props.task.subtasks && props.task.subtasks.length > 0) {
-      items.push([{ 
-        label: 'Split Completed',
-        icon: 'i-heroicons-chevron-up-down',
-        click: () => t.splitCompleted(props.task)
-      }])
-    }
+  ]
+  if (props.task.subtasks && props.task.subtasks.length > 0) {
+    items.push([{
+      label: 'Split Completed',
+      icon: 'i-heroicons-chevron-up-down',
+      click: () => t.splitCompleted(props.task)
+    }])
+  }
   return items
 })
 </script>
@@ -140,7 +139,7 @@ const dropdownItems = computed(() => {
           :label="props.task.title"
         />
         <!-- toggle visibility of subtasks -->
-         <template v-if="!isChecked">
+        <template v-if="!isChecked">
           <UDropdown :items="dropdownItems">
             <UButton
               type="button"
@@ -150,7 +149,7 @@ const dropdownItems = computed(() => {
               size="sm"
             />
           </UDropdown>
-         </template>
+        </template>
       </template>
     </div>
 

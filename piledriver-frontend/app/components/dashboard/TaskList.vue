@@ -32,7 +32,10 @@ const onDrop = async (e: any) => {
       />
     </Draggable>
   </Container>
-  <UDivider label="Completed" class="my-3"/>
+  <UDivider
+    label="Completed"
+    class="my-3"
+  />
   <ul>
     <li
       v-for="(task, index) in ts.completed"

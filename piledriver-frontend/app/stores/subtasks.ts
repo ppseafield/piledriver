@@ -13,7 +13,7 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
   (rsc) => {
     const session = useSessionStore()
 
-    const requestFetch = useRequestFetch()
+    // const requestFetch = useRequestFetch()
 
     const addBlankSubtask = (subtask: Subtask) => {
       rsc.items.value.push({
