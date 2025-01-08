@@ -1,17 +1,27 @@
+import type { ShallowRef } from 'vue'
 import type { Task } from '~~/shared/types/tasks'
 import type { Journal } from '~~/shared/types/journal'
 
 interface TaskStore {
-  tasksToJournal: Ref<Task[]>
+  unjournaledTasks: ShallowRef<Task[]>
+  fetchUnjournaledTasks: () => Promise<void>
 }
 
 export const useJournalStore = defineStoreForResource<Journal, TaskStore>(
   'journals',
   (_) => {
-    const tasksToJournal = ref<Task[]>([])
+    const unjournaledTasks = shallowRef<Task[]>([])
+
+    const requestFetch = useRequestFetch()
+
+    const fetchUnjournaledTasks = async () => {
+      const tasks = await requestFetch<Task[]>('/api/tasks?queryType=unjournaled')
+      unjournaledTasks.value = tasks
+    }
 
     return {
-      tasksToJournal
+      unjournaledTasks,
+      fetchUnjournaledTasks
     }
   }
 )
