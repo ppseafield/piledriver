@@ -38,13 +38,3 @@ services:
       - postgres
     environment:
       DATABASE_URL: $PGHERO_DATABASE_URL
-
-  swagger:
-    image: swaggerapi/swagger-ui
-    container_name: pd_swagger
-    ports:
-    - "9090:8080"
-    depends_on:
-      - postgrest
-    environment:
-      SWAGGER_JSON_URL: "http://localhost:3030"

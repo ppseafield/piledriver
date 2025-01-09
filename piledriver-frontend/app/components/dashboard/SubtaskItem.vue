@@ -53,7 +53,7 @@ const deleteSubtask = async () => {
 }
 
 const updateCompleted = async (value: boolean) => {
-  console.log('todo: update subtask completed: check completion cascasde')
+  console.log('todo: update subtask completed: check completion cascasde', value)
   // const updatedSubtask = { ...props.subtask, completed_at: value ? new Date() : null }
   // await st.put([updatedSubtask])
 }
@@ -113,9 +113,9 @@ const dropdownItems = computed(() => [
       <template v-else>
         <UCheckbox
           :model-value="isChecked"
-          @update:model-value="updateCompleted"
           :ui="{ wrapper: 'grow' }"
           :label="props.subtask.title"
+          @update:model-value="updateCompleted"
         />
         <!-- todo: toggle visibility of subtasks -->
         <UDropdown :items="dropdownItems">

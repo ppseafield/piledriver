@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { clamp } from 'es-toolkit'
 import { Container, Draggable } from 'vue3-smooth-dnd'
 import SubtaskItem from './SubtaskItem.vue'
 

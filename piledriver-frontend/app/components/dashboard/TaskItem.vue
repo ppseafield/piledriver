@@ -134,9 +134,9 @@ const dropdownItems = computed(() => {
       <template v-else>
         <UCheckbox
           :model-value="isChecked"
-          @update:model-value="updateCompleted"
           :ui="{ wrapper: 'grow', label: textStyles.label, form: textStyles.form }"
           :label="props.task.title"
+          @update:model-value="updateCompleted"
         />
         <!-- toggle visibility of subtasks -->
         <template v-if="!isChecked">

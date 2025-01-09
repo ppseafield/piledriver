@@ -42,6 +42,18 @@ const editor = useEditor({
 onBeforeUnmount(() => {
   editor.value?.destroy()
 })
+
+const saveNewJournal = async () => {
+  const newJournal = await j.createJournal({
+    journal: {
+      title: title.value,
+      text_body: editor.value?.getHTML() ?? '',
+      json_body: editor.value?.getJSON() ?? {}
+    },
+    tasks: tasks.filter(task => checked[task.id as UUID])
+  })
+  console.log('new journal created:', newJournal)
+}
 </script>
 
 <template>
@@ -70,6 +82,7 @@ onBeforeUnmount(() => {
             color="primary"
             label="Save"
             icon="i-heroicons-check"
+            @click="saveNewJournal"
           />
         </template>
       </UDashboardToolbar>
