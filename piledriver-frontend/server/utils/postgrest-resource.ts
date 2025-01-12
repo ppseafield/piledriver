@@ -1,7 +1,7 @@
 import type { H3Event, EventHandlerRequest, HTTPMethod } from 'h3'
-import type { z } from 'zod'
+import { set, type z } from 'zod'
 
-interface RequestError {
+export interface RequestError {
   statusCode: number
   message: string
 }
@@ -59,6 +59,7 @@ export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
     this.schema = config.schema
     this.url = `${runtimeConfig.postgrestUrl}/${config.endpoint}`
     this.handle = this.handle.bind(this)
+    this.getSingleItem = this.getSingleItem.bind(this)
   }
 
   computedFields(): string {
@@ -90,12 +91,11 @@ export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
 
   buildPostgRESTParams(event: H3Event<EventHandlerRequest>): URLSearchParams {
     const query = getQuery(event)
-    if (query?.['queryType']) {
-      const queryType = query['queryType'] as string
-      return new URLSearchParams(this.additionalParams?.[event.method]?.[queryType] ?? [])
-    } else {
-      return new URLSearchParams(this.additionalParams?.[event.method]?.['default'] ?? [])
-    }
+    const queryType = query?.['queryType'] as string ?? 'default'
+    return new URLSearchParams([
+      ['select', this.computedFields()],
+      ...this.additionalParams?.[event.method]?.[queryType] ?? []
+    ])
   }
 
   async handle(event: H3Event<EventHandlerRequest>): Promise<T[] | RequestError> {
@@ -124,6 +124,30 @@ export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
       method: 'GET',
       headers
     })
+  }
+
+  async getSingleItem(event: H3Event<EventHandlerRequest>): Promise<T | RequestError> {
+    const headers = this.getAuthenticatedHeaders(event)
+    const params = this.buildPostgRESTParams(event)
+    const id = event.context.params?.id
+    params.append('id', `eq.${id}`)
+    try {
+      const [singleItem] = await $fetch<T[]>(`${this.url}?id=eq.${id}`, {
+        method: 'GET',
+        headers
+      })
+      if (singleItem) {
+        return singleItem
+      } else {
+        throw new Error('Item not found')
+      }
+    } catch (error) {
+      setResponseStatus(event, 404)
+      return {
+        statusCode: 404,
+        message: error
+      } as RequestError
+    }
   }
 
   async post(event: H3Event<EventHandlerRequest>): Promise<T[] | RequestError> {

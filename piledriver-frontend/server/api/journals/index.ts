@@ -1,4 +1,4 @@
-import { fields as tasks } from './tasks'
+import { fields as tasks } from '../tasks'
 import { journalSchema } from '~~/shared/utils/validation/journal'
 
 const fields = [
@@ -11,7 +11,7 @@ const fields = [
   'json_body'
 ]
 
-const journalsResource = new PostgRESTResource({
+export const journalsResource = new PostgRESTResource({
   endpoint: 'journals',
   fields,
   allowAnonymous: false,

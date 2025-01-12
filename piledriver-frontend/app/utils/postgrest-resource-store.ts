@@ -16,6 +16,8 @@ export interface ResourceStoreOptional<T> {
 
 export interface StoreRequestOptions {
   queryType?: string
+  params?: URLSearchParams
+  append?: boolean
 }
 
 export interface ResourceStoreCore<T extends HasID> extends ResourceStoreOptional<T> {
@@ -39,6 +41,7 @@ export function defineStoreForResource<T extends HasID, E>(
 ): StoreDefinition {
   return defineStore<string, ResourceStore<T, E>>(endpoint, () => {
     const items = shallowRef<T[]>([])
+
     const currentItem: ShallowRef<T | null> = shallowRef<T | null>(null)
     const selectItem = (item: T | null) => {
       currentItem.value = item
@@ -65,14 +68,27 @@ export function defineStoreForResource<T extends HasID, E>(
     const requestFetch = useRequestFetch()
 
     const get = async (options: StoreRequestOptions | undefined) => {
-      const url = `/api/${endpoint}${options?.queryType ? `?queryType${options.queryType}` : ''}`
+      const params = options?.params ?? new URLSearchParams()
+      if (options?.queryType) {
+        params.append('queryType', options.queryType)
+      }
+      const url = `/api/${endpoint}${params}`
       const response = await requestFetch<T[]>(url)
       if (response !== undefined && response !== null) {
-        items.value = optional.mapResponse ? optional.mapResponse(response) : response
+        const mappedResponse = optional.mapResponse ? optional.mapResponse(response) : response
+        if (options?.append) {
+          items.value.push(...mappedResponse)
+        } else {
+          items.value = mappedResponse
+        }
       } else {
         // TODO handle error
         items.value = []
       }
+      if (optional.sortItems) {
+        items.value.sort(optional.sortItems)
+      }
+      triggerRef(items)
     }
 
     const post = async (itemsToCreate: T[]): Promise<T[]> => {
@@ -112,8 +128,11 @@ export function defineStoreForResource<T extends HasID, E>(
         currentItem.value = item
       } else {
         // TODO: fetch the item and set current to it
-        // await get([`id=eq.${id}`])
-        // currentItem.value = items.value.find(i => i.id === id) ?? null
+        const response = await get({
+          params: new URLSearchParams([['id', `eq.${id}`]]),
+          append: true
+        })
+        currentItem.value = response?.[0] ?? null
       }
     }
 

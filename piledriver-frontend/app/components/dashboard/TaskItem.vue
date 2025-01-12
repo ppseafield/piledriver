@@ -82,6 +82,11 @@ const dropdownItems = computed(() => {
         label: 'Add subtask',
         icon: 'i-heroicons-plus',
         click: () => st.addBlankSubtask(props.task)
+      },
+      {
+        label: 'View',
+        icon: 'i-heroicons-eye',
+        click: () => navigateTo(`/dashboard/${props.task.id}`)
       }
     ],
     [
