@@ -2,5 +2,5 @@ containers/postgresql-17/data
 .env
 **/.env
 piledriver-frontend/.eslintcache
-piledriver-frontend/.eslintcache
-piledriver-frontend/.eslintcache
+**/.eslintcache
+
