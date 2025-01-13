@@ -50,8 +50,11 @@ export function defineStoreForResource<T extends HasID, E>(
       for (const item of items.value) {
         const index = response.findIndex(i => i.id === item.id)
         if (index !== -1 && items.value[index] !== undefined) {
-          console.log('updating item:', { ...items.value[index] }, ' with: ', response[index])
           Object.assign(item, response[index])
+          if (currentItem.value?.id === item.id) {
+            currentItem.value = item
+            triggerRef(currentItem)
+          }
         }
       }
       if (optional.sortItems) {
@@ -63,6 +66,7 @@ export function defineStoreForResource<T extends HasID, E>(
       const i = index < 0 ? items.value.length + index : index
       items.value[i] = item
       triggerRef(items)
+      triggerRef(currentItem)
     }
 
     const requestFetch = useRequestFetch()
@@ -80,6 +84,11 @@ export function defineStoreForResource<T extends HasID, E>(
           items.value.push(...mappedResponse)
         } else {
           items.value = mappedResponse
+        }
+        const i = mappedResponse.findIndex(item => item.id === currentItem.value?.id)
+        if (i >= 0) {
+          currentItem.value = response[i] as T
+          triggerRef(currentItem)
         }
       } else {
         // TODO handle error
@@ -106,7 +115,7 @@ export function defineStoreForResource<T extends HasID, E>(
     const put = async (itemsToUpdate: T[]): Promise<T[]> => {
       const response = await requestFetch<T[]>(`/api/${endpoint}`, {
         method: 'PUT',
-        body: itemsToUpdate
+        body: optional.prepare ? optional.prepare(itemsToUpdate) : itemsToUpdate
       })
       const mapped: T[] = optional.mapResponse ? optional.mapResponse(response) : response
       updateItemsFromResponse(mapped)

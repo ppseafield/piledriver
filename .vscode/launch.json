@@ -1,0 +1,38 @@
+{
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "client: chrome",
+      "url": "http://localhost:3000",
+      "urlFilter": "http://localhost:3000/*",
+      "webRoot": "${workspaceFolder}/piledriver-frontend",
+      "userDataDir": false,
+      "port": 9222,
+      "runtimeExecutable": "/usr/bin/google-chrome",
+      "runtimeArgs": [
+        "--remote-debuggin-port=9222",
+        "--inspect"
+      ],
+      "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "nuxt: server",
+      "outputCapture": "std",
+      "program": "${workspaceFolder}/piledriver-frontend/node_modules/nuxi/bin/nuxi.mjs",
+      "args": [
+        "dev"
+      ],
+      "cwd": "${workspaceFolder}/piledriver-frontend",
+      "console": "integratedTerminal"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "fullstack: nuxt",
+      "configurations": ["client: chrome", "nuxt: server"]
+    }
+  ]
+}

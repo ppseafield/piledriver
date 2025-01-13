@@ -44,14 +44,14 @@ onBeforeUnmount(() => {
 })
 
 const saveNewJournal = async () => {
-  const newJournal = await j.createJournal({
-    journal: {
+  const newJournal = await j.createJournal(
+    {
       title: title.value,
       text_body: editor.value?.getHTML() ?? '',
       json_body: editor.value?.getJSON() ?? {}
     },
-    tasks: tasks.filter(task => checked[task.id as UUID])
-  })
+    tasks.filter(task => checked[task.id as UUID])
+  )
   console.log('new journal created:', newJournal)
 }
 </script>

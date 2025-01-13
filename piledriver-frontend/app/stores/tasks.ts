@@ -30,7 +30,9 @@ const sortTasks = (a: Task, b: Task): number => {
 
 const prepareTasks = (tasks: Task[]): Task[] => {
   // omit subtasks, since they are not part of the task table
-  return tasks.map(t => ({ ...t, subtasks: undefined }))
+  const prepared = tasks.map(({ subtasks, ...t }) => t)
+  console.log('prepared tasks:', prepared)
+  return prepared
 }
 
 const mapResponseTasks = (tasks: Task[]): Task[] => {

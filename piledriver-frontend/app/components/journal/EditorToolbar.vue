@@ -15,22 +15,22 @@ const { editor } = defineProps<{
       <UButton
         :variant="editor.isActive('bold') ? 'solid' : 'outline'"
         label="Bold"
-        @click="editor.chain().toggleBold().run()"
+        @click="editor.chain().focus().toggleBold().run()"
       />
       <UButton
         :variant="editor.isActive('italic') ? 'solid' : 'outline'"
         label="Italic"
-        @click="editor.chain().toggleItalic().run()"
+        @click="editor.chain().focus().toggleItalic().run()"
       />
       <UButton
         :variant="editor.isActive('strike') ? 'solid' : 'outline'"
         label="Strike"
-        @click="editor.chain().toggleStrike().run()"
+        @click="editor.chain().focus().toggleStrike().run()"
       />
       <UButton
         :variant="editor.isActive('code') ? 'solid' : 'outline'"
         label="Strike"
-        @click="editor.chain().toggleCode().run()"
+        @click="editor.chain().focus().toggleCode().run()"
       />
     </UButtonGroup>
 
@@ -38,14 +38,17 @@ const { editor } = defineProps<{
       <UButton
         :variant="editor.isActive('heading', { level: 1 }) ? 'solid' : 'outline'"
         label="H1"
+        @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
       />
       <UButton
         :variant="editor.isActive('heading', { level: 2 }) ? 'solid' : 'outline'"
         label="H2"
+        @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
       />
       <UButton
         :variant="editor.isActive('heading', { level: 3 }) ? 'solid' : 'outline'"
         label="H3"
+        @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
       />
     </UButtonGroup>
 
@@ -53,21 +56,25 @@ const { editor } = defineProps<{
       <UButton
         :variant="editor.isActive('bulletList') ? 'solid' : 'outline'"
         label="⦁ List"
+        @click="editor.chain().focus().toggleBulletList().run()"
       />
       <UButton
         :variant="editor.isActive('orderedList') ? 'solid' : 'outline'"
         label="# List"
+        @click="editor.chain().focus().toggleOrderedList().run()"
       />
     </UButtonGroup>
 
     <UButton
       :variant="editor.isActive('blockquote') ? 'solid' : 'outline'"
       label="Blockquote"
+      @click="editor.chain().focus().toggleBlockquote().run()"
     />
 
     <UButton
       :variant="editor.isActive('codeBlock') ? 'solid' : 'outline'"
       label="Code Block"
+      @click="editor.chain().focus().toggleCodeBlock().run()"
     />
   </div>
   <div v-else />
