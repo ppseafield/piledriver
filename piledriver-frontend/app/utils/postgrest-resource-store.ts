@@ -76,7 +76,7 @@ export function defineStoreForResource<T extends HasID, E>(
       if (options?.queryType) {
         params.append('queryType', options.queryType)
       }
-      const url = `/api/${endpoint}${params}`
+      const url = `/api/${endpoint}?${params}`
       const response = await requestFetch<T[]>(url)
       if (response !== undefined && response !== null) {
         const mappedResponse = optional.mapResponse ? optional.mapResponse(response) : response

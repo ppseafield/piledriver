@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { shortDate } from '~~/shared/utils/temporal-helpers'
+
 definePageMeta({
   layout: 'dashboard-layout'
 })
@@ -24,14 +26,15 @@ await j.get()
       </UDashboardToolbar>
 
       <UDashboardPanelContent>
-        <ul>
-          <li
-            v-for="journal in j.items"
-            :key="journal.id"
-          >
-            <p>{{ journal.title }}</p>
-          </li>
-        </ul>
+        <UBlogList orientation="vertical">
+          <UBlogPost
+            v-for="entry in j.items"
+            :key="entry.id"
+            :title="entry.title"
+            :date="shortDate(entry.created_at)"
+            :to="`/journal/${entry.id}`"
+          />
+        </UBlogList>
       </UDashboardPanelContent>
     </UDashboardPanel>
   </UDashboardPage>
