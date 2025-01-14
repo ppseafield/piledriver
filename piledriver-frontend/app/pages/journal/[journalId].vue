@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { useEditor, EditorContent } from '@tiptap/vue-3'
+import StarterKit from '@tiptap/starter-kit'
+import Placeholder from '@tiptap/extension-placeholder'
+import EditorToolbar from '~/components/journal/EditorToolbar.vue'
+
 definePageMeta({
   layout: 'dashboard-layout'
 })
@@ -6,6 +11,28 @@ definePageMeta({
 const j = useJournalStore()
 const route = useRoute()
 await j.ensureCurrent(route.params.journalId)
+
+const editing = ref<boolean>(false)
+const editor = useEditor({
+  content: j.currentItem?.json_body ?? '',
+  editable: editing.value,
+  extensions: [
+    StarterKit,
+    Placeholder.configure({
+      placeholder: 'Start writing...'
+    })
+  ],
+  editorProps: {
+    attributes: {
+      class: 'prose w-full h-full border border-crocodile-100 rounded-lg p-4 outline outline-0'
+    }
+  }
+})
+const toggleEdit = () => {
+  const newEditing = !editing.value
+  editing.value = newEditing
+  editor.value?.setEditable(newEditing)
+}
 </script>
 
 <template>
@@ -18,7 +45,11 @@ await j.ensureCurrent(route.params.journalId)
 
       <UDashboardToolbar>
         <template #left>
-          Published <span>date</span>
+          <EditorToolbar
+            v-if="editing"
+            :editor="editor"
+          />
+          <span v-else>Published ...</span>
         </template>
 
         <template #right>
@@ -26,17 +57,16 @@ await j.ensureCurrent(route.params.journalId)
             color="primary"
             label="Edit"
             icon="i-heroicons-check"
-            @click="() => console.log('edit')"
+            @click="toggleEdit"
           />
         </template>
       </UDashboardToolbar>
 
       <UDashboardPanelContent>
         <div class="flex gap-4 h-full">
-          <section
-            v-html="j.currentItem?.text_body"
-            class="w-2/3 h-full tiptap-container" 
-          />
+          <section class="w-2/3 h-full tiptap-container">
+            <EditorContent :editor="editor" />
+          </section>
           <UAside
             :ui="{ wrapper: 'w-1/3' }"
           >

@@ -9,7 +9,6 @@ definePageMeta({
 })
 
 const j = useJournalStore()
-
 await j.fetchUnjournaledTasks()
 
 const tasks = reactive<Task[]>([])
@@ -23,10 +22,9 @@ onMounted(() => {
 })
 
 const title = ref<string>('')
-const editorContent = ref<string>('')
 
 const editor = useEditor({
-  content: editorContent.value,
+  content: '',
   extensions: [
     StarterKit,
     Placeholder.configure({
@@ -39,6 +37,7 @@ const editor = useEditor({
     }
   }
 })
+
 onBeforeUnmount(() => {
   editor.value?.destroy()
 })
@@ -47,7 +46,7 @@ const saveNewJournal = async () => {
   const newJournal = await j.createJournal(
     {
       title: title.value,
-      text_body: editor.value?.getHTML() ?? '',
+      text_body: editor.value?.getText() ?? '',
       json_body: editor.value?.getJSON() ?? {}
     },
     tasks.filter(task => checked[task.id as UUID])

@@ -73,7 +73,10 @@ const footerLinks = [
         :ui="{ left: 'flex-1' }"
       >
         <template #left>
-          <img src="~/assets/icons/piledriver-bulldozer-32x32.png">
+          <img
+            src="~/assets/icons/piledriver-bulldozer-32x32.png"
+            alt="piledriver logo (yellow bulldozer)"
+          >
           <span class="font-serif font-semibold text-2xl">piledriver</span>
         </template>
       </UDashboardNavbar>

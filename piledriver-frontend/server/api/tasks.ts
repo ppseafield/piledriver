@@ -46,9 +46,4 @@ const tasksResource = new PostgRESTResource({
   schema: taskArraySchema
 })
 
-export default defineEventHandler(async (event) => {
-  console.log('Got request for resource', tasksResource.url)
-  const response = await tasksResource.handle(event)
-  console.log('response from tasks:', response)
-  return response
-})
+export default defineEventHandler(tasksResource.handle)

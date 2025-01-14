@@ -19,6 +19,17 @@ export default defineNuxtConfig({
   ],
   devtools: { enabled: true },
 
+  app: {
+    head: {
+      title: 'Piledriver',
+      charset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1',
+      htmlAttrs: {
+        lang: 'en'
+      }
+    }
+  },
+
   colorMode: {
     preference: 'light'
   },
