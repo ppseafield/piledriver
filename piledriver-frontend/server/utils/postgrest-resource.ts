@@ -1,5 +1,5 @@
 import type { H3Event, EventHandlerRequest, HTTPMethod } from 'h3'
-import { set, type z } from 'zod'
+import type { z } from 'zod'
 
 export interface RequestError {
   statusCode: number
@@ -92,9 +92,13 @@ export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
   buildPostgRESTParams(event: H3Event<EventHandlerRequest>): URLSearchParams {
     const query = getQuery(event)
     const queryType = query?.['queryType'] as string ?? 'default'
+    const params = this.additionalParams?.[event.method]?.[queryType] ?? []
+    if (queryType === 'single' && query?.['id'] !== null) {
+      params.push(['id', `eq.${query['id']}`])
+    }
     return new URLSearchParams([
       ['select', this.computedFields()],
-      ...this.additionalParams?.[event.method]?.[queryType] ?? []
+      ...params
     ])
   }
 

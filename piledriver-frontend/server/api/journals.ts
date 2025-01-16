@@ -1,4 +1,4 @@
-import { fields as tasks } from '../tasks'
+import { fields as tasks } from './tasks'
 import { journalSchema } from '~~/shared/utils/validation/journal'
 
 const fields = [

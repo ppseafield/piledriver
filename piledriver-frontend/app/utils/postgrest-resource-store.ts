@@ -24,12 +24,12 @@ export interface ResourceStoreCore<T extends HasID> extends ResourceStoreOptiona
   items: ShallowRef<T[]>
   currentItem: ShallowRef<T | null>
   selectItem: (item: T | null) => void
-  get: (options: StoreRequestOptions | undefined) => Promise<void>
+  get: (options: StoreRequestOptions | undefined) => Promise<T[]>
   post: (items: T[]) => Promise<T[]>
   put: (items: T[]) => Promise<T[]>
   archive: (items: T[]) => Promise<void>
   updateAtIndex: (index: number, item: T) => void
-  ensureCurrent: (id: UUID) => Promise<void>
+  ensureCurrent: (id: UUID) => Promise<T | null>
 }
 
 type ResourceStore<T extends HasID, E> = ResourceStoreCore<T> & E
@@ -98,6 +98,7 @@ export function defineStoreForResource<T extends HasID, E>(
         items.value.sort(optional.sortItems)
       }
       triggerRef(items)
+      return items.value
     }
 
     const post = async (itemsToCreate: T[]): Promise<T[]> => {
@@ -130,18 +131,22 @@ export function defineStoreForResource<T extends HasID, E>(
       const removedIDs = response.map(i => i.id)
       items.value = items.value.filter(i => !removedIDs.includes(i?.id))
     }
-    const ensureCurrent = async (id: UUID) => {
+    const ensureCurrent = async (id: UUID): Promise<T | null> => {
       currentItem.value = null
       const item = items.value.find(i => i.id === id)
       if (item) {
         currentItem.value = item
+        return item
       } else {
         // TODO: fetch the item and set current to it
         const response = await get({
-          params: new URLSearchParams([['id', `eq.${id}`]]),
+          queryType: 'single',
+          params: new URLSearchParams([['id', id]]),
           append: true
         })
-        currentItem.value = response?.[0] ?? null
+        const current = response?.[0] ?? null
+        currentItem.value = current
+        return current
       }
     }
 

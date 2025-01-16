@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { useEditor, EditorContent } from '@tiptap/vue-3'
+import { generateHTML } from '@tiptap/html'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
+import { extensions } from '~/utils/tiptap-helpers'
 import EditorToolbar from '~/components/journal/EditorToolbar.vue'
 
 definePageMeta({
@@ -11,6 +13,11 @@ definePageMeta({
 const j = useJournalStore()
 const route = useRoute()
 await j.ensureCurrent(route.params.journalId)
+
+const htmlBody = generateHTML(
+  j.currentItem?.json_body ?? {},
+  extensions
+)
 
 const editing = ref<boolean>(false)
 const editor = useEditor({
@@ -65,7 +72,15 @@ const toggleEdit = () => {
       <UDashboardPanelContent>
         <div class="flex gap-4 h-full">
           <section class="w-2/3 h-full tiptap-container">
-            <EditorContent :editor="editor" />
+            <EditorContent
+              v-if="editing"
+              :editor="editor"
+            />
+            <div
+              v-else
+              v-html="htmlBody"
+              class="prose w-full h-full border border-crocodile-100 rounded-lg p-4 outline outline-0"
+            />
           </section>
           <UAside
             :ui="{ wrapper: 'w-1/3' }"
