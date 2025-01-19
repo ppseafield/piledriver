@@ -26,11 +26,13 @@ export const useSessionStore = defineStore('session', () => {
   }
 
   async function restore(): Promise<void> {
-    const restoreResponse = await $fetch<User[]>('/api/restore-session')
-    if (restoreResponse.length > 0) {
-      setUser(restoreResponse[0] as User)
-    } else {
-      setUser(null)
+    if (authStatus.value === 'unknown') {
+      const restoreResponse = await $fetch<User[]>('/api/restore-session')
+      if (restoreResponse.length > 0) {
+        setUser(restoreResponse[0] as User)
+      } else {
+        setUser(null)
+      }
     }
   }
 

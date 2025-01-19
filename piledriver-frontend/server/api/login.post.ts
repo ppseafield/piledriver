@@ -29,6 +29,11 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
         sameSite: 'strict',
         secure: config.nodeEnv === 'production'
       })
+
+      await setUserSession(event, {
+        user: login as User,
+        loggedInAt: nowTemporal()
+      })
       return login
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

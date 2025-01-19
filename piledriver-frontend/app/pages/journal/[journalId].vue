@@ -5,9 +5,11 @@ import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import { extensions } from '~/utils/tiptap-helpers'
 import EditorToolbar from '~/components/journal/EditorToolbar.vue'
+import type { MiddlewareKey } from '#build/types/middleware'
 
 definePageMeta({
-  layout: 'dashboard-layout'
+  layout: 'dashboard-layout',
+  middleware: ['require-auth' as MiddlewareKey]
 })
 
 const j = useJournalStore()

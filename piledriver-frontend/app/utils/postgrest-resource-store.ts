@@ -77,28 +77,36 @@ export function defineStoreForResource<T extends HasID, E>(
         params.append('queryType', options.queryType)
       }
       const url = `/api/${endpoint}?${params}`
-      const response = await requestFetch<T[]>(url)
-      if (response !== undefined && response !== null) {
-        const mappedResponse = optional.mapResponse ? optional.mapResponse(response) : response
-        if (options?.append) {
-          items.value.push(...mappedResponse)
+      try {
+        const response = await requestFetch<T[]>(url)
+        if (response !== undefined && response !== null) {
+          const mappedResponse = optional.mapResponse ? optional.mapResponse(response) : response
+          if (options?.append) {
+            items.value.push(...mappedResponse)
+          } else {
+            items.value = mappedResponse
+          }
+          const i = mappedResponse.findIndex(item => item.id === currentItem.value?.id)
+          if (i >= 0) {
+            currentItem.value = response[i] as T
+            triggerRef(currentItem)
+          }
         } else {
-          items.value = mappedResponse
+          // TODO handle error
+          items.value = []
         }
-        const i = mappedResponse.findIndex(item => item.id === currentItem.value?.id)
-        if (i >= 0) {
-          currentItem.value = response[i] as T
-          triggerRef(currentItem)
+        if (optional.sortItems) {
+          items.value.sort(optional.sortItems)
         }
-      } else {
+        triggerRef(items)
+        return items.value
+      } catch (error) {
         // TODO handle error
+        console.error('PROBLEM GETTING!', error)
         items.value = []
+        triggerRef(items)
+        return items.value
       }
-      if (optional.sortItems) {
-        items.value.sort(optional.sortItems)
-      }
-      triggerRef(items)
-      return items.value
     }
 
     const post = async (itemsToCreate: T[]): Promise<T[]> => {

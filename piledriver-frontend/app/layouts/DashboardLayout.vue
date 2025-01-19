@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import { useSessionStore } from '~~/layers/auth/stores/session'
-
-// Attempt to restore the user's session on page first load.
-const session = useSessionStore()
-await session.restore()
-
 const route = useRoute()
+const { user } = useUserSession()
+console.log('USER:', user)
 
 const dasbhoardLinks = computed(() => {
   const linkActive = (parentPath: string): boolean => {
@@ -86,7 +82,7 @@ const footerLinks = [
         <UDashboardSidebarLinks :links="footerLinks" />
 
         <template #footer>
-          user dropdown
+          {{ user?.username ?? '' }}
         </template>
       </UDashboardSidebar>
     </UDashboardPanel>
