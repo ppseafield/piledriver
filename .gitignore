@@ -3,4 +3,4 @@ containers/postgresql-17/data
 **/.env
 piledriver-frontend/.eslintcache
 **/.eslintcache
-
+.idea/
