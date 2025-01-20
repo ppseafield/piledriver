@@ -1,10 +1,6 @@
-import { useSessionStore } from '~~/layers/auth/stores/session'
-
 export default defineNuxtRouteMiddleware(async (to) => {
-  const s = useSessionStore()
-  await s.restore()
-  console.log('CHECKING AUTH STATE:', s.user)
-  if (s.authStatus !== 'user') {
+  const { loggedIn } = useUserSession()
+  if (!loggedIn.value) {
     navigateTo(`/login?redirect=${to.fullPath}`)
   }
 })

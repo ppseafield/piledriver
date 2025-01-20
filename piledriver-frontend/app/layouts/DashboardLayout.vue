@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const route = useRoute()
+
 const { user } = useUserSession()
-console.log('USER:', user)
 
 const dasbhoardLinks = computed(() => {
   const linkActive = (parentPath: string): boolean => {
