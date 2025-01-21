@@ -41,15 +41,27 @@ const dasbhoardLinks = computed(() => {
   ]
 })
 
-/* const accountItems = [
+const accountItems = [
   [
-    { label: 'Profile' },
-    { label: 'Settings' }
+    {
+      label: 'Profile',
+      to: '/profile',
+      icon: 'i-heroicons-user'
+    },
+    {
+      label: 'Settings',
+      to: '/profile/settings',
+      icon: 'i-heroicons-cog'
+    }
   ],
   [
-    { label: 'Log Out' }
+    {
+      label: 'Log Out',
+      to: '/logout',
+      icon: 'i-heroicons-arrow-right-start-on-rectangle'
+    }
   ]
-] */
+]
 
 const footerLinks = [
   { label: 'Home', to: '/' }
@@ -59,8 +71,8 @@ const footerLinks = [
 <template>
   <UDashboardLayout>
     <UDashboardPanel
-      :width="250"
-      :resizable="{ min: 200, max: 300 }"
+      :width="190"
+      :resizable="{ min: 190, max: 260 }"
       collapsible
       class="bg-energy-yellow-300"
     >
@@ -82,7 +94,17 @@ const footerLinks = [
         <UDashboardSidebarLinks :links="footerLinks" />
 
         <template #footer>
-          {{ user?.username ?? '' }}
+          <UDropdown
+            :items="accountItems"
+            class="w-full grow"
+          >
+            <UButton
+              color="tango"
+              trailing-icon="i-heroicons-chevron-up-20-solid"
+              :label="user.username"
+              :ui="{ wrapper: 'w-full grow', block: 'grow', inline: 'justify-between grow' }"
+            />
+          </UDropdown>
         </template>
       </UDashboardSidebar>
     </UDashboardPanel>

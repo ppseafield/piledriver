@@ -4,6 +4,8 @@
 // nuxt-mailpit
 // pinia-plugin-persistedstate and `destr`
 
+// Workaround: adding 'ui' trips up this rule. security: {...} doesn't.
+// eslint-disable-next-line nuxt/nuxt-config-keys-order
 export default defineNuxtConfig({
   extends: ['@nuxt/ui-pro'],
   modules: [
@@ -30,7 +32,6 @@ export default defineNuxtConfig({
       }
     }
   },
-
   colorMode: {
     preference: 'light'
   },
@@ -64,5 +65,8 @@ export default defineNuxtConfig({
   },
   security: {
     // todo
+  },
+  ui: {
+    safelistColors: ['dodger-blue', 'malibu', 'tango', 'energy-yellow']
   }
 })
