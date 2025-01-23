@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import TaskList from '~/components/dashboard/TaskList.vue'
 import { useProjectStore } from '~/stores/projects'
 
 definePageMeta({
@@ -8,8 +9,13 @@ definePageMeta({
 
 const route = useRoute()
 const p = useProjectStore()
+const t = useTaskStore()
 await p.ensureCurrent(route.params.projectId)
 // await p.fetchTasks
+await t.get({
+  queryType: 'project',
+  params: new URLSearchParams([['project_id', p.currentItem.id]])
+})
 </script>
 
 <template>
@@ -30,7 +36,7 @@ await p.ensureCurrent(route.params.projectId)
       </UDashboardToolbar>
 
       <UDashboardPanelContent>
-        <p>{{ p.currentItem?.description }}</p>
+        <TaskList :tasks="t.items" />
       </UDashboardPanelContent>
     </UDashboardPanel>
   </UDashboardPage>

@@ -6,23 +6,31 @@ export interface RequestError {
   message: string
 }
 
+interface AdditionalParams {
+  defaultParams: string[][]
+  allowedParams?: string[]
+}
+
 /**
  * Describes any number of named PostgREST parameters. Placing them in the server
  * resource definition means a Resource can send multiple kinds of requests to the
  * PostgREST server without pulling and sending raw request parameters from the client.
+ * Optionally allow some parameters to be passed in the query string.
  *
  * @example
  * {
  *   GET: {
- *     'default': [['order', 'task_order.asc']],
- *     'unjournaled': [
- *       ['completed_at', 'not.is.null'],
- *       ['journaled_by', 'is.null']
- *     ]
+ *     'default': {
+ *       defaultParams: [['order', 'task_order.asc']],
+ *     },
+ *     'project': {
+ *       defaultParams: [['order', 'task_order.asc']],
+ *       allowedParams: ['project_id']
+ *     }
  *   }
  * }
  */
-type ResourceAdditionalParams = Partial<Record<HTTPMethod, Record<string, string[][]>>>
+type ResourceAdditionalParams = Partial<Record<HTTPMethod, Record<string, AdditionalParams>>>
 
 interface PostgRESTResourceDescription<TSchema> {
   endpoint: string
@@ -92,9 +100,19 @@ export class PostgRESTResource<T, TSchema extends z.ZodType<T[]>> {
   buildPostgRESTParams(event: H3Event<EventHandlerRequest>): URLSearchParams {
     const query = getQuery(event)
     const queryType = query?.['queryType'] as string ?? 'default'
-    const params = this.additionalParams?.[event.method]?.[queryType] ?? []
+    const params = this.additionalParams?.[event.method]?.[queryType]?.defaultParams ?? []
     if (queryType === 'single' && query?.['id'] !== null) {
       params.push(['id', `eq.${query['id']}`])
+    } else if (this.additionalParams?.[event.method]?.[queryType]?.allowedParams instanceof Array) {
+      for (const allowed of this.additionalParams?.[event.method]?.[queryType]?.allowedParams ?? []) {
+        if (query[allowed] !== undefined) {
+          if (query[allowed] === null) {
+            params.push([allowed, 'is.null'])
+          } else {
+            params.push([allowed, `eq.${query[allowed]}`])
+          }
+        }
+      }
     }
     return new URLSearchParams([
       ['select', this.computedFields()],

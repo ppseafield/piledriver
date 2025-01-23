@@ -101,7 +101,7 @@ const footerLinks = [
             <UButton
               color="tango"
               trailing-icon="i-heroicons-chevron-up-20-solid"
-              :label="user.username"
+              :label="user?.username || 'Account'"
               :ui="{ wrapper: 'w-full grow', block: 'grow', inline: 'justify-between grow' }"
             />
           </UDropdown>

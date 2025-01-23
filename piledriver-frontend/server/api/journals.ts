@@ -18,9 +18,11 @@ export const journalsResource = new PostgRESTResource({
   embeddedResources: { tasks },
   additionalParams: {
     GET: {
-      default: [
-        ['order', 'created_at.desc']
-      ]
+      default: {
+        defaultParams: [
+          ['order', 'created_at.desc']
+        ]
+      }
     }
   },
   schema: journalSchema.array()
