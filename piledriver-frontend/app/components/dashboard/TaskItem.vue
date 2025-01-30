@@ -6,6 +6,7 @@ import { orderClass } from '~/utils/task-helpers'
 const props = defineProps<{
   task: Task
   index: number
+  project?: Project
 }>()
 
 const t = useTaskStore()
@@ -16,8 +17,11 @@ const textStyles = computed(() => {
   return orderClass(props.task.completed_at === null ? props.index : 7)
 })
 const titleText = ref<string>(props.task.title)
+const subtasks = shallowRef<Subtask[]>(props.task.subtasks ?? [])
 watch(props, () => {
   titleText.value = props.task.title
+  subtasks.value = props.task?.subtasks ?? []
+  triggerRef(subtasks)
 })
 const isChecked = computed<boolean>(() => {
   return props.task.completed_at !== null
@@ -70,6 +74,12 @@ const updateCompleted = (completed: boolean) => {
   t.updateCompletion(taskOnly, completed)
 }
 
+const addNewSubtask = () => {
+  const st = t.blankSubtask(props.task, null)
+  subtasks.value.push(st)
+  triggerRef(subtasks)
+}
+
 const dropdownItems = computed(() => {
   const items = [
     [
@@ -81,7 +91,7 @@ const dropdownItems = computed(() => {
       {
         label: 'Add subtask',
         icon: 'i-heroicons-plus',
-        click: () => st.addBlankSubtask(props.task)
+        click: addNewSubtask
       },
       {
         label: 'View',
@@ -159,9 +169,9 @@ const dropdownItems = computed(() => {
     </div>
 
     <SubtaskList
-      v-if="task.subtasks && task.subtasks.length > 0"
+      v-if="subtasks && subtasks.length > 0"
       :task="task"
-      :subtasks="task.subtasks"
+      :subtasks="subtasks"
       :level="1"
     />
   </div>

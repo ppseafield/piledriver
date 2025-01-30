@@ -36,7 +36,7 @@ await t.get({
       </UDashboardToolbar>
 
       <UDashboardPanelContent>
-        <TaskList :tasks="t.items" />
+        <TaskList />
       </UDashboardPanelContent>
     </UDashboardPanel>
   </UDashboardPage>

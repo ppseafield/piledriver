@@ -10,7 +10,9 @@ export const fields = [
   'completed_at',
   'archived_at',
   'task_order',
-  'title'
+  'title',
+  'project_id',
+  'project_assigned'
 ]
 const subtasks = [
   'id',
@@ -36,14 +38,15 @@ const tasksResource = new PostgRESTResource({
       default: {
         defaultParams: [
           ['order', 'task_order.asc'],
-          ['or', `(completed_at.is.null,and(completed_at.gte.${twoWeeksAgo()},journaled_by.is.null))`],
+          ['journaled_by', 'is.null'],
           ['or', '(project_id.is.null,project_assigned.is.true)']
         ]
       },
       unjournaled: {
         defaultParams: [
           ['order', 'completed_at.asc'],
-          ['and', '(completed_at.not.is.null,journaled_by.is.null)']
+          ['and', '(completed_at.not.is.null,journaled_by.is.null)'],
+          ['or', '(project_id.is.null,project_assigned.is.true)']
         ]
       },
       project: {

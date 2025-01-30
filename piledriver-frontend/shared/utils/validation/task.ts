@@ -17,6 +17,7 @@ const baseSubtaskSchema = z.object({
 const subtaskSchema = baseSubtaskSchema.extend({
   subtasks: z.optional(baseSubtaskSchema.array())
 }).refine(
+  /** If the task is on the user's dashboard, it should either be completed or have a task order. */
   ({ id, task_order }) => !(id !== undefined && task_order === undefined),
   {
     message: 'Task order is required.',
@@ -36,15 +37,17 @@ const baseTaskSchema = z.object({
   archived_at: z.nullable(z.string().datetime({ offset: true })),
   task_order: z.optional(z.nullable(z.number())),
   title: z.string().min(3, { message: 'Title is required' }),
+  project_id: z.nullable(z.string().uuid()),
+  project_assigned: z.boolean(),
   subtasks: z.optional(subtaskArraySchema)
 })
 
 export const taskSchema = baseTaskSchema.refine(
-  ({ id, completed_at, task_order }: z.infer<typeof baseTaskSchema>) => {
-    if (id !== undefined) {
-      return completed_at !== null || task_order !== null
-    } else {
+  ({ id, completed_at, task_order, project_id, project_assigned }: z.infer<typeof baseTaskSchema>) => {
+    if (id === undefined || (project_id !== null && !project_assigned)) {
       return true
+    } else {
+      return completed_at !== null || task_order !== null
     }
   },
   {

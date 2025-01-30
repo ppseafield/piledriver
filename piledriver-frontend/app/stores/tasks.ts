@@ -2,7 +2,6 @@ import { defineStoreForResource } from '~/utils/postgrest-resource-store'
 import { nowTemporal } from '~~/shared/utils/temporal-helpers'
 import type { MoveTaskResponse, Task } from '~~/shared/types/tasks'
 import { makeSubtaskTree } from '~/utils/task-helpers'
-import { useSessionStore } from '~~/layers/auth/stores/session'
 
 interface TaskStore {
   waiting: ComputedRef<Task[]>
@@ -13,6 +12,7 @@ interface TaskStore {
   moveTask: (task: Task, move_task_order: number) => Promise<void>
   nextOrder: ComputedRef<number>
   splitCompleted: (task: Task) => void
+  blankSubtask: (task: Task, subtask: Subtask | null) => Subtask
 }
 
 const sortTasks = (a: Task, b: Task): number => {
@@ -43,7 +43,7 @@ const mapResponseTasks = (tasks: Task[]): Task[] => {
 export const useTaskStore = defineStoreForResource<Task, TaskStore>(
   'tasks',
   (rsc) => {
-    const session = useSessionStore()
+    const us = useUserSession()
     // TODO: project filters
     const waiting = computed(() => rsc.items.value.filter(t => t.completed_at === null))
     const completed = computed(() => rsc.items.value.filter(t => t.completed_at))
@@ -66,15 +66,40 @@ export const useTaskStore = defineStoreForResource<Task, TaskStore>(
 
     const addBlankTask = () => {
       rsc.items.value.push({
-        created_by: session.user?.user_id as UUID,
+        created_by: us.user.user_id,
         journaled_by: null,
         routine_from: null,
         created_at: nowTemporal(),
         completed_at: null,
         archived_at: null,
-        title: ''
+        title: '',
+        project_id: null,
+        project_assigned: false
       })
       triggerRef(rsc.items)
+    }
+    const blankSubtask = (task: Task, subtask: Subtask | null): Subtask => {
+      let task_order = 1
+      if (subtask !== null && subtask.subtasks.length >= 0) {
+        task_order = subtask?.subtasks.length + 1
+      } else if (task?.subtasks && task.subtasks.length >= 0) {
+        task_order = task.subtasks.length + 1
+      }
+      const newSubtask: Subtask = {
+        parent_subtask_id: subtask === null ? null : subtask.id,
+        task_sheet_item_id: null,
+        created_by: us.user.user_id,
+        routine_from: null,
+        created_at: nowTemporal(),
+        completed_at: null,
+        archived_at: null,
+        task_order,
+        title: ''
+      }
+      if (task.id !== undefined) {
+        newSubtask.task_id = task.id
+      }
+      return newSubtask
     }
 
     const removeTask = (task: Task) => {
@@ -122,7 +147,8 @@ export const useTaskStore = defineStoreForResource<Task, TaskStore>(
       removeTask,
       moveTask,
       nextOrder,
-      splitCompleted
+      splitCompleted,
+      blankSubtask
     }
   },
   {
