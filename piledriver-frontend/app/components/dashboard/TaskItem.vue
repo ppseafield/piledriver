@@ -17,14 +17,18 @@ const textStyles = computed(() => {
   return orderClass(props.task.completed_at === null ? props.index : 7)
 })
 const titleText = ref<string>(props.task.title)
-const subtasks = shallowRef<Subtask[]>(props.task.subtasks ?? [])
 watch(props, () => {
   titleText.value = props.task.title
-  subtasks.value = props.task?.subtasks ?? []
-  triggerRef(subtasks)
 })
 const isChecked = computed<boolean>(() => {
   return props.task.completed_at !== null
+})
+const subtasks = computed(() => {
+  if (props.task?.id === undefined || st.subtaskMap === undefined) {
+    return []
+  } else {
+    return st.subtaskMap.get(props.task.id) ?? []
+  }
 })
 
 onMounted(() => {
@@ -39,7 +43,7 @@ const editTask = () => {
 }
 const saveTask = async () => {
   const updatedTask = { ...props.task, title: titleText.value }
-  delete updatedTask.subtasks
+
   if (updatedTask.id === undefined) {
     const [savedTask] = await t.post([updatedTask])
     t.updateAtIndex(-1, savedTask)
@@ -69,15 +73,11 @@ const deleteTask = () => {
 }
 
 const updateCompleted = (completed: boolean) => {
-  // Hmm, this happens annoyingly enough times; should address it.
-  const { subtasks, ...taskOnly } = props.task
-  t.updateCompletion(taskOnly, completed)
+  t.updateCompletion(props.task, completed)
 }
 
 const addNewSubtask = () => {
-  const st = t.blankSubtask(props.task, null)
-  subtasks.value.push(st)
-  triggerRef(subtasks)
+  console.log('add new subtask')
 }
 
 const dropdownItems = computed(() => {
@@ -107,13 +107,14 @@ const dropdownItems = computed(() => {
       }
     ]
   ]
-  if (props.task.subtasks && props.task.subtasks.length > 0) {
+  // TODO: sort out subtasks (again)
+  /* if (props.task.subtasks && props.task.subtasks.length > 0) {
     items.push([{
       label: 'Split Completed',
       icon: 'i-heroicons-chevron-up-down',
       click: () => t.splitCompleted(props.task)
     }])
-  }
+  } */
   return items
 })
 </script>
@@ -169,7 +170,7 @@ const dropdownItems = computed(() => {
     </div>
 
     <SubtaskList
-      v-if="subtasks && subtasks.length > 0"
+      v-if="subtasks.length > 0"
       :task="task"
       :subtasks="subtasks"
       :level="1"

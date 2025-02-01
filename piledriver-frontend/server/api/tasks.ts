@@ -14,25 +14,11 @@ export const fields = [
   'project_id',
   'project_assigned'
 ]
-const subtasks = [
-  'id',
-  'task_id',
-  'parent_subtask_id',
-  'task_sheet_item_id',
-  'created_by',
-  'routine_from',
-  'created_at',
-  'completed_at',
-  'archived_at',
-  'task_order',
-  'title'
-]
 
 const tasksResource = new PostgRESTResource({
   endpoint: 'tasks',
   fields,
   allowAnonymous: false,
-  embeddedResources: { subtasks },
   additionalParams: {
     GET: {
       default: {

@@ -9,6 +9,14 @@ const props = defineProps<{
 
 const st = useSubtaskStore()
 
+const subtasks = computed(() => {
+  if (props.subtask?.id === undefined || st.subtaskMap === undefined) {
+    return []
+  } else {
+    return st.subtaskMap.get(props.subtask.id) ?? []
+  }
+})
+
 const titleText = ref<string>(props.subtask.title)
 watch(props, () => {
   titleText.value = props.subtask.title
@@ -131,9 +139,9 @@ const dropdownItems = computed(() => [
     </div>
 
     <SubtaskList
-      v-if="subtask.subtasks && subtask.subtasks.length > 0"
+      v-if="subtasks.length > 0"
       :task="task"
-      :subtasks="subtask.subtasks"
+      :subtasks="subtasks"
       :level="level + 1"
     />
   </div>

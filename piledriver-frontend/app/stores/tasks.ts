@@ -1,7 +1,6 @@
 import { defineStoreForResource } from '~/utils/postgrest-resource-store'
 import { nowTemporal } from '~~/shared/utils/temporal-helpers'
 import type { MoveTaskResponse, Task } from '~~/shared/types/tasks'
-import { makeSubtaskTree } from '~/utils/task-helpers'
 
 interface TaskStore {
   waiting: ComputedRef<Task[]>
@@ -26,18 +25,6 @@ const sortTasks = (a: Task, b: Task): number => {
   } else {
     return -1
   }
-}
-
-const prepareTasks = (tasks: Task[]): Task[] => {
-  // omit subtasks, since they are not part of the task table
-  const prepared = tasks.map(({ subtasks, ...t }) => t)
-  console.log('prepared tasks:', prepared)
-  return prepared
-}
-
-const mapResponseTasks = (tasks: Task[]): Task[] => {
-  // Turn a flat subtask list into a tree of subtasks
-  return tasks.map(t => ({ ...t, subtasks: makeSubtaskTree(t.subtasks ?? []) }))
 }
 
 export const useTaskStore = defineStoreForResource<Task, TaskStore>(
@@ -79,12 +66,13 @@ export const useTaskStore = defineStoreForResource<Task, TaskStore>(
       triggerRef(rsc.items)
     }
     const blankSubtask = (task: Task, subtask: Subtask | null): Subtask => {
-      let task_order = 1
+      // TODO: figure out subtask task_order
+      /* let task_order = 1
       if (subtask !== null && subtask.subtasks.length >= 0) {
         task_order = subtask?.subtasks.length + 1
       } else if (task?.subtasks && task.subtasks.length >= 0) {
         task_order = task.subtasks.length + 1
-      }
+      } */
       const newSubtask: Subtask = {
         parent_subtask_id: subtask === null ? null : subtask.id,
         task_sheet_item_id: null,
@@ -93,7 +81,7 @@ export const useTaskStore = defineStoreForResource<Task, TaskStore>(
         created_at: nowTemporal(),
         completed_at: null,
         archived_at: null,
-        task_order,
+        task_order: 1,
         title: ''
       }
       if (task.id !== undefined) {
@@ -151,9 +139,5 @@ export const useTaskStore = defineStoreForResource<Task, TaskStore>(
       blankSubtask
     }
   },
-  {
-    sortItems: sortTasks,
-    prepare: prepareTasks,
-    mapResponse: mapResponseTasks
-  }
+  { sortItems: sortTasks }
 )

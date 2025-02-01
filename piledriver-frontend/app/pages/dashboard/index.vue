@@ -8,7 +8,9 @@ definePageMeta({
 
 const t = useTaskStore()
 const st = useSubtaskStore()
-await Promise.all([t.get(), st.get()])
+await Promise.all([t.get(), st.getAndBuild()])
+
+console.log('subtask map:', st.subtaskMap)
 
 const newTaskPresent = computed(() => {
   return t.items?.[0]?.id === undefined

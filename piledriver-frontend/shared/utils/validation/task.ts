@@ -38,8 +38,7 @@ const baseTaskSchema = z.object({
   task_order: z.optional(z.nullable(z.number())),
   title: z.string().min(3, { message: 'Title is required' }),
   project_id: z.nullable(z.string().uuid()),
-  project_assigned: z.boolean(),
-  subtasks: z.optional(subtaskArraySchema)
+  project_assigned: z.boolean()
 })
 
 export const taskSchema = baseTaskSchema.refine(

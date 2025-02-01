@@ -20,7 +20,12 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     'nuxt-auth-utils'
   ],
-  devtools: { enabled: true },
+  devtools: {
+    enabled: true,
+    vscode: {
+      reuseExistingServer: true
+    }
+  },
 
   app: {
     head: {
