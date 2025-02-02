@@ -17,6 +17,26 @@ const subtasks = computed(() => {
   }
 })
 
+const completion = computed<[number, number]>(() => {
+  if (subtasks.value.length === 0) {
+    return [0, 0]
+  } else {
+    const completed = subtasks.value.filter(
+      (subtask: Subtask) => subtask.completed_at !== null
+    ).length
+    return [completed, subtasks.value.length]
+  }
+})
+
+const subtaskTitle = computed<string>(() => {
+  const [completed, total] = completion.value
+  if (total > 0 && completed < total) {
+    return `[${completed}/${total}] ${props.subtask.title}`
+  } else {
+    return props.subtask.title
+  }
+})
+
 const titleText = ref<string>(props.subtask.title)
 watch(props, () => {
   titleText.value = props.subtask.title
@@ -122,7 +142,7 @@ const dropdownItems = computed(() => [
         <UCheckbox
           :model-value="isChecked"
           :ui="{ wrapper: 'grow' }"
-          :label="props.subtask.title"
+          :label="subtaskTitle"
           @update:model-value="updateCompleted"
         />
         <!-- todo: toggle visibility of subtasks -->

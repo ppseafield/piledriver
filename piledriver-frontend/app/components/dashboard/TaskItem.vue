@@ -31,6 +31,26 @@ const subtasks = computed(() => {
   }
 })
 
+const completion = computed<[number, number]>(() => {
+  if (subtasks.value.length === 0) {
+    return [0, 0]
+  } else {
+    const completed = subtasks.value.filter(
+      (subtask: Subtask) => subtask.completed_at !== null
+    ).length
+    return [completed, subtasks.value.length]
+  }
+})
+
+const taskTitle = computed<string>(() => {
+  const [completed, total] = completion.value
+  if (total > 0) {
+    return `[${completed}/${total}] ${props.task.title}`
+  } else {
+    return props.task.title
+  }
+})
+
 onMounted(() => {
   if (props.task.title === '') {
     editing.value = true
@@ -151,7 +171,7 @@ const dropdownItems = computed(() => {
         <UCheckbox
           :model-value="isChecked"
           :ui="{ wrapper: 'grow', label: textStyles.label, form: textStyles.form }"
-          :label="props.task.title"
+          :label="taskTitle"
           @update:model-value="updateCompleted"
         />
         <!-- toggle visibility of subtasks -->
