@@ -38,3 +38,11 @@ services:
       - postgres
     environment:
       DATABASE_URL: $PGHERO_DATABASE_URL
+  
+  dozzle:
+    container_name: dozzle
+    image: amir20/dozzle:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8181:8080"

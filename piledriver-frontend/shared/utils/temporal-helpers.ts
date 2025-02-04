@@ -1,18 +1,10 @@
 import { Temporal } from 'temporal-polyfill'
 
-/* declare global {
-  interface Window {
-    Temporal: typeof Temporal
-  }
-}
-
-window.Temporal = Temporal */
-
-export function nowTemporal(): string {
+export function nowTemporal(): Timestamp {
   return Temporal.Now.zonedDateTimeISO().toString({ timeZoneName: 'never' })
 }
 
-export function twoWeeksAgo(): string {
+export function twoWeeksAgo(): Timestamp {
   return Temporal.Now.plainDateISO().subtract({ days: 14 }).toString()
 }
 
@@ -21,7 +13,7 @@ export function twoWeeksAgo(): string {
  * @param datestring - timestamp with timezone from postgres
  * @returns string - nice formatted date
  */
-export function shortDate(datestring: string): string {
+export function shortDate(datestring: Timestamp): string {
   return Temporal.Instant.from(datestring).toLocaleString(undefined, {
     month: 'short', day: 'numeric', year: 'numeric'
   })

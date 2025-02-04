@@ -30,7 +30,6 @@ const sortTasks = (a: Task, b: Task): number => {
 export const useTaskStore = defineStoreForResource<Task, TaskStore>(
   'tasks',
   (rsc) => {
-    const us = useUserSession()
     // TODO: project filters
     const waiting = computed(() => rsc.items.value.filter(t => t.completed_at === null))
     const completed = computed(() => rsc.items.value.filter(t => t.completed_at))
@@ -52,8 +51,10 @@ export const useTaskStore = defineStoreForResource<Task, TaskStore>(
     }
 
     const addBlankTask = () => {
+      const { user } = useUserSession()
+      console.log('user:', user.value)
       rsc.items.value.push({
-        created_by: us.user.user_id,
+        created_by: user.value.user_id,
         journaled_by: null,
         routine_from: null,
         created_at: nowTemporal(),
@@ -73,10 +74,11 @@ export const useTaskStore = defineStoreForResource<Task, TaskStore>(
       } else if (task?.subtasks && task.subtasks.length >= 0) {
         task_order = task.subtasks.length + 1
       } */
+      const { user } = useUserSession()
       const newSubtask: Subtask = {
         parent_subtask_id: subtask === null ? null : subtask.id,
         task_sheet_item_id: null,
-        created_by: us.user.user_id,
+        created_by: user.user_id,
         routine_from: null,
         created_at: nowTemporal(),
         completed_at: null,

@@ -6,7 +6,7 @@ import type { Subtask } from '~~/shared/types/tasks'
 interface SubtaskStore {
   subtaskMap: Reactive<Map<UUID, ShallowRef<Subtask>[]>>
   getAndBuild: () => Promise<void>
-  // updateCompletion: (subtask: Subtask, completed: boolean) => void
+  updateCompletion: (subtask: Subtask, completed: boolean) => void
   addBlankSubtask: (subtask: Subtask) => void
 }
 
@@ -23,6 +23,7 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
       subtaskMap.clear()
 
       for (const subtask of rsc.items.value) {
+        // Keys are a mix of subtask and task ids so that all child relationships are present.
         const uuidKey: UUID = subtask.parent_subtask_id ?? subtask.task_id
         const sts = subtaskMap.get(uuidKey)
         if (sts !== undefined) {
@@ -47,9 +48,49 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
         title: ''
       })
     }
+    const findTopmostParent = (subtask: Subtask): UUID => {
+      console.log('subtaskMap', subtaskMap)
+      console.log('subtask id:', subtask.id)
+      if (subtask.parent_subtask_id === null) {
+        // TODO: Task may also be done! Handle this too.
+        return subtask.id
+      } else {
+        const siblings = subtaskMap.get(subtask.parent_subtask_id)
+        if (siblings === undefined) {
+          return subtask.id
+        } else {
+          for (const st of siblings) {
+            if (st.id === subtask.id) {
+              st.completed_at = nowTemporal()
+            }
+          }
+          // Because completion can cascade upwards, we need to find the topmost parent id.
+          if (siblings.every((st: Subtask) => st.completed_at !== null)) {
+            return findTopmostParent(
+              rsc.items.value.find(
+                (st: Subtask) => st.id === subtask.parent_subtask_id
+              )
+            )
+          } else {
+            return subtask.id
+          }
+        }
+      }
+    }
+
+    const updateCompletion = (subtask: Subtask, completed: boolean) => {
+      let id = subtask.id
+      if (completed) {
+        id = findTopmostParent(subtask)
+        console.log('had to look upwards for id:', id)
+      }
+      console.log('id:', id)
+    }
+
     return {
       subtaskMap,
       getAndBuild,
+      updateCompletion,
       addBlankSubtask
     }
   },

@@ -80,8 +80,9 @@ const deleteSubtask = async () => {
   console.log('todo: delete subtask')
 }
 
-const updateCompleted = async (value: boolean) => {
-  console.log('todo: update subtask completed: check completion cascasde', value)
+const updateCompleted = async (completed: boolean) => {
+  st.updateCompletion(props.subtask, completed)
+  // console.log('todo: update subtask completed: check completion cascasde', completed)
   // const updatedSubtask = { ...props.subtask, completed_at: value ? new Date() : null }
   // await st.put([updatedSubtask])
 }
