@@ -61,3 +61,8 @@ export const moveTaskSchema = z.object({
   move_task_id: z.string().uuid({ message: 'Task ID is required' }),
   move_new_order: z.number({ message: 'Task order is required' })
 })
+
+export const updateSubtaskCompletionSchema = z.object({
+  subtask_id: z.string().uuid({ message: 'Subtask ID is required' }),
+  completed: z.boolean()
+})

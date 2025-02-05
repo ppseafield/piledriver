@@ -1,21 +1,17 @@
-create function piledriver.update_subtask_completion(st_id UUID, done BOOLEAN)
-    returns setof piledriver.subtasks
+create function piledriver.update_subtask_completion(subtask_id UUID, completed BOOLEAN)
+    returns TABLE (st_id UUID, new_completed TIMESTAMP WITH TIME ZONE)
     language plpgsql
 as $$
 DECLARE
     new_completed_at TIMESTAMP WITH TIME ZONE = CASE
-        WHEN done THEN now()
+        WHEN completed THEN now()
         ELSE NULL
     END;
 BEGIN
-    update piledriver.subtasks
-    set completed_at = new_completed_at
-    where id = st_id;
-
     return query with recursive subtask_children as (
         select id, parent_subtask_id
         from piledriver.subtasks
-        where id = st_id
+        where id = subtask_id
         union all
         select s.id, s.parent_subtask_id
         from piledriver.subtasks s
@@ -26,6 +22,7 @@ BEGIN
             where id in (select id from subtask_children)
             returning id, completed_at
     )
-    select id, completed_at from updated_subtasks;
+    select us.id AS st_id, us.completed_at as new_completed_at from updated_subtasks us;
 END
 $$;
+grant execute on function piledriver.update_subtask_completion(UUID, BOOLEAN) to piledriver_user;

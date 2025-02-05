@@ -11,6 +11,7 @@ declare module '#auth-utils' {
   interface UserSession {
     user: User | null
     loggedInAt: Timestamp | null
+    token?: string
   }
 
   interface SecureSessionData {

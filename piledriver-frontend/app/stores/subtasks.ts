@@ -1,12 +1,12 @@
 import type { Reactive, ShallowRef } from 'vue'
 import { defineStoreForResource } from '~/utils/postgrest-resource-store'
 import { nowTemporal } from '~~/shared/utils/temporal-helpers'
-import type { Subtask } from '~~/shared/types/tasks'
+import type { Subtask, SubtaskCompletion } from '~~/shared/types/tasks'
 
 interface SubtaskStore {
   subtaskMap: Reactive<Map<UUID, ShallowRef<Subtask>[]>>
   getAndBuild: () => Promise<void>
-  updateCompletion: (subtask: Subtask, completed: boolean) => void
+  updateCompletion: (subtask: Subtask, completed: boolean) => Promise<void>
   addBlankSubtask: (subtask: Subtask) => void
 }
 
@@ -78,13 +78,38 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
       }
     }
 
-    const updateCompletion = (subtask: Subtask, completed: boolean) => {
+    const updateCompletion = async (subtask: Subtask, completed: boolean) => {
       let id = subtask.id
       if (completed) {
         id = findTopmostParent(subtask)
         console.log('had to look upwards for id:', id)
       }
       console.log('id:', id)
+      const response = await $fetch<SubtaskCompletion[]>('/api/update-subtask-completion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: { subtask_id: id, completed }
+      })
+      const updatedSubtasks = Object.fromEntries(
+        response.map(({ st_id, new_completed }) => [st_id, new_completed])
+      )
+      // Update the store subtasks
+      for (const item of rsc.items.value) {
+        if (updatedSubtasks[item.id]) {
+          item.completed_at = updatedSubtasks[item.id]
+          if (item.parent_subtask_id !== null) {
+            const siblings = subtaskMap.get(item.parent_subtask_id)
+            if (siblings) {
+              siblings.forEach((st: Subtask) => {
+                if (st.id === item.id) {
+                  st.completed_at = updatedSubtasks[item.id]
+                }
+              })
+            }
+          }
+        }
+      }
+      triggerRef(rsc.items)
     }
 
     return {
