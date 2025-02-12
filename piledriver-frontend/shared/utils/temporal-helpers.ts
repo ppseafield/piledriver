@@ -18,3 +18,4 @@ export function shortDate(datestring: Timestamp): string {
     month: 'short', day: 'numeric', year: 'numeric'
   })
 }
+

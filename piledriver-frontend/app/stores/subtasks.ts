@@ -16,7 +16,7 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
     const { user } = useUserSession()
 
     // const requestFetch = useRequestFetch()
-    const subtaskMap = reactive(new Map<UUID, Subtask[]>())
+    const subtaskMap = reactive<Map<UUID, ShallowRef<Subtask>[]>>(new Map<UUID, ShallowRef<Subtask>[]>())
 
     const getAndBuild = async () => {
       await rsc.get({})
@@ -51,6 +51,7 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
     const findTopmostParent = (subtask: Subtask): UUID => {
       console.log('subtaskMap', subtaskMap)
       console.log('subtask id:', subtask.id)
+      const now = nowTemporal()
       if (subtask.parent_subtask_id === null) {
         // TODO: Task may also be done! Handle this too.
         return subtask.id
@@ -60,8 +61,8 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
           return subtask.id
         } else {
           for (const st of siblings) {
-            if (st.id === subtask.id) {
-              st.completed_at = nowTemporal()
+            if (st.value.id === subtask.id) {
+              st.value.completed_at = now
             }
           }
           // Because completion can cascade upwards, we need to find the topmost parent id.
@@ -90,7 +91,7 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
         headers: { 'Content-Type': 'application/json' },
         body: { subtask_id: id, completed }
       })
-      const updatedSubtasks = Object.fromEntries(
+      const updatedSubtasks: Record<UUID, Timestamp | null> = Object.fromEntries(
         response.map(({ st_id, new_completed }) => [st_id, new_completed])
       )
       // Update the store subtasks
@@ -100,9 +101,10 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
           if (item.parent_subtask_id !== null) {
             const siblings = subtaskMap.get(item.parent_subtask_id)
             if (siblings) {
-              siblings.forEach((st: Subtask) => {
-                if (st.id === item.id) {
-                  st.completed_at = updatedSubtasks[item.id]
+              siblings.forEach((st: ShallowRef<Subtask>) => {
+                if (st.value.id === item.value.id) {
+                  st.value.completed_at = updatedSubtasks[item.value.id]
+                  triggerRef(st)
                 }
               })
             }
