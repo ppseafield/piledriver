@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useSessionStore } from '../stores/session'
 import type { FormSubmitEvent } from '~~/shared/types'
 import { loginRequestSchema } from '~~/shared/utils/validation/session'
 
@@ -23,13 +22,26 @@ async function onSubmit(event: FormSubmitEvent<LoginRequest>) {
 
 <template>
   <div class="max-w-xl mx-auto">
-    <UForm :state="state" :schema="loginRequestSchema" @submit="onSubmit">
-      <UFormGroup label="Username" name="username">
+    <UForm
+      :state="state"
+      :schema="loginRequestSchema"
+      @submit="onSubmit"
+    >
+      <UFormGroup
+        label="Username"
+        name="username"
+      >
         <UInput v-model="state.username" />
       </UFormGroup>
 
-      <UFormGroup label="Password" name="password">
-        <UInput v-model="state.password" type="password" />
+      <UFormGroup
+        label="Password"
+        name="password"
+      >
+        <UInput
+          v-model="state.password"
+          type="password"
+        />
       </UFormGroup>
 
       <UButton type="submit">

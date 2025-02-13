@@ -3,8 +3,7 @@ import type { Config } from 'tailwindcss'
 
 export default <Partial<Config>>{
   content: [
-    './app/**/*.{vue,ts}',
-    './layers/**/*.{vue,ts}'
+    './app/**/*.{vue,ts}'
   ],
   theme: {
     extend: {

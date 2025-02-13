@@ -1,7 +1,6 @@
 import type { ShallowRef } from 'vue'
 import type { Task } from '~~/shared/types/tasks'
 import type { Journal } from '~~/shared/types/journal'
-import { useSessionStore } from '~~/layers/auth/stores/session'
 import { journalSchema } from '~~/shared/utils/validation/journal'
 
 interface JournalStore {
@@ -13,7 +12,6 @@ interface JournalStore {
 export const useJournalStore = defineStoreForResource<Journal, JournalStore>(
   'journals',
   (rsc) => {
-    const s = useSessionStore()
     const t = useTaskStore()
     const unjournaledTasks = shallowRef<Task[]>([])
 
@@ -25,10 +23,10 @@ export const useJournalStore = defineStoreForResource<Journal, JournalStore>(
     }
 
     const createJournal = async (journal: Partial<Journal>, tasks: Task[]) => {
-      // TODO: try/catch, set global error toast.
-      // journalSchema.parse(
+      const { user } = useUserSession()
+
       const j = {
-        created_by: s.user?.user_id as UUID,
+        created_by: user?.user_id as UUID,
         created_at: nowTemporal(),
         archived_at: null,
         ...journal

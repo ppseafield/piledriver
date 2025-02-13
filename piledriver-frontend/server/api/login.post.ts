@@ -23,13 +23,6 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
       const login = loginResponse[0] as LoginSuccess
       const token = createUserJWT(login)
 
-      /* setCookie(event, 'session', jwt, {
-        maxAge,
-        httpOnly: true,
-        sameSite: 'strict',
-        secure: config.nodeEnv === 'production'
-      }) */
-
       await setUserSession(event, {
         user: login as User,
         loggedInAt: nowTemporal(),
