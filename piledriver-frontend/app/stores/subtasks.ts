@@ -1,10 +1,10 @@
-import type { Reactive, ShallowRef } from 'vue'
+import type { Reactive } from 'vue'
 import { defineStoreForResource } from '~/utils/postgrest-resource-store'
 import { nowTemporal } from '~~/shared/utils/temporal-helpers'
 import type { Subtask, SubtaskCompletion } from '~~/shared/types/tasks'
 
 interface SubtaskStore {
-  subtaskMap: Reactive<Map<UUID, ShallowRef<Subtask>[]>>
+  subtaskMap: Reactive<Map<UUID, Subtask[]>>
   getAndBuild: () => Promise<void>
   updateCompletion: (subtask: Subtask, completed: boolean) => Promise<void>
   addBlankSubtask: (subtask: Subtask) => void
@@ -16,7 +16,7 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
     const { user } = useUserSession()
 
     // const requestFetch = useRequestFetch()
-    const subtaskMap = reactive<Map<UUID, ShallowRef<Subtask>[]>>(new Map<UUID, ShallowRef<Subtask>[]>())
+    const subtaskMap = reactive<Map<UUID, Subtask[]>>(new Map<UUID, Subtask[]>())
 
     const getAndBuild = async () => {
       await rsc.get({})
@@ -49,6 +49,7 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
       })
     }
     const findTopmostParent = (subtask: Subtask): UUID => {
+      console.log('subtask:', subtask)
       console.log('subtaskMap', subtaskMap)
       console.log('subtask id:', subtask.id)
       const now = nowTemporal()
@@ -57,12 +58,14 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
         return subtask.id
       } else {
         const siblings = subtaskMap.get(subtask.parent_subtask_id)
+        console.log('siblings:', siblings)
         if (siblings === undefined) {
           return subtask.id
         } else {
           for (const st of siblings) {
-            if (st.value.id === subtask.id) {
-              st.value.completed_at = now
+            console.log('st:', st)
+            if (st.id === subtask.id) {
+              st.completed_at = now
             }
           }
           // Because completion can cascade upwards, we need to find the topmost parent id.
@@ -101,10 +104,9 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
           if (item.parent_subtask_id !== null) {
             const siblings = subtaskMap.get(item.parent_subtask_id)
             if (siblings) {
-              siblings.forEach((st: ShallowRef<Subtask>) => {
-                if (st.value.id === item.value.id) {
-                  st.value.completed_at = updatedSubtasks[item.value.id]
-                  triggerRef(st)
+              siblings.forEach((st: Subtask) => {
+                if (st.id === item.id) {
+                  st.completed_at = updatedSubtasks[item.id]
                 }
               })
             }

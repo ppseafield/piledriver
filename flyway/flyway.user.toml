@@ -1,0 +1,3 @@
+[environments.production]
+user = "postgres"
+password = "${localSecret.Flyway Desktop 8fb80617-b0ff-4d5f-87d9-3f59e74a82d1}"

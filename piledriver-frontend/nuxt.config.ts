@@ -51,7 +51,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-12-06',
 
   typescript: {
-    typeCheck: false,
+    typeCheck: true,
     tsConfig: {
       exclude: [
         './node_modules',

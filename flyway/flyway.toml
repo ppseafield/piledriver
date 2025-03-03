@@ -26,3 +26,7 @@ ignoreNewlinesInTextObjects = "off"
 url = "jdbc:postgresql://localhost/postgres"
 schemas = [ "piledriver", "public" ]
 displayName = "postgres-docker"
+
+[environments.production]
+url = "jdbc:postgresql://5.78.125.74:5432/postgres"
+schemas = [ "public" ]
