@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import SubtaskList from './SubtaskList.vue'
+// import SubtaskList from './SubtaskList.vue'
 import { useTaskStore } from '~/stores/tasks'
 import { orderClass } from '~/utils/task-helpers'
 
@@ -10,7 +10,7 @@ const props = defineProps<{
 }>()
 
 const t = useTaskStore()
-const st = useSubtaskStore()
+// const st = useSubtaskStore()
 
 const editing = ref<boolean>(false)
 const textStyles = computed(() => {
@@ -23,7 +23,7 @@ watch(props, () => {
 const isChecked = computed<boolean>(() => {
   return props.task.completed_at !== null
 })
-const subtasks = computed(() => {
+/* const subtasks = computed(() => {
   if (props.task?.id === undefined || st.subtaskMap === undefined) {
     return []
   } else {
@@ -50,7 +50,7 @@ const taskTitle = computed<string>(() => {
     return props.task.title
   }
 })
-
+ */
 onMounted(() => {
   if (props.task.title === '') {
     editing.value = true
@@ -171,7 +171,7 @@ const dropdownItems = computed(() => {
         <UCheckbox
           :model-value="isChecked"
           :ui="{ wrapper: 'grow', label: textStyles.label, form: textStyles.form }"
-          :label="taskTitle"
+          :label="props.task.title"
           @update:model-value="updateCompleted"
         />
         <!-- toggle visibility of subtasks -->
@@ -188,12 +188,5 @@ const dropdownItems = computed(() => {
         </template>
       </template>
     </div>
-
-    <SubtaskList
-      v-if="subtasks.length > 0"
-      :task="task"
-      :subtasks="subtasks"
-      :level="1"
-    />
   </div>
 </template>

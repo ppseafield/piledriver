@@ -7,12 +7,14 @@ definePageMeta({
 })
 
 const t = useTaskStore()
-const st = useSubtaskStore()
+await t.get()
+/* const st = useSubtaskStore()
 await Promise.all([t.get(), st.getAndBuild()])
-
-console.log('subtask map:', st.subtaskMap)
+ */
+// console.log('subtask map:', st.subtaskMap)
 
 const newTaskPresent = computed(() => {
+  // TODO: add task to the end of the list, scroll to bottom?
   return t.items?.[0]?.id === undefined
 })
 </script>
