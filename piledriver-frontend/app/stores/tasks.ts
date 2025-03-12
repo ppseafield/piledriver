@@ -93,11 +93,13 @@ export const useTaskStore = defineStoreForResource<Task, TaskStore>(
     }
 
     const removeTask = (task: Task) => {
-      if (task.id === undefined) {
-        rsc.items.value = rsc.items.value.filter(t => t.id !== undefined)
-      } else {
-        console.log('todo: remove task', task)
+      if (task.id !== undefined) {
+        rsc.put([{
+          ...task,
+          archived_at: nowTemporal()
+        }])
       }
+      rsc.items.value = rsc.items.value.filter(t => t.id !== task.id)
     }
 
     const moveTask = async (task: Task, move_new_order: number): Promise<void> => {
