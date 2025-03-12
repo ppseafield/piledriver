@@ -24,9 +24,8 @@ export const useJournalStore = defineStoreForResource<Journal, JournalStore>(
 
     const createJournal = async (journal: Partial<Journal>, tasks: Task[]) => {
       const { user } = useUserSession()
-
       const j = {
-        created_by: user?.user_id as UUID,
+        created_by: user.value?.user_id as UUID,
         created_at: nowTemporal(),
         archived_at: null,
         ...journal

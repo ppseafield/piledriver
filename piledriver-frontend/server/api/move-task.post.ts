@@ -3,8 +3,8 @@ import type { MoveTaskResponse } from '~~/shared/types/tasks'
 import { moveTaskSchema } from '~~/shared/utils/validation/task'
 
 export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) => {
-  const jwt = getCookie(event, 'session') ?? null
-  if (jwt === null) {
+  const { token } = await getUserSession(event)
+  if (token === null) {
     throw createError({ statusCode: 401, statusMessage: 'Unauthorized request' })
   } else {
     const config = useRuntimeConfig()
@@ -15,7 +15,7 @@ export default defineEventHandler(async (event: H3Event<EventHandlerRequest>) =>
       headers: {
         'Content-Type': 'application/json',
         'Prefer': 'return=representation',
-        'Authorization': `Bearer ${jwt}`
+        'Authorization': `Bearer ${token}`
       },
       body
     })
