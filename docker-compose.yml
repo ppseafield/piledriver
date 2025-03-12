@@ -46,3 +46,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - "8181:8080"
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    ports:
+      - "2345:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: patrick@ppseafield.com
+      PGADMIN_DEFAULT_PASSWORD: $PGADMIN_DEFAULT_PASSWORD
