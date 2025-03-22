@@ -4,11 +4,14 @@ import SubtaskItem from './SubtaskItem.vue'
 
 const props = defineProps<{
   task: Task
-  subtasks: Subtask[]
   level: number
 }>()
+
+const st = useSubtaskStore()
+const subtasks = st.getSubtasks(props.task.id)
+
 const getChildPayload = (index: number) => {
-  return props.subtasks[index]
+  return subtasks[index]
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const onDrop = async (e: any) => {
@@ -32,7 +35,7 @@ const containerProps = {
       @drop="onDrop"
     >
       <Draggable
-        v-for="subtask in props.subtasks"
+        v-for="subtask in subtasks"
         :key="subtask.id"
         :tag="{ value: 'li' }"
       >

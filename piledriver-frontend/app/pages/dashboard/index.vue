@@ -7,10 +7,14 @@ definePageMeta({
 })
 
 const t = useTaskStore()
-await t.get()
-/* const st = useSubtaskStore()
-await Promise.all([t.get(), st.getAndBuild()])
+const st = useSubtaskStore()
+
+/* const { status } = await useAsyncData(async () => {
+  return Promise.all([t.get(), st.getAndBuild()])
+})
  */
+await Promise.all([t.get(), st.getAndBuild()])
+// await t.get()
 // console.log('subtask map:', st.subtaskMap)
 
 const newTaskPresent = computed(() => {

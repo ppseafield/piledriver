@@ -4,49 +4,61 @@ import { nowTemporal } from '~~/shared/utils/temporal-helpers'
 import type { Subtask, SubtaskCompletion } from '~~/shared/types/tasks'
 
 interface SubtaskStore {
-  subtaskMap: Reactive<Map<UUID, Subtask[]>>
+  subtaskMap: Record<UUID, Reactive<Subtask[]>>
   getAndBuild: () => Promise<void>
   updateCompletion: (subtask: Subtask, completed: boolean) => Promise<void>
-  addBlankSubtask: (subtask: Subtask) => void
+  addBlankSubtask: (subtask: Partial<Subtask>, task_order?: number) => void
+  getSubtasks: (task_id: UUID) => ComputedRef<Subtask[]> | null
 }
 
 export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
   'subtasks',
   (rsc) => {
-    const { user } = useUserSession()
-
     // const requestFetch = useRequestFetch()
-    const subtaskMap = reactive<Map<UUID, Subtask[]>>(new Map<UUID, Subtask[]>())
+    const subtaskMap = {} as Record<UUID, Reactive<Subtask[]>>
 
     const getAndBuild = async () => {
       await rsc.get({})
-      subtaskMap.clear()
+      // clear array
+      for (const sts of Object.values(subtaskMap)) {
+        sts.splice(0, sts.length)
+      }
 
       for (const subtask of rsc.items.value) {
         // Keys are a mix of subtask and task ids so that all child relationships are present.
         const uuidKey: UUID = subtask.parent_subtask_id ?? subtask.task_id
-        const sts = subtaskMap.get(uuidKey)
+        const sts = subtaskMap[uuidKey]
         if (sts !== undefined) {
           sts.push(subtask)
         } else {
-          subtaskMap.set(uuidKey, [subtask])
+          subtaskMap[uuidKey] = reactive<Subtask[]>([subtask])
         }
       }
     }
 
-    const addBlankSubtask = (subtask: Subtask) => {
-      rsc.items.value.push({
+    const getSubtasks = (task_id: UUID): ComputedRef<Subtask[]> | null => {
+      return computed(() => subtaskMap[task_id] ?? null)
+    }
+
+    const addBlankSubtask = (subtask: Partial<Subtask>, task_order?: number) => {
+      const { user } = useUserSession()
+      console.log('user', user)
+      const newSubtask = {
         task_id: subtask.task_id,
         parent_subtask_id: subtask.id,
         task_sheet_item_id: null,
-        created_by: user?.user_id,
+        created_by: user?.value?.user_id,
         routine_from: null,
         created_at: nowTemporal(),
         completed_at: null,
         archived_at: null,
-        task_order: subtask.subtasks.length,
+        task_order: task_order ?? subtask?.subtasks?.length ?? 0,
         title: ''
-      })
+      }
+
+      rsc.items.value.push(newSubtask)
+      triggerRef(rsc.items)
+      subtaskMap[subtask.task_id].push(newSubtask)
     }
     const findTopmostParent = (subtask: Subtask): UUID => {
       console.log('subtask:', subtask)
@@ -57,7 +69,7 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
         // TODO: Task may also be done! Handle this too.
         return subtask.id
       } else {
-        const siblings = subtaskMap.get(subtask.parent_subtask_id)
+        const siblings = subtaskMap[subtask.parent_subtask_id]
         console.log('siblings:', siblings)
         if (siblings === undefined) {
           return subtask.id
@@ -102,7 +114,7 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
         if (updatedSubtasks[item.id]) {
           item.completed_at = updatedSubtasks[item.id]
           if (item.parent_subtask_id !== null) {
-            const siblings = subtaskMap.get(item.parent_subtask_id)
+            const siblings = subtaskMap[item.parent_subtask_id]
             if (siblings) {
               siblings.forEach((st: Subtask) => {
                 if (st.id === item.id) {
@@ -120,7 +132,8 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
       subtaskMap,
       getAndBuild,
       updateCompletion,
-      addBlankSubtask
+      addBlankSubtask,
+      getSubtasks
     }
   },
   {}

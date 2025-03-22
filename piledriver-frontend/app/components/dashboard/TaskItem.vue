@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// import SubtaskList from './SubtaskList.vue'
+import SubtaskList from './SubtaskList.vue'
 import { useTaskStore } from '~/stores/tasks'
 import { orderClass } from '~/utils/task-helpers'
 
@@ -10,7 +10,7 @@ const props = defineProps<{
 }>()
 
 const t = useTaskStore()
-// const st = useSubtaskStore()
+const st = useSubtaskStore()
 
 const editing = ref<boolean>(false)
 const textStyles = computed(() => {
@@ -23,16 +23,14 @@ watch(props, () => {
 const isChecked = computed<boolean>(() => {
   return props.task.completed_at !== null
 })
-/* const subtasks = computed(() => {
-  if (props.task?.id === undefined || st.subtaskMap === undefined) {
-    return []
-  } else {
-    return st.subtaskMap.get(props.task.id) ?? []
-  }
+const subtasks = st.getSubtasks(props.task.id)
+
+watch(subtasks, (value) => {
+  console.log('subtasks:', value)
 })
 
 const completion = computed<[number, number]>(() => {
-  if (subtasks.value.length === 0) {
+  if (subtasks.value === null || subtasks.value.length === 0) {
     return [0, 0]
   } else {
     const completed = subtasks.value.filter(
@@ -50,7 +48,7 @@ const taskTitle = computed<string>(() => {
     return props.task.title
   }
 })
- */
+
 onMounted(() => {
   if (props.task.title === '') {
     editing.value = true
@@ -98,6 +96,13 @@ const updateCompleted = (completed: boolean) => {
 
 const addNewSubtask = () => {
   console.log('add new subtask')
+  st.addBlankSubtask(
+    { id: null,
+      task_id: props.task.id,
+      title: ''
+    },
+    subtasks.value?.length ?? 0
+  )
 }
 
 const dropdownItems = computed(() => {
@@ -171,7 +176,7 @@ const dropdownItems = computed(() => {
         <UCheckbox
           :model-value="isChecked"
           :ui="{ wrapper: 'grow', label: textStyles.label, form: textStyles.form }"
-          :label="props.task.title"
+          :label="taskTitle"
           @update:model-value="updateCompleted"
         />
         <!-- toggle visibility of subtasks -->
@@ -188,5 +193,10 @@ const dropdownItems = computed(() => {
         </template>
       </template>
     </div>
+    <SubtaskList
+      v-if="subtasks?.length > 0"
+      :task="props.task"
+      :level="0"
+    />
   </div>
 </template>

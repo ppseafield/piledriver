@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import SubtaskList from './SubtaskList.vue'
-
 const props = defineProps<{
   subtask: Subtask
   task: Task
@@ -8,34 +6,6 @@ const props = defineProps<{
 }>()
 
 const st = useSubtaskStore()
-
-const subtasks = computed(() => {
-  if (props.subtask?.id === undefined || st.subtaskMap === undefined) {
-    return []
-  } else {
-    return st.subtaskMap.get(props.subtask.id) ?? []
-  }
-})
-
-const completion = computed<[number, number]>(() => {
-  if (subtasks.value.length === 0) {
-    return [0, 0]
-  } else {
-    const completed = subtasks.value.filter(
-      (subtask: Subtask) => subtask.completed_at !== null
-    ).length
-    return [completed, subtasks.value.length]
-  }
-})
-
-const subtaskTitle = computed<string>(() => {
-  const [completed, total] = completion.value
-  if (total > 0 && completed < total) {
-    return `[${completed}/${total}] ${props.subtask.title}`
-  } else {
-    return props.subtask.title
-  }
-})
 
 const titleText = ref<string>(props.subtask.title)
 watch(props, () => {
@@ -69,8 +39,8 @@ const saveSubtask = async () => {
   const updatedSubtask = { ...props.subtask, title: titleText.value }
   if (updatedSubtask.id === undefined) {
     console.log('todo: save new subtask')
-    // const [savedSubtask] = await st.post([updatedSubtask])
-    // st.updateAtIndex(-1, savedSubtask)
+    const [savedSubtask] = await st.post([updatedSubtask])
+    st.updateAtIndex(-1, savedSubtask)
   } else {
     await st.put([updatedSubtask])
   }
@@ -93,14 +63,15 @@ const dropdownItems = computed(() => [
       label: 'Edit',
       icon: 'i-heroicons-pencil',
       click: editSubtask
-    },
+    }
+    /* ,
     {
       label: 'Add Subtask',
       icon: 'i-heroicons-plus',
       click: () => {
         console.log('todo: add subtask to subtask')
       }
-    }
+    } */
   ],
   [
     {
@@ -143,7 +114,7 @@ const dropdownItems = computed(() => [
         <UCheckbox
           :model-value="isChecked"
           :ui="{ wrapper: 'grow' }"
-          :label="subtaskTitle"
+          :label="props.subtask.title"
           @update:model-value="updateCompleted"
         />
         <!-- todo: toggle visibility of subtasks -->
@@ -158,12 +129,5 @@ const dropdownItems = computed(() => [
         </UDropdown>
       </template>
     </div>
-
-    <SubtaskList
-      v-if="subtasks.length > 0"
-      :task="task"
-      :subtasks="subtasks"
-      :level="level + 1"
-    />
   </div>
 </template>
