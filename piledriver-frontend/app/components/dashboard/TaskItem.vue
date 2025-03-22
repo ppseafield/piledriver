@@ -186,7 +186,7 @@ const dropdownItems = computed(() => {
               type="button"
               icon="i-heroicons-ellipsis-vertical"
               color="primary"
-              variant="outline"
+              variant="solid"
               size="sm"
             />
           </UDropdown>

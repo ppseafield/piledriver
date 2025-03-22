@@ -123,8 +123,9 @@ const dropdownItems = computed(() => [
             type="button"
             icon="i-heroicons-ellipsis-vertical"
             color="primary"
-            variant="outline"
+            variant="soft"
             size="sm"
+            :ui="{ base: 'border border-dodger-blue-200' }"
           />
         </UDropdown>
       </template>
