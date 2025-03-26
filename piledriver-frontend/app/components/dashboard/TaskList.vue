@@ -26,7 +26,7 @@ const onDrop = async (e: any) => {
       <Draggable
         v-for="(task, index) in ts.waiting"
         :key="task.id"
-        :tag="{ value: 'li' }"
+        :tag="{ value: 'li', class: 'p-1' }"
       >
         <TaskItem
           :task="task"

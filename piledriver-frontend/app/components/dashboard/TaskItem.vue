@@ -42,7 +42,7 @@ const completion = computed<[number, number]>(() => {
 
 const taskTitle = computed<string>(() => {
   const [completed, total] = completion.value
-  if (total > 0) {
+  if (total > 0 && props.task.completed_at === null) {
     return `[${completed}/${total}] ${props.task.title}`
   } else {
     return props.task.title
@@ -145,8 +145,8 @@ const dropdownItems = computed(() => {
 </script>
 
 <template>
-  <div class="ps-2 pe-3">
-    <div class="flex hover:bg-tango-200 py-1">
+  <div>
+    <div class="flex hover:bg-tango-200 p-2 hover:rounded">
       <template v-if="editing">
         <UInput
           v-model="titleText"
@@ -194,7 +194,7 @@ const dropdownItems = computed(() => {
       </template>
     </div>
     <SubtaskList
-      v-if="subtasks?.length > 0"
+      v-if="subtasks?.length > 0 && props.task.completed_at === null"
       :task="props.task"
       :level="0"
     />

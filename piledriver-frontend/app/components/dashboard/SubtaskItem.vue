@@ -84,8 +84,8 @@ const dropdownItems = computed(() => [
 </script>
 
 <template>
-  <div class="ps-2">
-    <div class="flex hover:bg-tango-200 py-1 ps-2">
+  <div>
+    <div class="flex hover:bg-tango-200 p-2 hover:rounded">
       <template v-if="editing">
         <UInput
           v-model="titleText"
@@ -115,6 +115,7 @@ const dropdownItems = computed(() => [
           :model-value="isChecked"
           :ui="{ wrapper: 'grow' }"
           :label="props.subtask.title"
+          class="my-2"
           @update:model-value="updateCompleted"
         />
         <!-- todo: toggle visibility of subtasks -->
