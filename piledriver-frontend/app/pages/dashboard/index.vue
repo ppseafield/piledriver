@@ -48,7 +48,7 @@ const newTaskPresent = computed(() => {
       </UDashboardToolbar>
 
       <UDashboardPanelContent
-        :ui="{ wrapper: 'overflow-y-scroll' }"
+        :ui="{ wrapper: 'ps-4 pe-1' }"
       >
         <TaskList />
       </UDashboardPanelContent>

@@ -145,7 +145,7 @@ const dropdownItems = computed(() => {
 </script>
 
 <template>
-  <div class="ps-2">
+  <div class="ps-2 pe-3">
     <div class="flex hover:bg-tango-200 py-1">
       <template v-if="editing">
         <UInput

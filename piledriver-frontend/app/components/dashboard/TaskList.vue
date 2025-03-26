@@ -15,36 +15,39 @@ const onDrop = async (e: any) => {
 </script>
 
 <template>
-  <Container
-    :tag="{ value: 'ol' }"
-    group-name="tasks"
-    :get-child-payload="getChildPayload"
-    @drop="onDrop"
-  >
-    <Draggable
-      v-for="(task, index) in ts.waiting"
-      :key="task.id"
-      :tag="{ value: 'li' }"
+  <div class="min-h-content">
+    <Container
+      :tag="{ value: 'ol' }"
+      group-name="tasks"
+      :get-child-payload="getChildPayload"
+      class="min-h-fit"
+      @drop="onDrop"
     >
-      <TaskItem
-        :task="task"
-        :index="index"
-      />
-    </Draggable>
-  </Container>
-  <UDivider
-    label="Completed"
-    class="my-3"
-  />
-  <ul>
-    <li
-      v-for="(task, index) in ts.completed"
-      :key="task.id"
-    >
-      <TaskItem
-        :task="task"
-        :index="index"
-      />
-    </li>
-  </ul>
+      <Draggable
+        v-for="(task, index) in ts.waiting"
+        :key="task.id"
+        :tag="{ value: 'li' }"
+      >
+        <TaskItem
+          :task="task"
+          :index="index"
+        />
+      </Draggable>
+    </Container>
+    <UDivider
+      label="Completed"
+      class="my-3"
+    />
+    <ul class="min-h-fit">
+      <li
+        v-for="(task, index) in ts.completed"
+        :key="task.id"
+      >
+        <TaskItem
+          :task="task"
+          :index="index"
+        />
+      </li>
+    </ul>
+  </div>
 </template>
