@@ -6,7 +6,7 @@ import { useTaskStore } from '~/stores/tasks'
 const ts = useTaskStore()
 
 const getChildPayload = (index: number) => {
-  return ts.items[index]
+  return ts.waiting[index]
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const onDrop = async (e: any) => {
