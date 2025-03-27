@@ -25,10 +25,6 @@ const isChecked = computed<boolean>(() => {
 })
 const subtasks = st.getSubtasks(props.task.id)
 
-watch(subtasks, (value) => {
-  console.log('subtasks:', value)
-})
-
 const completion = computed<[number, number]>(() => {
   if (subtasks.value === null || subtasks.value.length === 0) {
     return [0, 0]
@@ -45,7 +41,7 @@ const taskTitle = computed<string>(() => {
   if (total > 0 && props.task.completed_at === null) {
     return `[${completed}/${total}] ${props.task.title}`
   } else {
-    return props.task.title
+    return props.task.title || titleText.value
   }
 })
 
@@ -133,13 +129,13 @@ const dropdownItems = computed(() => {
     ]
   ]
   // TODO: sort out subtasks (again)
-  /* if (props.task.subtasks && props.task.subtasks.length > 0) {
-    items.push([{
-      label: 'Split Completed',
-      icon: 'i-heroicons-chevron-up-down',
-      click: () => t.splitCompleted(props.task)
-    }])
-  } */
+  // if (props.task.subtasks && props.task.subtasks.length > 0) {
+  //   items.push([{
+  //     label: 'Split Completed',
+  //     icon: 'i-heroicons-chevron-up-down',
+  //     click: () => t.splitCompleted(props.task)
+  //   }])
+  // }
   return items
 })
 </script>

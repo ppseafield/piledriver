@@ -9,13 +9,14 @@ interface SubtaskStore {
   updateCompletion: (subtask: Subtask, completed: boolean) => Promise<void>
   addBlankSubtask: (subtask: Partial<Subtask>, task_order?: number) => void
   getSubtasks: (task_id: UUID) => ComputedRef<Subtask[]> | null
+  removeSubtask: (subtask: Subtask) => Promise<void>
 }
 
 export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
   'subtasks',
   (rsc) => {
     // const requestFetch = useRequestFetch()
-    const subtaskMap = {} as Record<UUID, Reactive<Subtask[]>>
+    const subtaskMap = reactive<Record<UUID, Reactive<Subtask[]>>>({})
 
     const getAndBuild = async () => {
       await rsc.get({})
@@ -28,7 +29,7 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
         // Keys are a mix of subtask and task ids so that all child relationships are present.
         const uuidKey: UUID = subtask.parent_subtask_id ?? subtask.task_id
         const sts = subtaskMap[uuidKey]
-        if (sts !== undefined) {
+        if (sts) {
           sts.push(subtask)
         } else {
           subtaskMap[uuidKey] = reactive<Subtask[]>([subtask])
@@ -37,7 +38,7 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
     }
 
     const getSubtasks = (task_id: UUID): ComputedRef<Subtask[]> | null => {
-      return computed(() => subtaskMap[task_id] ?? null)
+      return computed(() => rsc.items.value.filter((st: Subtask) => st.task_id === task_id))
     }
 
     const addBlankSubtask = (subtask: Partial<Subtask>, task_order?: number) => {
@@ -55,10 +56,11 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
         task_order: task_order ?? subtask?.subtasks?.length ?? 0,
         title: ''
       }
-
+      console.log('subtask big list:', rsc.items.value)
+      console.log('rsc.items.value is an array?', Array.isArray(rsc.items.value))
       rsc.items.value.push(newSubtask)
       triggerRef(rsc.items)
-      subtaskMap[subtask.task_id].push(newSubtask)
+      // subtaskMap[subtask.task_id].push(newSubtask)
     }
     const findTopmostParent = (subtask: Subtask): UUID => {
       console.log('subtask:', subtask)
@@ -128,12 +130,30 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
       triggerRef(rsc.items)
     }
 
+    const removeSubtask = async (subtask: Subtask): Promise<void> => {
+      await rsc.put([
+        {
+          ...subtask,
+          archived_at: nowTemporal()
+        }
+      ])
+      // Remove subtask from the list of all subtasks.
+      rsc.items.value = rsc.items.value.filter(item => item.id !== subtask.id)
+      triggerRef(rsc.items)
+      // Remove subtask from its list of sibilings in the subtaskMap.
+      const parentID = subtask?.parent_subtask_id || subtask.task_id
+      const i = subtaskMap[parentID].findIndex((st: Subtask) => st.id === subtask.id)
+      subtaskMap[parentID].splice(i, 1)
+      // TODO: update subtask ordering
+    }
+
     return {
       subtaskMap,
       getAndBuild,
       updateCompletion,
       addBlankSubtask,
-      getSubtasks
+      getSubtasks,
+      removeSubtask
     }
   },
   {}

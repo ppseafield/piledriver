@@ -47,7 +47,7 @@ const saveSubtask = async () => {
   editing.value = false
 }
 const deleteSubtask = async () => {
-  console.log('todo: delete subtask')
+  st.removeSubtask(props.subtask)
 }
 
 const updateCompleted = async (completed: boolean) => {

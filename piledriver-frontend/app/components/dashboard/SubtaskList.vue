@@ -19,7 +19,7 @@ const onDrop = async (e: any) => {
 }
 
 const containerProps = {
-  class: 'ps-6 before:absolute before:top-0 before:start-2 before:w-0.5 before:-ms-px before:h-full before:bg-crocodile-300 dark:before:bg-neutral-700'
+  class: 'ps-6 before:absolute before:top-0 before:start-4 before:w-0.5 before:-ms-px before:h-full before:bg-crocodile-300 dark:before:bg-neutral-700'
 }
 </script>
 
