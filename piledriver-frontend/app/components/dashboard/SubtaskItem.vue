@@ -36,9 +36,13 @@ const cancelEdit = () => {
   editing.value = false
 }
 const saveSubtask = async () => {
-  const updatedSubtask = { ...props.subtask, title: titleText.value }
+  const { user } = useUserSession()
+
+  const updatedSubtask = {
+    ...props.subtask, title: titleText.value
+  }
   if (updatedSubtask.id === undefined) {
-    console.log('todo: save new subtask')
+    updatedSubtask.created_by = user.value.user_id
     const [savedSubtask] = await st.post([updatedSubtask])
     st.updateAtIndex(-1, savedSubtask)
   } else {
