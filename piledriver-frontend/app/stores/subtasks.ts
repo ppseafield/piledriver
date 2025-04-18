@@ -1,7 +1,7 @@
 import type { Reactive } from 'vue'
 import { defineStoreForResource } from '~/utils/postgrest-resource-store'
 import { nowTemporal } from '~~/shared/utils/temporal-helpers'
-import type { Subtask, SubtaskCompletion } from '~~/shared/types/tasks'
+import type { Subtask, SubtaskCompletion, Task } from '~~/shared/types/tasks'
 
 interface SubtaskStore {
   subtaskMap: Record<UUID, Reactive<Subtask[]>>
@@ -97,12 +97,12 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
     }
 
     const updateCompletion = async (subtask: Subtask, completed: boolean) => {
-      let id = subtask.id
-      if (completed) {
+      const id = subtask.id
+      /* if (completed) {
         id = findTopmostParent(subtask)
         console.log('had to look upwards for id:', id)
-      }
-      console.log('id:', id)
+      } */
+
       const response = await $fetch<SubtaskCompletion[]>('/api/update-subtask-completion', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -112,10 +112,14 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
         response.map(({ st_id, new_completed }) => [st_id, new_completed])
       )
       // Update the store subtasks
+      /* const t = useTaskStore()
+      const parentTask = t.items.find((task: Task) => task.id === subtask.task_id)
+      const siblings = [] */
       for (const item of rsc.items.value) {
         if (updatedSubtasks[item.id]) {
           item.completed_at = updatedSubtasks[item.id]
-          if (item.parent_subtask_id !== null) {
+          // TODO: not important for now, will matter when nesting subtasks is allowed.
+          /* if (item.parent_subtask_id !== null) {
             const siblings = subtaskMap[item.parent_subtask_id]
             if (siblings) {
               siblings.forEach((st: Subtask) => {
@@ -124,9 +128,21 @@ export const useSubtaskStore = defineStoreForResource<Subtask, SubtaskStore>(
                 }
               })
             }
-          }
+          } */
         }
+        /* if (item.task_id === parentTask.id) {
+          siblings.push(item)
+        } */
       }
+      /*
+      console.log('siblings:', siblings)
+      if (siblings.every((st: Subtask) => st.completed_at !== null)) {
+        console.log('all complete')
+        // await t.updateCompletion(parentTask, true)
+      } else if (siblings.some((st: Subtask) => st.completed_at === null)) {
+        console.log('not all complete')
+        // await t.updateCompletion(parentTask, false)
+      } */
       triggerRef(rsc.items)
     }
 
