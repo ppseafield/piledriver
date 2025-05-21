@@ -1,0 +1,16 @@
+@import "tailwindcss";
+@import "@nuxt/ui-pro";
+
+@theme {
+    --color-steelblue-50: #f6f6fc;
+    --color-steelblue-100: #ecedf8;
+    --color-steelblue-200: #d9dbf1;
+    --color-steelblue-300: #c7caea;
+    --color-steelblue-400: #b4b8e3;
+    --color-steelblue-500: #a1a7dc;
+    --color-steelblue-600: #8e97d5;
+    --color-steelblue-700: #7a87cd;
+    --color-steelblue-800: #6577c6;
+    --color-steelblue-900: #4f68bf;
+    --color-steelblue-950: #4260bb;
+}
