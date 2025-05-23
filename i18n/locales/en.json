@@ -3,5 +3,8 @@
   "layout.aboutLink": "About",
   "layout.blogLink": "Blog",
   "welcome": "Welcome",
-  "a": "ahahaha"
+  "a": "ahahaha",
+  "dashboard.pageTitle": "Dashboard",
+  "routines.pageTitle": "Routines",
+  "journal.pageTitle": "Journal"
 }

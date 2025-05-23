@@ -3,5 +3,9 @@
   "layout.aboutLink": "Über",
   "layout.blogLink": "Blog",
   "welcome": "Wilkommen",
-  "a": "auauaua"
+  "a": "auauaua",
+  "dashboard.pageTitle": "Dashboard",
+  "routines.pageTitle": "Routinen",
+  "journal.pageTitle": "Tagebuch"
+  
 }
