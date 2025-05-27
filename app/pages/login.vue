@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { FormSubmitEvent, FormError } from '@nuxt/ui'
-import type { ValiError } from 'valibot'
 import { safeParse } from 'valibot'
 
 defineI18nRoute({
@@ -17,22 +16,12 @@ definePageMeta({
 // TODO: Why does the login button not have any color?
 
 const { t } = useI18n()
+const localePath = useLocalePath()
 
 const state = reactive<Partial<LoginRequest>>({
   username: undefined,
   password: undefined
 })
-
-const fields = [
-  { name: 'username',
-    type: 'text' as const,
-    label: t('login.username')
-  },
-  { name: 'password',
-    type: 'text' as const,
-    label: t('login.password')
-  }
-]
 
 function validate(state: any): FormError[] {
   const result = safeParse(LoginRequestSchema, {
@@ -51,8 +40,21 @@ function validate(state: any): FormError[] {
   }
 }
 
-function onSubmit(payload: FormSubmitEvent<LoginRequest>) {
+async function onSubmit(payload: FormSubmitEvent<LoginRequest>) {
   console.log('submitted:', payload)
+  try {
+    await $fetch<{ user: User | null, session: any }>('/api/login', {
+      method: 'POST',
+      headers: {
+	'Content-Type': 'application/json'
+      },
+      body: payload.data
+    })
+    navigateTo({ path: localePath('dashboard') })
+  } catch (e) {
+    // formwide error: error issue
+    console.log('error: ', e)
+  }
 }
 </script>
 

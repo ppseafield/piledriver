@@ -11,6 +11,7 @@
   "login.username.tooShort": "Username must be at least 6 characters.",
   "login.password": "Password",
   "login.password.tooShort": "Password must be at least 10 characters.",
+  "login.error.accountNotFound": "No account found with that user and password combination.",
 
   "dashboard.pageTitle": "Dashboard",
   "routines.pageTitle": "Routines",

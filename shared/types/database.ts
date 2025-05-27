@@ -19,7 +19,7 @@ export interface UserTable {
   updated_at: ColumnType<Date, string>
   preferences: JSONColumnType<{
     theme: string
-  }>
+  } | null>
 }
 export type User = Selectable<UserTable>
 export type NewUser = Omit<Insertable<UserTable>, 'id' | 'created_at' | 'updated_at'>

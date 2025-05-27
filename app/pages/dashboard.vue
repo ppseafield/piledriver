@@ -6,7 +6,7 @@ defineI18nRoute({
   }
 })
 const { t } = useI18n()
-
+const { loggedIn, user } = useUserSession()
 </script>
 
 <template>
@@ -21,6 +21,11 @@ const { t } = useI18n()
 
     <template #body>
       tasks
+      <p>logged in: {{ loggedIn }}</p>
+      <p>user:</p>
+      <pre>
+	{{ JSON.stringify(user) }}
+      </pre>
     </template>
   </UDashboardPanel>
 </template>
