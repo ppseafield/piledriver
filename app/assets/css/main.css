@@ -2,15 +2,51 @@
 @import "@nuxt/ui-pro";
 
 @theme {
-    --color-steelblue-50: #f6f6fc;
-    --color-steelblue-100: #ecedf8;
-    --color-steelblue-200: #d9dbf1;
-    --color-steelblue-300: #c7caea;
-    --color-steelblue-400: #b4b8e3;
-    --color-steelblue-500: #a1a7dc;
-    --color-steelblue-600: #8e97d5;
-    --color-steelblue-700: #7a87cd;
-    --color-steelblue-800: #6577c6;
-    --color-steelblue-900: #4f68bf;
-    --color-steelblue-950: #4260bb;
+    --color-energy-yellow-50: #fefce8;
+    --color-energy-yellow-100: #fff9c2;
+    --color-energy-yellow-200: #ffef89;
+    --color-energy-yellow-300: #ffe156;
+    --color-energy-yellow-400: #fdca12;
+    --color-energy-yellow-500: #ecb006;
+    --color-energy-yellow-600: #cc8702;
+    --color-energy-yellow-700: #a35f05;
+    --color-energy-yellow-800: #864b0d;
+    --color-energy-yellow-900: #723d11;
+    --color-energy-yellow-950: #431f05;
+
+    --color-crocodile-50: #f4f3f1;
+    --color-crocodile-100: #e8e6df;
+    --color-crocodile-200: #d3d0c3;
+    --color-crocodile-300: #b7b29f;
+    --color-crocodile-400: #9c977f;
+    --color-crocodile-500: #79745c;
+    --color-crocodile-600: #65614b;
+    --color-crocodile-700: #4f4c3c;
+    --color-crocodile-800: #413f33;
+    --color-crocodile-900: #39382e;
+    --color-crocodile-950: #1d1c16;
+
+    --color-bamboo-50: #fffaeb;
+    --color-bamboo-100: #fff0c6;
+    --color-bamboo-200: #ffdf88;
+    --color-bamboo-300: #ffc84a;
+    --color-bamboo-400: #ffb120;
+    --color-bamboo-500: #f98e07;
+    --color-bamboo-600: #dd6802;
+    --color-bamboo-700: #b74706;
+    --color-bamboo-800: #95350b;
+    --color-bamboo-900: #7a2c0d;
+    --color-bamboo-950: #461502;
+
+    --color-mariner-50: #f1f7fd;
+    --color-mariner-100: #e0edf9;
+    --color-mariner-200: #c8dff5;
+    --color-mariner-300: #a3cbed;
+    --color-mariner-400: #77aee3;
+    --color-mariner-500: #5792da;
+    --color-mariner-600: #4277ce;
+    --color-mariner-700: #3b68c4;
+    --color-mariner-800: #33529a;
+    --color-mariner-900: #2e477a;
+    --color-mariner-950: #202d4b;
 }

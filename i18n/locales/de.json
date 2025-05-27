@@ -1,9 +1,17 @@
 {
-  "layout.siteTitle": "Piledriver",
+  "layout.siteTitle": "piledriver",
   "layout.aboutLink": "Über",
   "layout.blogLink": "Blog",
   "welcome": "Wilkommen",
   "a": "auauaua",
+  
+  "login.pageTitle": "Anmelden",
+  "login.submitButton": "Anmelden",
+  "login.username": "Benutzername",
+  "login.username.tooShort": "Benutzername muss mindestens 6 Buchstaben lang.",
+  "login.password": "Passwort",
+  "login.password.tooShort": "Passwort muss mindestens 10 Buchstaben lang.",
+
   "dashboard.pageTitle": "Dashboard",
   "routines.pageTitle": "Routinen",
   "journal.pageTitle": "Tagebuch"

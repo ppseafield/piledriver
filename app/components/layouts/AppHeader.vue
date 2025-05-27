@@ -47,8 +47,9 @@ watch(locale, () => {
 <!--          class=""-->
 <!--      />-->
       <ULocaleSelect
-          v-model="locale"
-          :locales="[en, de]"
+        v-model="locale"
+	color="secondary"
+        :locales="[en, de]"
       />
     </template>
   </UHeader>

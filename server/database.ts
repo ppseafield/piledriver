@@ -1,4 +1,4 @@
-import type { Database } from '../shared/types'
+import type { Database } from '../shared/types/database'
 import { Pool } from 'pg'
 import { Kysely, PostgresDialect } from 'kysely'
 
