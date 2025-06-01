@@ -16,6 +16,12 @@ const { loggedIn, user } = useUserSession()
 	<template #leading>
 	  <UDashboardSidebarCollapse />
 	</template>
+	<template #right>
+	  <UButton
+	    :label="t('dashboard.addTaskButton')"
+	    icon="i-carbon-add-filled"
+	  />
+	</template>
       </UDashboardNavbar>
     </template>
 

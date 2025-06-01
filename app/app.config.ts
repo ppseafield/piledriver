@@ -7,7 +7,7 @@ export default defineAppConfig({
   },
   ui: {
     colors: {
-      primary: 'mariner',
+      primary: 'bamboo',
       neutral: 'crocodile'
     },
     input: {
@@ -20,6 +20,12 @@ export default defineAppConfig({
   },
   uiPro: {
     header: {
+      slots: {
+	root: 'bg-energy-yellow-300',
+	header: 'bg-energy-yellow-300'
+      }
+    },
+    dashboardSidebar: {
       slots: {
 	root: 'bg-energy-yellow-300',
 	header: 'bg-energy-yellow-300'

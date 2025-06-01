@@ -49,4 +49,6 @@
     --color-mariner-800: #33529a;
     --color-mariner-900: #2e477a;
     --color-mariner-950: #202d4b;
+
+    --ui-primary: var(--color-bamboo-500);
 }

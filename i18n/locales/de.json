@@ -14,6 +14,8 @@
   "login.error.accountNotFound": "Zu Ihren Angaben konnte kein Account gefunden werden.",
 
   "dashboard.pageTitle": "Dashboard",
+  "dashboard.addTaskButton": "Neue Aufgabe hinzufügen",
+
   "routines.pageTitle": "Routinen",
   "journal.pageTitle": "Tagebuch"
   

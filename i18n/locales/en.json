@@ -14,6 +14,8 @@
   "login.error.accountNotFound": "No account found with that user and password combination.",
 
   "dashboard.pageTitle": "Dashboard",
+  "dashboard.addTaskButton": "Add New Task",
+
   "routines.pageTitle": "Routines",
   "journal.pageTitle": "Journal"
 }
