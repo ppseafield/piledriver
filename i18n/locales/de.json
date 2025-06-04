@@ -3,6 +3,10 @@
   "layout.aboutLink": "Über",
   "layout.blogLink": "Blog",
   "layout.accountNotLoggedInTitle": "Benutzerkonto",
+  "layout.profile.notLoggedInTitle": "Benutzerkonto",
+  "layout.profile.profileLink": "Benutzerprofil",
+  "layout.profile.settingsLink": "Einstellungen",
+  "layout.profile.accountActionsLabel": "Konten-Aktionen",
   "welcome": "Wilkommen",
   "a": "auauaua",
   
