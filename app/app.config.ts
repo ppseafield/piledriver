@@ -28,7 +28,7 @@ export default defineAppConfig({
     dashboardSidebar: {
       slots: {
 	root: 'bg-energy-yellow-300',
-	header: 'bg-energy-yellow-300'
+	header: 'bg-energy-yellow-300 app-title text-bold text-xl content-center'
       }
     }
   }

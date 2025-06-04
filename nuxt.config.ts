@@ -20,10 +20,16 @@ export default defineNuxtConfig({
     'nuxt-auth-utils',
     '@nuxtjs/html-validator',
     '@nuxtjs/seo',
-    '@nuxtjs/storybook'
+    '@nuxtjs/storybook',
+    '@pinia/nuxt',
+    '@pinia/colada-nuxt'
   ],
 
   css: ['~/assets/css/main.css'],
+
+  fonts: {
+    priority: ['local']
+  },
 
   i18n: {
     locales: [

@@ -50,5 +50,10 @@
     --color-mariner-900: #2e477a;
     --color-mariner-950: #202d4b;
 
-    --ui-primary: var(--color-bamboo-500);
+    --ui-primary: var(--color-bamboo-600);
+}
+
+.app-title {
+    font-family: 'Montserrat Alternates', Arial;
+    font-weight: bold;
 }

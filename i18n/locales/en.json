@@ -2,6 +2,9 @@
   "layout.siteTitle": "piledriver",
   "layout.aboutLink": "About",
   "layout.blogLink": "Blog",
+  "layout.profile.notLoggedInTitle": "Account",
+  "layout.profile.profileLink": "Profile",
+  "layout.profile.settingsLink": "Settings",
   "welcome": "Welcome",
   "a": "ahahaha",
 

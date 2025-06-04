@@ -30,11 +30,15 @@ const open = ref<boolean>(false)
 	collapsible
       >
 	<template #header>
-	  piledriver
+	  <span class="w-full ms-2">
+	    piledriver
+	  </span>
 	</template>
 
 	<template #default="{ collapsed }">
 	  <UNavigationMenu
+	    highlight
+	    highlight-color="primary"
 	    :collapsed="collapsed"
 	    :items="links"
 	    orientation="vertical"
@@ -42,7 +46,7 @@ const open = ref<boolean>(false)
 	</template>
 
 	<template #footer>
-	  <p>user info</p>
+	  <ProfileActions />
 	</template>
       </UDashboardSidebar>
 
