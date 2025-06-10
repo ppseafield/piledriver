@@ -6,6 +6,7 @@
   "layout.profile.profileLink": "Profile",
   "layout.profile.settingsLink": "Settings",
   "layout.profile.accountActionsLabel": "Account Actions",
+  "errors.network.notAuthorized": "Unauthorized Request",
   "welcome": "Welcome",
   "a": "ahahaha",
 
@@ -17,8 +18,12 @@
   "login.password.tooShort": "Password must be at least 10 characters.",
   "login.error.accountNotFound": "No account found with that user and password combination.",
 
+  "logout.pageTitle": "Log out",
+  "logout.loggedOutMessage": "You have been logged out.",
+
   "dashboard.pageTitle": "Dashboard",
   "dashboard.addTaskButton": "Add New Task",
+  "dashboard.completed.sectionTitle": "Completed Tasks",
 
   "routines.pageTitle": "Routines",
   "journal.pageTitle": "Journal"

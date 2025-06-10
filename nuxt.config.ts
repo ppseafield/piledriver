@@ -21,8 +21,7 @@ export default defineNuxtConfig({
     '@nuxtjs/html-validator',
     '@nuxtjs/seo',
     '@nuxtjs/storybook',
-    '@pinia/nuxt',
-    '@pinia/colada-nuxt'
+    '@pinia/nuxt'
   ],
 
   css: ['~/assets/css/main.css'],

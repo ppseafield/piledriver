@@ -1,12 +1,20 @@
-<script setup lang="ts">
+<script async setup lang="ts">
+import { Temporal } from '@js-temporal/polyfill'
+import WaitingList from '../components/tasks/WaitingList.vue'
+import CompletedList from '../components/tasks/CompletedList.vue'
+
 defineI18nRoute({
   paths: {
     en: '/dashboard',
     de: '/dashboard'
   }
 })
+
+console.log('Temporal', Temporal)
+
 const { t } = useI18n()
-const { loggedIn, user } = useUserSession()
+const ts = useTasksStore()
+await ts.fetch()
 </script>
 
 <template>
@@ -26,12 +34,12 @@ const { loggedIn, user } = useUserSession()
     </template>
 
     <template #body>
-      tasks
-      <p>logged in: {{ loggedIn }}</p>
-      <p>user:</p>
-      <pre>
-	{{ JSON.stringify(user) }}
-      </pre>
+      <WaitingList />
+      <USeparator
+	icon="i-carbon-checkmark-outline"
+	class="my-3"
+      />
+      <CompletedList />
     </template>
   </UDashboardPanel>
 </template>

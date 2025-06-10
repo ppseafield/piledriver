@@ -7,6 +7,7 @@
   "layout.profile.profileLink": "Benutzerprofil",
   "layout.profile.settingsLink": "Einstellungen",
   "layout.profile.accountActionsLabel": "Konten-Aktionen",
+  "errors.network.notAuthorized": "Unbefugt Anfrage",
   "welcome": "Wilkommen",
   "a": "auauaua",
   
@@ -18,8 +19,12 @@
   "login.password.tooShort": "Passwort muss mindestens 10 Buchstaben lang.",
   "login.error.accountNotFound": "Zu Ihren Angaben konnte kein Benutzerkonto gefunden werden.",
 
+  "logout.pageTitle": "Abmelden",
+  "logout.loggedOutMessage": "Sie haben abgemeldet.",
+
   "dashboard.pageTitle": "Dashboard",
   "dashboard.addTaskButton": "Neue Aufgabe hinzufügen",
+  "dashboard.completed.sectionTitle": "Ausgeführte Aufgaben",
 
   "routines.pageTitle": "Routinen",
   "journal.pageTitle": "Tagebuch"

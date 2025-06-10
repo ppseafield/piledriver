@@ -1,9 +1,16 @@
 import type { Database } from '../shared/types/database'
-import { Pool } from 'pg'
+import * as pg from 'pg'
 import { Kysely, PostgresDialect } from 'kysely'
+import { Temporal } from '@js-temporal/polyfill'
+
+// This allow a custom mapping at the driver layer to and from Temporal.
+// https://www.kysely.dev/docs/recipes/data-types
+pg.types.setTypeParser(pg.types.builtins.TIMESTAMPTZ, (val) => {
+  return Temporal.Instant.from(val)
+})
 
 export const dialect = new PostgresDialect({
-  pool: new Pool({
+  pool: new pg.Pool({
     connectionString: process.env.DATABASE_URL,
     max: 5
   })
