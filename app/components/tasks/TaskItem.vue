@@ -26,7 +26,7 @@ const taskCompleted = computed({
   set: (completed) => ts.setCompleted(task, completed)
 })
 
-const textSize = computed(() => taskTextSize(task.task_order))
+const textSize = computed(() => taskTextSize(task?.task_order ?? 7))
 </script>
 
 <template>
@@ -36,7 +36,7 @@ const textSize = computed(() => taskTextSize(task.task_order))
       :ui="{ label: textSize }"
       size="lg"
       icon="i-carbon-checkmark"
-      :label="task.task_order.toString()"
+      :label="task?.task_order?.toString()"
       :disabled="editing"
     />
 

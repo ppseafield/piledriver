@@ -14,7 +14,7 @@ export interface TasksTable {
   updated_at: ColumnType<Date, string | undefined, never>
   completed_at: ColumnType<Date, string | undefined, never>
   archived_at: ColumnType<Date, string | undefined, never>
-  task_order: number
+  task_order: number | null
   title: string
 }
 
