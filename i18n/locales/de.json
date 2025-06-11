@@ -25,6 +25,9 @@
   "dashboard.pageTitle": "Dashboard",
   "dashboard.addTaskButton": "Neue Aufgabe hinzufügen",
   "dashboard.completed.sectionTitle": "Ausgeführte Aufgaben",
+  "dashboard.taskItem.menu.taskMenuLabel": "Aufgabe-Aktionen",
+  "dashboard.taskItem.menu.edit": "Überarbeiten",
+  "dashboard.taskItem.menu.delete": "Löschen",
 
   "routines.pageTitle": "Routinen",
   "journal.pageTitle": "Tagebuch"

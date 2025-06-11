@@ -24,7 +24,10 @@
   "dashboard.pageTitle": "Dashboard",
   "dashboard.addTaskButton": "Add New Task",
   "dashboard.completed.sectionTitle": "Completed Tasks",
-
+  "dashboard.taskItem.menu.taskMenuLabel": "Task Actions",
+  "dashboard.taskItem.menu.edit": "Edit",
+  "dashboard.taskItem.menu.delete": "Delete",
+  
   "routines.pageTitle": "Routines",
   "journal.pageTitle": "Journal"
 }

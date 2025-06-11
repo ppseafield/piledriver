@@ -10,8 +10,6 @@ defineI18nRoute({
   }
 })
 
-console.log('Temporal', Temporal)
-
 const { t } = useI18n()
 const ts = useTasksStore()
 await ts.fetch()
