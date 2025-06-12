@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
 	.insertInto('tasks')
 	.values(newTasks)
 	.returningAll()
-	.executeTakeFirst()
+	.execute()
     }
   }
 })

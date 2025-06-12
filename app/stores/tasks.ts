@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { v7 as uuid } from 'uuid'
 import type { Task } from '../../shared/types/database/tasks'
 
 export const useTasksStore = defineStore('tasks', {
@@ -26,18 +27,30 @@ export const useTasksStore = defineStore('tasks', {
      * @param task - The task to update.
      */
     async addEmptyTask() {
-      // TODO: implement
-      console.log('add new task')
+      this.tasks.push({
+	id: uuid(),
+	completed_at: null,
+	task_order: this.waiting.length + 1,
+	title: ''
+      })
     },
 
     /**
-     * Updates an existing task.
-     *
-     * @param task - The task to update.
+     * Create or update a task.
      */
-    async updateTask(task: Task) {
-      // TODO: implement
-      console.log('update task:', task)
+    async saveTask(task: Partial<Task>) {
+      if (task?.created_at) {
+	// update
+      } else {
+	// Create a new task and replace the placeholder.
+	const newTask = await $fetch('/api/tasks', {
+	  method: 'POST',
+	  body: [task]
+	})
+	if (newTask?.[0]) {
+	  Object.assign(this.tasks[this.tasks.length - 1], newTask[0])
+	}
+      }
     },
 
     /**

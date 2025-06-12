@@ -8,6 +8,7 @@ const { t } = useI18n()
 
 const editing = ref<boolean>(false)
 const titleText = ref<string>(task.title)
+const liBody = useTemplateRef<HTMLLIElement>('li-body')
 
 watch(() => task.title, () => {
   // When the task updates its title text, we should update our
@@ -19,6 +20,7 @@ onMounted(() => {
   // If this is a new task, just start editing.
   if (!task.id || task.title === '') {
     editing.value = true
+    liBody.value?.scrollIntoView({ behavior: 'smooth' })
   }
 })
 
@@ -42,16 +44,31 @@ const taskDropdownItems: DropdownMenuItem[][] = [
   ]
 ]
 
-  // Styles
-  const textSize = computed(() => taskTextSize(task?.task_order ?? 7))
+// Styles
+const textSize = computed(() => taskTextSize(task?.task_order ?? 7))
 const wrapperClass = computed(() => {
   const classes = 'flex flex-column gap-3 p-2 hover:bg-crocodile-200'
   return classes
 })
+
+/**
+ * Save the task with the updated title text.
+ */
+const saveTask = async () => {
+  // TODO: validate title text
+  await ts.saveTask({
+    ...task,
+    title: titleText.value
+  })
+  editing.value = false
+}
 </script>
 
 <template>
-  <li :class="wrapperClass">
+  <li
+    ref="li-body"
+    :class="wrapperClass"
+  >
     <UCheckbox
       :v-model="taskCompleted"
       :ui="{ label: textSize }"
@@ -64,8 +81,10 @@ const wrapperClass = computed(() => {
     <template v-if="editing">
       <UInput
 	v-model="titleText"
-		 :ui="{ base: textSize }"
+	:ui="{ base: textSize }"
 	class="grow"
+	@keyup.enter="saveTask"
+	:autofocus="true"
       />
       <UButtonGroup>
 	<UButton
@@ -76,7 +95,7 @@ const wrapperClass = computed(() => {
 	<UButton
 	  icon="i-carbon-checkmark"
 	  :aria-label="t('dashboard.taskItem.menu.edit')"
-	  @click="editing = true"
+	  @click="saveTask"
 	/>
       </UButtonGroup>
     </template>

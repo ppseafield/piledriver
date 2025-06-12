@@ -26,6 +26,7 @@ await ts.fetch()
 	  <UButton
 	    :label="t('dashboard.addTaskButton')"
 	    icon="i-carbon-add-filled"
+	    @click="ts.addEmptyTask()"
 	  />
 	</template>
       </UDashboardNavbar>
