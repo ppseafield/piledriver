@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
 	  oc
 	    .column('id')
 	    .doUpdateSet((eb) => Object.fromEntries(keys.map((key) => [key, eb.ref(`excluded.${key}`)])))
-	    .where('user_id', '=', user.id)
+	    .where('tasks.user_id', '=', user.id)
         )
 	.executeTakeFirst()
     }

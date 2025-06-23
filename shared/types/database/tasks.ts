@@ -12,8 +12,8 @@ export interface TasksTable {
   journaled_by: string | null
   created_at: ColumnType<Date, string | undefined, never>
   updated_at: ColumnType<Date, string | undefined, never>
-  completed_at: ColumnType<Date, string | undefined, never>
-  archived_at: ColumnType<Date, string | undefined, never>
+  completed_at: ColumnType<Date | null, string | undefined, never>
+  archived_at: ColumnType<Date | null, string | undefined, never>
   task_order: number | null
   title: string
 }

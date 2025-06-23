@@ -40,7 +40,15 @@ export const useTasksStore = defineStore('tasks', {
      */
     async saveTask(task: Partial<Task>) {
       if (task?.created_at) {
-	// update
+	// Update the task and add those changes to this.tasks.
+	const updatedTask = await $fetch('/api/tasks', {
+	  method: 'PUT',
+	  body: [task]
+	})
+	if (updatedTask?.[0]) {
+	  const index = this.tasks.findIndex(t => t.id === task.id)
+	  this.tasks[index] = { ...this.tasks[index], ...updatedTask[0] }
+	}
       } else {
 	// Create a new task and replace the placeholder.
 	const newTask = await $fetch('/api/tasks', {
