@@ -2,6 +2,31 @@ import { defineStore } from 'pinia'
 import { v7 as uuid } from 'uuid'
 import type { Task } from '../../shared/types/database/tasks'
 
+
+/**
+ * Sort function for tasks based on task_order.
+ *
+ * @param t1 - first task to compare
+ * @param t2 - second task to compare
+ * @returns number - ordering number
+ */
+function sortTasks(t1: Task, t2: Task): number {
+  const { task_order: order1 } = t1
+  const { task_order: order2 } = t2
+
+  // Sort the NULLs last.
+  if (order1 === order2) {
+    return 0
+  } else if (order1 === null && order2 !== null) {
+    return 1
+  } else if (order1 !== null && order2 === null) {
+    return -1
+  } else {
+    // Can't be null because of the above
+    return (order1 as number) - (order2 as number)
+  }
+}
+
 export const useTasksStore = defineStore('tasks', {
   state: () => ({
     tasks: [] as Task[],
@@ -106,6 +131,7 @@ export const useTasksStore = defineStore('tasks', {
      * @param move_new_order - The new order for the task
      */
     async reorderTask(move_task_id: string, move_new_order: number) {
+      // Call the endpoint to update the task order, fetching the new task orders.
       const response = await $fetch<ReorderTaskResult[]>('/api/reorder_task', {
 	method: 'POST',
 	body: {
@@ -113,8 +139,17 @@ export const useTasksStore = defineStore('tasks', {
 	  move_new_order
 	}
       })
-      // TODO: rearrange this.tasks according to new order
-      console.log('reorder task response:', response)
+
+      // Update the tasks in the store to reflect the new order.
+      const updates: Record<string, number> = Object.fromEntries(
+	response.map(({ task_id, updated_order }) => [task_id, updated_order])
+      )
+      for (const task of this.tasks) {
+	if (updates[task.id]) {
+	  task.task_order = updates[task.id] as number
+	}
+      }
+      this.tasks.sort(sortTasks)
     }
   }
 })

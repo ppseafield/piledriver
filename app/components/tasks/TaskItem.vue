@@ -3,7 +3,7 @@ import type { DropdownMenuItem } from '@nuxt/ui'
 import type { Task } from '../../../shared/types/database/tasks'
 
 const props = defineProps<{ task: Ref<Task> }>()
-const { task } = toRefs(props)
+const task = toRef(props, 'task')
 const ts = useTasksStore()
 const { t } = useI18n()
 
