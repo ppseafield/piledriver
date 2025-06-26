@@ -11,12 +11,9 @@ const editing = ref<boolean>(false)
 const titleText = ref<string>(task.value.title)
 const liBody = useTemplateRef<HTMLLIElement>('li-body')
 
-console.log('task:', task.value)
-
 watch(() => task, () => {
   // When the task updates its title text, we should update our
   // form title text as well.
-  console.log('task:', task.value)
   titleText.value = task.value.title
 })
 
@@ -42,7 +39,7 @@ const taskDropdownItems: DropdownMenuItem[][] = [
     },
     { label: t('dashboard.taskItem.menu.reorder'),
       icon: 'i-carbon-arrows-vertical',
-      onSelect: () => console.log('open reorder modal')
+      onSelect: () => ts.openReorderModal(task.value)
     }
   ],
   [
@@ -75,6 +72,7 @@ const saveTask = async () => {
 <template>
   <li
     ref="li-body"
+    :data-task-id="task.id"
     :class="wrapperClass"
   >
     <UCheckbox

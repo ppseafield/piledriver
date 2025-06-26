@@ -16,3 +16,15 @@ export type TaskBody = v.InferOutput<typeof TaskBodySchema>
 
 export const TaskBodyArraySchema = v.array(TaskBodySchema)
 export type TaskBodyArray = v.Infer<typeof TaskBodyArraySchema>
+
+
+// Reorder tasks request/response
+export const ReorderTaskRequestSchema = v.object({
+  move_task_id: v.pipe(v.string(), v.uuid()),
+  move_new_order: v.pipe(v.number(), v.integer(), v.minValue(1))
+})
+
+export interface ReorderTaskResult {
+  task_id: string
+  updated_order: number
+}

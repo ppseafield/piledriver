@@ -27,7 +27,7 @@
   "dashboard.completed.sectionTitle": "Ausgeführte Aufgaben",
   "dashboard.taskItem.menu.taskMenuLabel": "Aufgabe-Aktionen",
   "dashboard.taskItem.menu.edit": "Überarbeiten",
-  "dashboard.taskITem.menu.reorder": "Neu Ordnen",
+  "dashboard.taskItem.menu.reorder": "Neu Ordnen",
   "dashboard.taskItem.menu.delete": "Löschen",
 
   "routines.pageTitle": "Routinen",

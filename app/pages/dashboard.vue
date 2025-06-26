@@ -1,7 +1,8 @@
 <script async setup lang="ts">
 import { Temporal } from '@js-temporal/polyfill'
-import WaitingList from '../components/tasks/WaitingList.vue'
-import CompletedList from '../components/tasks/CompletedList.vue'
+import WaitingList from '@/components/tasks/WaitingList.vue'
+import CompletedList from '@/components/tasks/CompletedList.vue'
+import ReorderModal from '@/components/tasks/ReorderModal.vue'
 
 defineI18nRoute({
   paths: {
@@ -36,9 +37,10 @@ await ts.fetch()
       <WaitingList />
       <USeparator
 	icon="i-carbon-checkmark-outline"
-	class="my-3"
+	      class="my-3"
       />
       <CompletedList />
     </template>
   </UDashboardPanel>
+  <ReorderModal />
 </template>

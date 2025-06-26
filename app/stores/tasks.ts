@@ -5,7 +5,11 @@ import type { Task } from '../../shared/types/database/tasks'
 export const useTasksStore = defineStore('tasks', {
   state: () => ({
     tasks: [] as Task[],
-    current: null
+    current: null,
+    reorder: {
+      open: false,
+      task: null as Task | null
+    }
   }),
   getters: {
     waiting: ({ tasks }) => tasks.filter(t => t.completed_at === null),
@@ -76,6 +80,41 @@ export const useTasksStore = defineStore('tasks', {
       }
       // TODO: save task
       // TODO: batch => move task into tasks array
+    },
+
+    /**
+     * Opens the Reorder Task modal.
+     * @param task - The task to reorder.
+     */
+    openReorderModal(task: Task) {
+      this.reorder.task = task
+      this.reorder.open = true
+    },
+
+    /**
+     * closethe Reorder Task modal.
+     */
+    closeReorderModal() {
+      this.reorder.open = false
+      this.reorder.task = null
+    },
+
+    /**
+     * Reorder a task.
+     *
+     * @param move_task_id - The task to reorder.
+     * @param move_new_order - The new order for the task
+     */
+    async reorderTask(move_task_id: string, move_new_order: number) {
+      const response = await $fetch<ReorderTaskResult[]>('/api/reorder_task', {
+	method: 'POST',
+	body: {
+	  move_task_id,
+	  move_new_order
+	}
+      })
+      // TODO: rearrange this.tasks according to new order
+      console.log('reorder task response:', response)
     }
   }
 })
