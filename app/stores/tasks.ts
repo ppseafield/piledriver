@@ -153,3 +153,85 @@ export const useTasksStore = defineStore('tasks', {
     }
   }
 })
+
+
+export const new_useTasksStore = defineStore('tasks', () => {
+  const waiting = ref<Task[]>([])
+  const completed = ref<Task[]>([])
+  const current = ref<Task | null>(null)
+
+  const reorder = reactive({
+    open: false,
+    task: null as Task | null
+  })
+
+  /** Fetches the dashboard's tasks. */
+  const fetch = async () => {
+    const requestFetch = useRequestFetch()
+    const response = await requestFetch<Task[]>('/api/tasks')
+    const w = []
+    const c = []
+
+    for (const task of response) {
+      if (task.completed_at === null) {
+	w.push(task)
+      } else {
+	c.push(task)
+      }
+    }
+    // Replace the existing data with the server's data.
+    waiting.value = w
+    completed.value = c
+  }
+
+  /** Add a new task to the list. */
+  const addEmptyTask = async () => {
+    const { user } = useUserSession()
+    const now = new Date()
+    waiting.value.push({
+      id: uuid(),
+      user_id: (user.value?.id) as string,
+      routine_from: null,
+      journaled_by: null,
+      created_at: now,
+      updated_at: now,
+      completed_at: null,
+      archived_at: null,
+      task_order: waiting.value.length + 1,
+      title: ''
+    })
+  }
+
+  const saveTask = async(task: Partial<Task>) => {
+    if (task?.created_at) {
+      // Update the task and add those changes to this.tasks.
+      const updatedTask = await $fetch('/api/tasks', {
+	method: 'PUT',
+	body: [task]
+      })
+      if (updatedTask?.[0]) {
+	const index = this.tasks.findIndex(t => t.id === task.id)
+	this.tasks[index] = { ...this.tasks[index], ...updatedTask[0] }
+      }
+    } else {
+      // Create a new task and replace the placeholder.
+      const newTask = await $fetch<Task[]>('/api/tasks', {
+	method: 'POST',
+	body: [task]
+      })
+      if (newTask?.[0]) {
+	waiting.value.push(newTask[0])
+      }
+    }
+  }
+
+  return {
+    waiting,
+    completed,
+    current,
+    reorder,
+
+    fetch,
+    addEmptyTask
+  }
+})
