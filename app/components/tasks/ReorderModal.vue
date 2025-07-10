@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import type { Task } from '@@/shared/types/database/tasks'
-
-const ts = useTasksStore()
-const { reorder } = storeToRefs(ts)
+const new_ts = new_useTasksStore()
+const { reorder } = storeToRefs(new_ts)
 
 function handleUpdateOpen(value: boolean) {
   console.log('handle update open:', value)
@@ -23,16 +21,15 @@ function handleUpdateOpen(value: boolean) {
       <p>new: ___</p>
     </template>
 
-    <template #footer="{ close }">
+    <template #footer>
       <UButton
 	icon="i-carbon-close"
-	@click="close"
       >
 	Close
       </UButton>
       <UButton
 	icon="i-carbon-checkmark"
-	@click="ts.reorderTask(reorder?.task as Task, 9999)"
+	@click="new_ts.reorderTask(reorder?.task?.id as string, 9999)"
       >
 	Reorder
       </UButton>

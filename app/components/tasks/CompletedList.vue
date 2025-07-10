@@ -2,24 +2,16 @@
 import TaskItem from './TaskItem.vue'
 
 const { t } = useI18n()
-const ts = useTasksStore()
+const new_ts = new_useTasksStore()
 
-const completed = computed(() => {
-  const items = []
-  for (const [i, task] of ts.tasks.entries()) {
-    if (task.completed_at !== null) {
-      items.push(toRef(ts.tasks, i))
-    }
-  }
-  return items
-})
 </script>
 
 <template>
-  <ul v-if="ts.completed?.length > 0">
+  <ul>
     <TaskItem
-      v-for="task in completed"
-	     :key="task.value.id"
+      v-if="new_ts.completed.length > 0"
+      v-for="task in new_ts.completed"
+	     :key="task.id"
 	     :task="task"
     />
   </ul>

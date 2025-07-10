@@ -46,6 +46,7 @@ const open = ref<boolean>(false)
 	</template>
 
 	<template #footer>
+	  <UColorModeButton />
 	  <ProfileActions />
 	</template>
       </UDashboardSidebar>

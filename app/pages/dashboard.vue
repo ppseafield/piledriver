@@ -12,8 +12,8 @@ defineI18nRoute({
 })
 
 const { t } = useI18n()
-const ts = useTasksStore()
-await ts.fetch()
+const new_ts = new_useTasksStore()
+await new_ts.fetch()
 </script>
 
 <template>
@@ -27,7 +27,7 @@ await ts.fetch()
 	  <UButton
 	    :label="t('dashboard.addTaskButton')"
 	    icon="i-carbon-add-filled"
-	    @click="ts.addEmptyTask()"
+	    @click="new_ts.addEmptyTask()"
 	  />
 	</template>
       </UDashboardNavbar>
