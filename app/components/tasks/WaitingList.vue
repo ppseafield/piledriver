@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { toRef, useTemplateRef } from 'vue'
+import { useTemplateRef } from 'vue'
 import { useSortable } from '@vueuse/integrations/useSortable'
 import TaskItem from './TaskItem.vue'
 import ReorderModal from './ReorderModal.vue'
@@ -7,12 +7,13 @@ import ReorderModal from './ReorderModal.vue'
 const new_ts = new_useTasksStore()
 const ul = useTemplateRef<HTMLElement>('waitingList')
 
-// TODO: implement reorder handler
-const { option } = useSortable(ul, new_ts.waiting, {
+useSortable(ul, new_ts.waiting, {
   onEnd: (event: any) => {
     console.log('end sorting event', event)
     event.preventDefault()
-    new_ts.reorderTask(event.item.dataset.taskId, event.newIndex + 1)
+    if (event.newIndex !== event.oldIndex) {
+      new_ts.reorderTask(event.item.dataset.taskId, event.newIndex + 1)
+    }
   }
 })
 </script>
