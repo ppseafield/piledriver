@@ -26,10 +26,7 @@ onMounted(() => {
 })
 
 /** Completed value for task based on completed_at value. */
-const taskCompleted = computed({
-  get: () => task.completed_at !== null,
-  set: (completed) => new_ts.setTaskCompletion(task, completed)
-})
+const taskCompleted = computed(() => task.completed_at !== null)
 
 const taskDropdownItems: DropdownMenuItem[][] = [
   [
@@ -67,6 +64,13 @@ const saveTask = async () => {
   })
   editing.value = false
 }
+
+const updateTaskCompletion = (completed: boolean | "indeterminate") => {
+  if (completed !== "indeterminate") {
+    console.log(`setting completion to [${completed}] for task:`, task)
+    new_ts.setTaskCompletion(task, completed)
+  }
+}
 </script>
 
 <template>
@@ -76,12 +80,13 @@ const saveTask = async () => {
     :class="wrapperClass"
   >
     <UCheckbox
-      :v-model="taskCompleted"
+      :modelValue="taskCompleted"
       :ui="{ label: textSize }"
       size="lg"
       icon="i-carbon-checkmark"
       :label="task?.task_order?.toString()"
       :disabled="editing"
+      @update:modelValue="updateTaskCompletion"
     />
 
     <template v-if="editing">

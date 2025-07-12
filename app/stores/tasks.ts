@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import { v7 as uuid } from 'uuid'
 import type { Task } from '../../shared/types/database/tasks'
 
-
 /**
  * Sort function for tasks based on task_order.
  *
@@ -104,8 +103,34 @@ export const new_useTasksStore = defineStore('tasks', () => {
       }
     }
 
-  const setTaskCompletion = (task: Task, completed: boolean) => {
-    console.log('todo: complete/uncomplete task', task, completed)
+  const setTaskCompletion = async (task: Task, taskCompleted: boolean) => {
+    if (taskCompleted) {
+      const response = await $fetch<CompleteTaskResult>('/api/complete_task', {
+	method: 'POST',
+	body: {
+	  completed_task_id: task.id
+	}
+      })
+      const updates: Record<string, CompletedTaskResult> = Object.fromEntries(
+	response.map((ctr) => [ctr.task_id, ctr])
+      )
+      // Update all of the task_orders/completed_at.
+      for (const [i, t] of waiting.value.entries()) {
+	if (updates[t.id]) {
+	  const { updated_order, updated_completed_at } = updates[t.id]
+	  waiting.value[i].task_order = updated_order
+	  waiting.value[i].completed_at = updated_completed_at
+	}
+      }
+      // Find the index of the completed task, remove it from waiting,
+      // and add it to completed.
+      const ci = waiting.value.findIndex(t => t.id === task.id)
+      const [completedTask] = waiting.value.splice(ci, 1)
+      completed.value.unshift(completedTask)
+    } else {
+      // TODO: uncompletion
+      console.log('uncompletion WIP');
+    }
   }
 
   /**

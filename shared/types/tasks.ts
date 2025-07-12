@@ -28,3 +28,14 @@ export interface ReorderTaskResult {
   task_id: string
   updated_order: number
 }
+
+// Complete task
+export const CompleteTaskRequestSchema = v.object({
+  completed_task_id: v.pipe(v.string(), v.uuid())
+})
+
+export interface CompleteTaskResult {
+  task_id: string
+  updated_order: number | null
+  updated_completed_at: string | null
+}
