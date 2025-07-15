@@ -29,7 +29,7 @@
     "dotenv": "^16.5.0",
     "eslint": "^9.28.0",
     "kysely": "^0.28.2",
-    "nuxt": "^3.17.5",
+    "nuxt": "^4.0.0",
     "nuxt-auth-utils": "0.5.20",
     "nuxt-security": "2.2.0",
     "pg": "^8.16.0",
