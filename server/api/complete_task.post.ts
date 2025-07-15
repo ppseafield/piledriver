@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
 	message: JSON.stringify({ issues })
       })
     } else {
-      const results = await sql<ReorderTaskResult[]>`SELECT task_id, updated_order, updated_completed_at FROM public.complete_task(${user.id}, ${output.completed_task_id});`
+      const results = await sql<CompleteTaskResult[]>`SELECT task_id, updated_order, updated_completed_at FROM public.complete_task(${user.id}, ${output.completed_task_id});`
         .execute(db)
       return results.rows
     }

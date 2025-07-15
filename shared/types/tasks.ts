@@ -39,3 +39,8 @@ export interface CompleteTaskResult {
   updated_order: number | null
   updated_completed_at: string | null
 }
+
+// Uncomplete task
+export const UncompleteTaskRequestSchema = v.object({
+  task_id: v.pipe(v.string(), v.uuid())
+})
