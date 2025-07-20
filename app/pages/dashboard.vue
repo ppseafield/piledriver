@@ -37,7 +37,7 @@ await new_ts.fetch()
       <WaitingList />
       <USeparator
 	icon="i-carbon-checkmark-outline"
-	      class="my-3"
+	class="my-3"
       />
       <CompletedList />
     </template>

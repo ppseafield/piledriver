@@ -10,6 +10,8 @@
   "welcome": "Welcome",
   "a": "ahahaha",
 
+  "actions.save": "Save",
+
   "login.pageTitle": "Login",
   "login.submitButton": "Login",
   "login.username": "Username",
@@ -30,5 +32,8 @@
   "dashboard.taskItem.menu.delete": "Delete",
   
   "routines.pageTitle": "Routines",
-  "journal.pageTitle": "Journal"
+
+  "journal.pageTitle": "Journal",
+  "journalNew.pageTitle": "New Journal Entry",
+  "journalNew.completedTasksLegend": "Completed Tasks"
 }

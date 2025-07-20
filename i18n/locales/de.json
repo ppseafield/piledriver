@@ -10,6 +10,8 @@
   "errors.network.notAuthorized": "Unbefugt Anfrage",
   "welcome": "Wilkommen",
   "a": "auauaua",
+
+  "actions.save": "Speichern",
   
   "login.pageTitle": "Anmelden",
   "login.submitButton": "Anmelden",
@@ -31,6 +33,8 @@
   "dashboard.taskItem.menu.delete": "Löschen",
 
   "routines.pageTitle": "Routinen",
-  "journal.pageTitle": "Tagebuch"
-  
+
+  "journal.pageTitle": "Tagebuch",
+  "journalNew.pageTitle": "Neue Tagebucheintrag",
+  "journalNew.completedTasksLegend": "Ausgeführte Aufgaben"
 }
