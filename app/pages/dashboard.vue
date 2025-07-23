@@ -25,6 +25,10 @@ await new_ts.fetch()
 	</template>
 	<template #right>
 	  <UButton
+	    :label="t('dashboard.journalTasksButton')"
+	    icon="i-carbon-notebook-reference"
+	  />
+	  <UButton
 	    :label="t('dashboard.addTaskButton')"
 	    icon="i-carbon-add-filled"
 	    @click="new_ts.addEmptyTask()"

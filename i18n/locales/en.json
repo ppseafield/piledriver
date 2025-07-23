@@ -24,6 +24,7 @@
   "logout.loggedOutMessage": "You have been logged out.",
 
   "dashboard.pageTitle": "Dashboard",
+  "dashboard.journalTasksButton": "Journal Completed Tasks",
   "dashboard.addTaskButton": "Add New Task",
   "dashboard.completed.sectionTitle": "Completed Tasks",
   "dashboard.taskItem.menu.taskMenuLabel": "Task Actions",

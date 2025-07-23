@@ -25,6 +25,7 @@
   "logout.loggedOutMessage": "Sie haben abgemeldet.",
 
   "dashboard.pageTitle": "Dashboard",
+  "dashboard.journalTasksButton": "Über Ausgeführten Tagebuch führen",
   "dashboard.addTaskButton": "Neue Aufgabe hinzufügen",
   "dashboard.completed.sectionTitle": "Ausgeführte Aufgaben",
   "dashboard.taskItem.menu.taskMenuLabel": "Aufgabe-Aktionen",

@@ -6,13 +6,16 @@ const localePath = useLocalePath()
 
 const links = [
   { label: t('dashboard.pageTitle'),
-    to: localePath('/dashboard')
+    to: localePath('/dashboard'),
+    icon: 'i-carbon-image-store-local'
   },
   { label: t('routines.pageTitle'),
-    to: localePath('/routines')
+    to: localePath('/routines'),
+    icon: 'i-carbon-exam-mode'
   },
   { label: t('journal.pageTitle'),
-    to: localePath('/journal')
+    to: localePath('/journal'),
+    icon: 'i-carbon-notebook'
   }
 ]
 
