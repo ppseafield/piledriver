@@ -67,7 +67,6 @@ const saveTask = async () => {
 
 const updateTaskCompletion = (completed: boolean | "indeterminate") => {
   if (completed !== "indeterminate") {
-    console.log(`setting completion to [${completed}] for task:`, task)
     new_ts.setTaskCompletion(task, completed)
   }
 }

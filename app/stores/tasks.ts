@@ -2,30 +2,6 @@ import { defineStore } from 'pinia'
 import { v7 as uuid } from 'uuid'
 import type { Task } from '../../shared/types/database/tasks'
 
-/**
- * Sort function for tasks based on task_order.
- *
- * @param t1 - first task to compare
- * @param t2 - second task to compare
- * @returns number - ordering number
- */
-function sortTasks(t1: Task, t2: Task): number {
-  const { task_order: order1 } = t1
-  const { task_order: order2 } = t2
-
-  // Sort the NULLs last.
-  if (order1 === order2) {
-    return 0
-  } else if (order1 === null && order2 !== null) {
-    return 1
-  } else if (order1 !== null && order2 === null) {
-    return -1
-  } else {
-    // Can't be null because of the above
-    return (order1 as number) - (order2 as number)
-  }
-}
-
 export const new_useTasksStore = defineStore('tasks', () => {
   const waiting = ref<Task[]>([])
   const completed = ref<Task[]>([])
@@ -103,6 +79,12 @@ export const new_useTasksStore = defineStore('tasks', () => {
       }
     }
 
+  /**
+   * Completes or uncompletes a task, then updates the completed_at and task_orders.
+   *
+   * @param task - The task to complete or uncomplete.
+   * @param taskCompleted - Whether or not the task is completed.
+   */
   const setTaskCompletion = async (task: Task, taskCompleted: boolean) => {
     if (taskCompleted) {
       const response = await $fetch<CompleteTaskResult[]>('/api/complete_task', {
@@ -118,8 +100,10 @@ export const new_useTasksStore = defineStore('tasks', () => {
       for (const [i, t] of waiting.value.entries()) {
         if (updates[t.id]) {
           const { updated_order, updated_completed_at } = updates[t.id] as CompleteTaskResult
-          waiting.value[i].task_order = updated_order
-          waiting.value[i].completed_at = updated_completed_at === null ? null : new Date(updated_completed_at)
+	  if (waiting.value[i] !== undefined) {
+            waiting.value[i].task_order = updated_order
+            waiting.value[i].completed_at = updated_completed_at === null ? null : new Date(updated_completed_at)
+	  }
         }
       }
       // Find the index of the completed task, remove it from waiting,
@@ -128,13 +112,14 @@ export const new_useTasksStore = defineStore('tasks', () => {
       const [completedTask] = waiting.value.splice(wi, 1) as [Task]
       completed.value.unshift(completedTask)
     } else {
-      const uncompleted = await $fetch<UncompleteTaskResult>('/api/uncomplete_task', {
+      // Complete and Uncomplete both return [{ task_id, updated_order, updated_completed_at }]
+      const uncompleted = await $fetch<CompleteTaskResult>('/api/uncomplete_task', {
         method: 'POST',
         body: {
           task_id: task.id
         }
       })
-      const ci = completed.value.findIndex(t => t.id === uncompleted.id)
+      const ci = completed.value.findIndex(t => t.id === uncompleted.task_id)
       const [waitingTask] = completed.value.splice(ci, 1) as [Task]
       waiting.value.push({
 	...waitingTask,
@@ -168,10 +153,13 @@ export const new_useTasksStore = defineStore('tasks', () => {
 	task.task_order = updates[task.id] as number
       }
     }
-    // useDrag&Drop takes care of this?
-    // this.tasks.sort(sortTasks)
   }
 
+  /**
+   * Open the task order modal for reordering without drag & drop.
+   *
+   * @param task - The task to be reordered.
+   */
   const openReorderModal = (task: Task) => {
     reorder.task = task
     reorder.open = true
