@@ -13,8 +13,11 @@ defineI18nRoute({
 
 const { t } = useI18n()
 const localePath = useLocalePath()
-const new_ts = new_useTasksStore()
-await new_ts.fetch()
+const ts = useTasksStore()
+await ts.fetch()
+
+// TODO: sometimes checkboxes get VERY strange
+// when checking unchecking quickly
 </script>
 
 <template>
@@ -33,7 +36,7 @@ await new_ts.fetch()
 	  <UButton
 	    :label="t('dashboard.addTaskButton')"
 	    icon="i-carbon-add-filled"
-	    @click="new_ts.addEmptyTask()"
+	    @click="ts.addEmptyTask()"
 	  />
 	</template>
       </UDashboardNavbar>

@@ -12,7 +12,7 @@ defineI18nRoute({
 })
 const { t } = useI18n()
 const localePath = useLocalePath()
-const ts = new_useTasksStore()
+const ts = useTasksStore()
 // TODO: consider caching this so it isn't fetched every time
 await ts.fetch()
 

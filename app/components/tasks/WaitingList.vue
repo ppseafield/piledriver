@@ -4,15 +4,15 @@ import { useSortable } from '@vueuse/integrations/useSortable'
 import TaskItem from './TaskItem.vue'
 import ReorderModal from './ReorderModal.vue'
 
-const new_ts = new_useTasksStore()
+const ts = useTasksStore()
 const ul = useTemplateRef<HTMLElement>('waitingList')
 
-useSortable(ul, new_ts.waiting, {
+useSortable(ul, ts.waiting, {
   onEnd: (event: any) => {
     console.log('end sorting event', event)
     event.preventDefault()
     if (event.newIndex !== event.oldIndex) {
-      new_ts.reorderTask(event.item.dataset.taskId, event.newIndex + 1)
+      ts.reorderTask(event.item.dataset.taskId, event.newIndex + 1)
     }
   }
 })
@@ -21,8 +21,8 @@ useSortable(ul, new_ts.waiting, {
 <template>
   <ol ref="waitingList">
     <TaskItem
-      v-if="new_ts.waiting.length > 0"
-      v-for="task in new_ts.waiting"
+      v-if="ts.waiting.length > 0"
+      v-for="task in ts.waiting"
       :key="task.id"
       :task="task"
     />

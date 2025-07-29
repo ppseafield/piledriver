@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { v7 as uuid } from 'uuid'
 import type { Task } from '../../shared/types/database/tasks'
 
-export const new_useTasksStore = defineStore('tasks', () => {
+export const useTasksStore = defineStore('tasks', () => {
   const waiting = ref<Task[]>([])
   const completed = ref<Task[]>([])
   const current = ref<Task | null>(null)

@@ -4,7 +4,7 @@ import type { Task } from '../../../shared/types/database/tasks'
 
 const { task } = defineProps<{ task: Task }>()
 
-const new_ts = new_useTasksStore()
+const ts = useTasksStore()
 const { t } = useI18n()
 
 const editing = ref<boolean>(false)
@@ -36,7 +36,7 @@ const taskDropdownItems: DropdownMenuItem[][] = [
     },
     { label: t('dashboard.taskItem.menu.reorder'),
       icon: 'i-carbon-arrows-vertical',
-      onSelect: () => new_ts.openReorderModal(task)
+      onSelect: () => ts.openReorderModal(task)
     }
   ],
   [
@@ -58,7 +58,7 @@ const wrapperClass = computed(() => {
  */
 const saveTask = async () => {
   // TODO: validate title text
-  await new_ts.saveTask({
+  await ts.saveTask({
     ...task,
     title: titleText.value
   })
@@ -67,7 +67,7 @@ const saveTask = async () => {
 
 const updateTaskCompletion = (completed: boolean | "indeterminate") => {
   if (completed !== "indeterminate") {
-    new_ts.setTaskCompletion(task, completed)
+    ts.setTaskCompletion(task, completed)
   }
 }
 </script>

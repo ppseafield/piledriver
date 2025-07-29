@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const new_ts = new_useTasksStore()
-const { reorder } = storeToRefs(new_ts)
+const ts = useTasksStore()
+const { reorder } = storeToRefs(ts)
 
 function handleUpdateOpen(value: boolean) {
   console.log('handle update open:', value)
@@ -29,7 +29,7 @@ function handleUpdateOpen(value: boolean) {
       </UButton>
       <UButton
 	icon="i-carbon-checkmark"
-	@click="new_ts.reorderTask(reorder?.task?.id as string, 9999)"
+	@click="ts.reorderTask(reorder?.task?.id as string, 9999)"
       >
 	Reorder
       </UButton>
