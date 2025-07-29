@@ -25,6 +25,8 @@ const breadcrumbs = [
   }
 ]
 
+const title = ref<string>('')
+
 const editor = useEditor({
   content: '',
   extensions: [StarterKit]
@@ -73,7 +75,8 @@ const selectedTasks = ref<CheckboxGroupValue[]>(
         <UPageHeader>
           <template #title>
             <UInput
-
+	      v-model="title"
+	      :ui="{}"
             />
           </template>
         </UPageHeader>
@@ -84,10 +87,14 @@ const selectedTasks = ref<CheckboxGroupValue[]>(
         <template #right>
           <UPageAside>
             <UCheckboxGroup
+	      v-if="completedTasks.length > 0"
               v-model="selectedTasks"
               :items="completedTasks"
               :legend="t('journalNew.completedTasksLegend')"
             />
+	    <div v-else>
+	      <p>{{ t('journalNew.noUnjournaledTasks') }}</p>
+	    </div>
           </UPageAside>
         </template>
       </UPage>

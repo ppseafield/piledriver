@@ -37,5 +37,6 @@
 
   "journal.pageTitle": "Tagebuch",
   "journalNew.pageTitle": "Neue Tagebucheintrag",
-  "journalNew.completedTasksLegend": "Ausgeführte Aufgaben"
+  "journalNew.completedTasksLegend": "Ausgeführte Aufgaben",
+  "journalNew.noUnjournaledTasks": "Keine ausgeführte uneingetragene Aufgaben."
 }

@@ -45,6 +45,7 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "@iconify-json/lucide": "^1.2.58",
     "@nuxt/test-utils": "3.18.0",
     "@nuxtjs/storybook": "8.3.3",
     "@storybook-vue/nuxt": "8.3.3",

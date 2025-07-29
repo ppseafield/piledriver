@@ -36,5 +36,6 @@
 
   "journal.pageTitle": "Journal",
   "journalNew.pageTitle": "New Journal Entry",
-  "journalNew.completedTasksLegend": "Completed Tasks"
+  "journalNew.completedTasksLegend": "Completed Tasks",
+  "journalNew.noUnjournaledTasks": "No completed unjournaled tasks."
 }

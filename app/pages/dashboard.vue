@@ -12,6 +12,7 @@ defineI18nRoute({
 })
 
 const { t } = useI18n()
+const localePath = useLocalePath()
 const new_ts = new_useTasksStore()
 await new_ts.fetch()
 </script>
@@ -27,6 +28,7 @@ await new_ts.fetch()
 	  <UButton
 	    :label="t('dashboard.journalTasksButton')"
 	    icon="i-carbon-notebook-reference"
+	    :to="localePath('/journal/new')"
 	  />
 	  <UButton
 	    :label="t('dashboard.addTaskButton')"
