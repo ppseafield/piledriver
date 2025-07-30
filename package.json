@@ -26,6 +26,7 @@
     "@pinia/nuxt": "0.11.1",
     "@tiptap/pm": "^3.0.7",
     "@tiptap/starter-kit": "^3.0.7",
+    "@tiptap/static-renderer": "^3.0.7",
     "@tiptap/vue-3": "^3.0.7",
     "@unhead/vue": "^2.0.10",
     "@vueuse/nuxt": "13.1.0",

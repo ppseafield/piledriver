@@ -50,6 +50,9 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^3.0.7
         version: 3.0.7
+      '@tiptap/static-renderer':
+        specifier: ^3.0.7
+        version: 3.0.7(@tiptap/core@3.0.7(@tiptap/pm@3.0.7))(@tiptap/pm@3.0.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tiptap/vue-3':
         specifier: ^3.0.7
         version: 3.0.7(@floating-ui/dom@1.7.2)(@tiptap/core@3.0.7(@tiptap/pm@3.0.7))(@tiptap/pm@3.0.7)(vue@3.5.18(typescript@5.8.3))
@@ -2878,6 +2881,14 @@ packages:
 
   '@tiptap/starter-kit@3.0.7':
     resolution: {integrity: sha512-oTHZp6GXQQaZfZi8Fh7klH2YUeGq73XPF35CFw41mwdWdUUUms3ipaCKFqUyEYO21JMf3pZylJLxUucx5U7isg==}
+
+  '@tiptap/static-renderer@3.0.7':
+    resolution: {integrity: sha512-jhDXejBvZjHmlbdmPIolnvVMjWKKjvq7JssYSRx+VKyhumeIGCgTTwz04m37smFy38FC/WzUxbgUrZNV2NkdUA==}
+    peerDependencies:
+      '@tiptap/core': ^3.0.7
+      '@tiptap/pm': ^3.0.7
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
 
   '@tiptap/vue-3@3.0.7':
     resolution: {integrity: sha512-ov0wztf/UeOFtZfTSFdLEVSvnJ+cdP5ZUwiibCmQYRyuN6731T/YZrCl4I0HJlNKAYvJhMyhb+sp+9aOC2K/Rw==}
@@ -11673,6 +11684,13 @@ snapshots:
       '@tiptap/extension-underline': 3.0.7(@tiptap/core@3.0.7(@tiptap/pm@3.0.7))
       '@tiptap/extensions': 3.0.7(@tiptap/core@3.0.7(@tiptap/pm@3.0.7))(@tiptap/pm@3.0.7)
       '@tiptap/pm': 3.0.7
+
+  '@tiptap/static-renderer@3.0.7(@tiptap/core@3.0.7(@tiptap/pm@3.0.7))(@tiptap/pm@3.0.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@tiptap/core': 3.0.7(@tiptap/pm@3.0.7)
+      '@tiptap/pm': 3.0.7
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   '@tiptap/vue-3@3.0.7(@floating-ui/dom@1.7.2)(@tiptap/core@3.0.7(@tiptap/pm@3.0.7))(@tiptap/pm@3.0.7)(vue@3.5.18(typescript@5.8.3))':
     dependencies:

@@ -13,6 +13,7 @@ defineI18nRoute({
 const { t } = useI18n()
 const localePath = useLocalePath()
 const ts = useTasksStore()
+const js = useJournalStore()
 // TODO: consider caching this so it isn't fetched every time
 await ts.fetch()
 
@@ -31,7 +32,7 @@ const editor = useEditor({
   content: '',
   editorProps: {
     attributes: {
-      'class': 'min-h-[50vh] mt-2 p-2 pb-4 ring ring-inset ring-inset-2',
+      'class': 'min-h-[50vh] mt-2 p-2 pb-4 ring ring-inset ring-inset-2 rounded-md',
       id: 'journal-body-editor'
     }
   },
@@ -39,7 +40,15 @@ const editor = useEditor({
 })
 
 const saveJournal = () => {
-  console.log('TODO save journal')
+  // TODO validate contents
+  js.create({
+    journal: {
+      title: title.value,
+      text_body: editor.value.getText(),
+      json_body: editor.value.getJSON()
+    },
+    task_ids: selectedTasks.value
+  })
 }
 
 // Specify the selected completed tasks for the sidebar.
@@ -87,7 +96,7 @@ const selectedTasks = ref<CheckboxGroupValue[]>(
 	      v-model="title"
 	      name="title"
 	      id="title"
-	      :ui="{ base: 'w-100' }"
+	      :ui="{ base: 'w-100 grow' }"
             />
 	  </div>
 

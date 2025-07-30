@@ -2,9 +2,15 @@ import { defineStore } from 'pinia'
 import { v7 as uuid } from 'uuid'
 import type { Task } from '../../shared/types/database/tasks'
 
+interface JournalSingle {
+  journal: Journal
+  tasks: Task[]
+}
+
 export const useJournalStore = defineStore('journal', () => {
   const journals = ref<Journal[]>([])
   const current = ref<Journal | null>(null)
+  const relatedTasks = ref<Tasks[]>([])
 
   /** Fetches the dashboard's tasks. */
   const fetch = async () => {
@@ -13,10 +19,31 @@ export const useJournalStore = defineStore('journal', () => {
     journals.value = response
   }
 
-  export default {
+  /** Fetch a single journal and its tasks */
+  const fetchSingle = async (id: string) => {
+    const requestFetch = useRequestFetch()
+    const { journal, tasks } = await requestFetch<JournalSingle>(`/api/journals/${id}`)
+    current.value = journal
+    relatedTasks.value = tasks
+  }
+
+  /** create a journal */
+  const create = async (j: NewJournalSchema) => {
+    const requestFetch = useRequestFetch()
+    const response = await requestFetch<JournalCreateResponse>('/api/journals', {
+      method: 'POST',
+      body: j
+    })
+    console.log('create response:', response)
+  }
+
+  return {
     journals,
     current,
+    relatedTasks,
 
-    fetch
+    fetch,
+    fetchSingle,
+    create
   }
 })
