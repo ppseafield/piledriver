@@ -29,6 +29,12 @@ const title = ref<string>('')
 
 const editor = useEditor({
   content: '',
+  editorProps: {
+    attributes: {
+      'class': 'min-h-[50vh] mt-2 p-2 pb-4 ring ring-inset ring-inset-2',
+      id: 'journal-body-editor'
+    }
+  },
   extensions: [StarterKit]
 })
 
@@ -72,16 +78,29 @@ const selectedTasks = ref<CheckboxGroupValue[]>(
       <UPage
         :ui="{ center: 'lg:col-span-7' }"
       >
-        <UPageHeader>
-          <template #title>
+        <UPageBody>
+	  <div class="flex flex-col">
+	    <label for="title" class="text-sm font-bold mb-2">
+	      {{ t('journalNew.titleLabel') }}
+	    </label>
             <UInput
 	      v-model="title"
-	      :ui="{}"
+	      name="title"
+	      id="title"
+	      :ui="{ base: 'w-100' }"
             />
-          </template>
-        </UPageHeader>
-        <UPageBody>
-          <EditorContent :editor="editor" />
+	  </div>
+
+	  <div>
+	    <label for="journal-body-editor" class="text-sm font-bold mb-2 pb-2">
+	      {{ t('journalNew.entryLabel') }}
+	    </label>
+
+            <EditorContent
+	      class="where-do-we-go-now"
+	      :editor="editor"
+	    />
+	  </div>
         </UPageBody>
 
         <template #right>
