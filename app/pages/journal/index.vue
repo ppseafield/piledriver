@@ -40,7 +40,7 @@ const entries = computed(() => {
 	
 	<template #right>
 	  <UButton
-	    :label="t('dashboard.journalTasksButton')"
+	    :label="t('journalNew.pageTitle')"
 	    icon="i-carbon-notebook-reference"
 	    :to="localePath('/journal/new')"
 	  />
