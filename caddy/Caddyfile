@@ -1,0 +1,11 @@
+piledriver.app {
+  encode gzip
+
+  reverse_proxy http://piledriver_server:3000 {
+    header_down Strict-Transport-Security "max-age=15552000;"
+    header_down Referrer-Policy "strict-origin-when-cross-origin"
+    header_down X-XSS-Protection "1; mode=block"
+    header_down X-Content-Type-Options "nosniff"
+    header_down X-Frame-Options "SAMEORIGIN"
+  }
+}

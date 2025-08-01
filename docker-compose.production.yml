@@ -1,0 +1,33 @@
+services:
+  postgres:
+    image: postgres:17.5-bookworm
+    container_name: pd_db
+    restart: always
+    command: -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all
+    environment:
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+  piledriver-server:
+    image: piledriver:0.02
+    container_name: piledriver-server
+    depends_on:
+      - postgres
+    restart: always
+    environment:
+      NUXT_UI_PRO_LICENSE: $NUXT_UI_PRO_LICENSE
+      NUXT_SESSION_PASSWORD: $NUXT_SESSION_PASSWORD
+      DATABASE_URL: $DATABASE_URL
+      NUXT_DATABASE_URL: $NUXT_DATABASE_URL
+  caddy:
+    image: caddy:latest
+    container_name: pd_caddy
+    depends_on:
+      - piledriver-server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./site:/srv
+      - ./caddy/data:/data
+      - ./caddy/config:/config    
