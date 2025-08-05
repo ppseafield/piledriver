@@ -32,8 +32,15 @@ const open = ref<boolean>(false)
 	v-model:open="open"
 	collapsible
       >
-	<template #header>
-	  <span class="w-full ms-2">
+	<template #header="{ collapsed }">
+	  <NuxtImg
+	    src="/piledriver-bulldozer.png"
+	    sizes="32px"
+	    :alt="t('layout.piledriverLogoText')"
+	  />
+	  <span
+	    v-if="!collapsed"
+	    class="w-full ms-2">
 	    piledriver
 	  </span>
 	</template>

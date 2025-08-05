@@ -1,5 +1,6 @@
 {
   "layout.siteTitle": "piledriver",
+  "layout.piledriverLogoText": "Piledriver Bulldozerlogo",
   "layout.aboutLink": "Über",
   "layout.blogLink": "Blog",
   "layout.accountNotLoggedInTitle": "Benutzerkonto",
@@ -27,6 +28,7 @@
   "dashboard.pageTitle": "Dashboard",
   "dashboard.journalTasksButton": "Über Ausgeführten Tagebuch führen",
   "dashboard.addTaskButton": "Neue Aufgabe hinzufügen",
+  "dashboard.mobileMenuButton": "Menü",
   "dashboard.completed.sectionTitle": "Ausgeführte Aufgaben",
   "dashboard.taskItem.menu.taskMenuLabel": "Aufgabe-Aktionen",
   "dashboard.taskItem.menu.edit": "Überarbeiten",
