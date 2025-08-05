@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useTemplateRef } from 'vue'
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 import { useSortable } from '@vueuse/integrations/useSortable'
 import TaskItem from './TaskItem.vue'
 import ReorderModal from './ReorderModal.vue'
@@ -7,15 +8,24 @@ import ReorderModal from './ReorderModal.vue'
 const ts = useTasksStore()
 const ul = useTemplateRef<HTMLElement>('waitingList')
 
-useSortable(ul, ts.waiting, {
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const mobileSized = breakpoints.smaller('lg')
+
+const sortable = useSortable(ul, ts.waiting, {
+  disabled: mobileSized.value,
   onEnd: (event: any) => {
-    console.log('end sorting event', event)
     event.preventDefault()
     if (event.newIndex !== event.oldIndex) {
       ts.reorderTask(event.item.dataset.taskId, event.newIndex + 1)
     }
   }
 })
+
+watch(mobileSized, (isMobile) => {
+  sortable.option('disabled', isMobile)
+})
+
+console.log('sortable:', sortable)
 </script>
 
 <template>
