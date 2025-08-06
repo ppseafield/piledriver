@@ -6,8 +6,10 @@ services:
     command: -c shared_preload_libraries=pg_stat_statements -c pg_stat_statements.track=all
     environment:
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    ports:
+      - "5432:5432"
   piledriver-server:
-    image: piledriver:0.02
+    image: piledriver/piledriver-server:0.04
     container_name: piledriver-server
     depends_on:
       - postgres
