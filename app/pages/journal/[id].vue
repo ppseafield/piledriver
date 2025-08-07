@@ -8,7 +8,7 @@ defineI18nRoute({
     de: '/tagebuch/[id]'
   }
 })
-const { t } = useI18n()
+const { t, d } = useI18n()
 const localePath = useLocalePath()
 const js = useJournalStore()
 const route = useRoute()
@@ -24,20 +24,22 @@ const breadcrumbs = computed(() => [
   }
 ])
 
-console.log('renderToHTMLString',renderToHTMLString)
-console.log('extensions', [StarterKit])
+const postDate = computed(() => {
+  console.log('js current:', js.current)
+  if (js.current) {
+    return dateFromTimestamptz(js.current.created_at)
+  } else {
+    return null
+  }
+})
 
 const postHTML = computed(() => {
-  console.log('js.current json body', js.current.json_body)
   return renderToHTMLString({
     content: js.current?.json_body ?? ({ 'type': 'doc', 'content': [] } as any),
     extensions: [StarterKit]
   })
 })
 
-watch(() => postHTML, (value) => {
-  console.log('updated postHTML:', postHTML)
-})
 </script>
 
 <template>
@@ -66,8 +68,9 @@ watch(() => postHTML, (value) => {
         :ui="{ center: 'lg:col-span-7' }"
       >
         <UPageBody>
+	  <p>{{ shortDate(js.current.created_at) }}</p>
 	  <div
-	    class="flex flex-col"
+	    class="journal-editor flex flex-col"
 	    v-html="postHTML"
 	  />
         </UPageBody>

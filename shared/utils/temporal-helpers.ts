@@ -22,7 +22,7 @@ export function twoWeeksAgo(): string {
 }
 
 /**
- * Takes a postgres timestamp with timezone and returns a nice, localized formatted date
+ * Takes a postgres timestamp with timezone and returns a nice, localized formatted date.
  * @param datestring - timestamp with timezone from postgres
  * @returns a nice formatted date
  */
@@ -30,5 +30,14 @@ export function shortDate(datestring: string): string {
   return Temporal.Instant.from(datestring).toLocaleString(undefined, {
     month: 'short', day: 'numeric', year: 'numeric'
   })
+}
+
+/**
+ * Takes a postgres timestamp with timezone and returns a date object.
+ * @param datestring - timestamp with timezone from postgres
+ * @returns a Date object
+ */
+export function dateFromTimestamptz(datestring: string): Date {
+  return new Date(Temporal.Instant.from(datestring).epochMilliseconds)
 }
 

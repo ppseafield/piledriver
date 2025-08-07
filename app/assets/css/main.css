@@ -57,3 +57,7 @@
     font-family: 'Montserrat Alternates', Arial;
     font-weight: bold;
 }
+
+.tiptap p, .journal-editor p {
+    @apply mb-2 indent-8;
+}
