@@ -133,8 +133,11 @@ export const useTasksStore = defineStore('tasks', () => {
    *
    * @param move_task_id - The task to reorder.
    * @param move_new_order - The new order for the task
+   * @param rearrange - Whether to move the task in ts.waiting. (i.e. sortable or no)
    */
-  const reorderTask = async (move_task_id: string, move_new_order: number) => {
+  const reorderTask = async (move_task_id: string, move_new_order: number, rearrange: boolean = false) => {
+    const oldOrder = waiting.value.find(t => t.id === move_task_id).task_order
+
     // Call the endpoint to update the task order, fetching the new task orders.
     const response = await $fetch<ReorderTaskResult[]>('/api/reorder_task', {
       method: 'POST',
@@ -148,10 +151,16 @@ export const useTasksStore = defineStore('tasks', () => {
     const updates: Record<string, number> = Object.fromEntries(
       response.map(({ task_id, updated_order }) => [task_id, updated_order])
     )
-    for (const task of waiting.value) {
+    for (const [i, task] of waiting.value.entries()) {
       if (updates[task.id]) {
-	task.task_order = updates[task.id] as number
+	waiting.value[i].task_order = updates[task.id] as number
       }
+    }
+    // If the task was moved via the reorder modal, we need to move the task
+    // in ts.waiting here. Otherwise useSortable takes care of the reposition.
+    if (rearrange) {
+      const [movedTask] = waiting.value.splice(oldOrder - 1, 1)
+      waiting.value.splice(move_new_order - 1, 0, movedTask)
     }
   }
 

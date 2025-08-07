@@ -2,8 +2,29 @@
 const ts = useTasksStore()
 const { reorder } = storeToRefs(ts)
 
+const newOrder = ref<Task>(reorder.value.task?.task_order ?? 1)
+
+const moveOptions = computed(() => {
+  return ts.waiting.map((t) => ({
+    label: `${t.task_order}: ${t.title}`,
+    onSelect: () => {
+      newOrder.value = t.task_order
+    }
+  }))
+})
+
+const selected = ref<SelectMenuItem>(moveOptions.value[ newOrder.value - 1 ])
+
+const disabled = computed(() => newOrder.value === reorder.value?.task?.task_order)
+
+const reorderTask = () => {
+  ts.reorderTask(reorder.value?.task?.id as string, newOrder.value, true)
+  reorder.value.open = false
+}
+
 function handleUpdateOpen(value: boolean) {
-  console.log('handle update open:', value)
+  newOrder.value = reorder.value?.task?.task_order
+  selected.value = moveOptions.value[ newOrder.value - 1 ]
 }
 </script>
 
@@ -17,8 +38,19 @@ function handleUpdateOpen(value: boolean) {
     :ui="{ overlay: 'bg-crocodile-300 opacity-50' }"
   >
     <template #body>
-      <p>current: {{ reorder.task?.task_order ?? '' }}</p>
-      <p>new: ___</p>
+      <div>
+	move
+	{{ reorder.task?.task_order ?? '' }}
+	<UIcon
+	  name="i-carbon-arrow-right"
+	  alt="to"
+	/>
+	<USelectMenu
+	  v-model="selected"
+	  :items="moveOptions"
+	  class="w-75"
+	/>
+      </div>
     </template>
 
     <template #footer>
@@ -29,7 +61,8 @@ function handleUpdateOpen(value: boolean) {
       </UButton>
       <UButton
 	icon="i-carbon-checkmark"
-	@click="ts.reorderTask(reorder?.task?.id as string, 9999)"
+	:disabled="disabled"
+	@click="reorderTask"
       >
 	Reorder
       </UButton>
