@@ -33,7 +33,7 @@ const mobileMenu: DropdownMenuItem[] = [
 </script>
 
 <template>
-  <UDashboardPanel>
+  <UDashboardPanel :ui="{ body: 'sm:gap-4 sm:p-4' }">
     <template #header>
       <UDashboardNavbar
 	:title="t('dashboard.pageTitle')"

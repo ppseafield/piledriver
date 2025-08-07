@@ -14,7 +14,9 @@ const liBody = useTemplateRef<HTMLLIElement>('li-body')
 watch(() => task, () => {
   // When the task updates its title text, we should update our
   // form title text as well.
-  titleText.value = task.title
+  if (task.title) {
+    titleText.value = task.title
+  }
 })
 
 onMounted(() => {
@@ -49,7 +51,7 @@ const taskDropdownItems: DropdownMenuItem[][] = [
 // Styles
 const textSize = computed(() => taskTextSize(task?.task_order ?? 7))
 const wrapperClass = computed(() => {
-  const classes = 'flex flex-column gap-3 p-2 hover:bg-crocodile-200'
+  const classes = 'flex flex-column gap-1 lg:gap-3 p-1 lg:p-2 hover:bg-crocodile-200'
   return classes
 })
 
@@ -112,7 +114,7 @@ const updateTaskCompletion = (completed: boolean | "indeterminate") => {
     <template v-else>
       <div :class="`flex flex-column grow ${textSize}`">
 	<span
-	  class="ms-4 my-2 grow"
+	  class="mx-1 lg:mx-2 grow"
 	  @dblclick="editing = true"
 	>
 	  {{ titleText }}
