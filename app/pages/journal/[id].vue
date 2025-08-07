@@ -15,6 +15,10 @@ const route = useRoute()
 
 await js.fetchSingle(route.params.id)
 
+useHead({
+  title: js.current.title
+})
+
 const breadcrumbs = computed(() => [
   { label: t('journal.pageTitle'),
     to: localePath('/journal')
