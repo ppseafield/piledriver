@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import * as locales from '@nuxt/ui-pro/locale'
+import logo from '/assets/images/piledriver-bulldozer-32.png'
 
 const { locale, t } = useI18n()
 const localePath = useLocalePath()
@@ -33,9 +34,8 @@ const open = ref<boolean>(false)
 	collapsible
       >
 	<template #header="{ collapsed }">
-	  <NuxtImg
-	    src="/piledriver-bulldozer.png"
-	    sizes="32px"
+	  <img
+	    :src="logo"
 	    :alt="t('layout.piledriverLogoText')"
 	  />
 	  <span
