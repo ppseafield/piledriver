@@ -86,6 +86,9 @@ importers:
       pinia:
         specifier: ^3.0.3
         version: 3.0.3(typescript@5.8.3)(vue@3.5.18(typescript@5.8.3))
+      sharp:
+        specifier: ^0.34.3
+        version: 0.34.3
       sortablejs:
         specifier: ^1.15.6
         version: 1.15.6
@@ -165,9 +168,6 @@ importers:
       playwright-core:
         specifier: ^1.54.1
         version: 1.54.1
-      sharp:
-        specifier: ^0.34.3
-        version: 0.34.3
       storybook:
         specifier: 8.6.12
         version: 8.6.12(prettier@3.5.3)
