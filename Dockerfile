@@ -1,5 +1,5 @@
 
-FROM node:24-alpine AS build
+FROM node:24-bookworm AS build
 WORKDIR /app
 
 RUN corepack enable
