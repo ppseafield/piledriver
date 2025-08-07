@@ -34,7 +34,7 @@ export const useJournalStore = defineStore('journal', () => {
       method: 'POST',
       body: j
     })
-    console.log('create response:', response)
+    return response.journal
   }
 
   return {

@@ -39,9 +39,9 @@ const editor = useEditor({
   extensions: [StarterKit]
 })
 
-const saveJournal = () => {
+const saveJournal = async () => {
   // TODO validate contents
-  js.create({
+  const newJournal = await js.create({
     journal: {
       title: title.value,
       text_body: editor.value.getText(),
@@ -49,6 +49,7 @@ const saveJournal = () => {
     },
     task_ids: selectedTasks.value
   })
+  navigateTo(localePath({ name: 'journal-id', params: { id: newJournal.id } }))
 }
 
 // Specify the selected completed tasks for the sidebar.
