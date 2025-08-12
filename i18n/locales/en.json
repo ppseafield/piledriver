@@ -12,6 +12,9 @@
   "a": "ahahaha",
 
   "actions.save": "Save",
+  "actions.saveDraft": "Save Draft",
+  "actions.edit": "Edit",
+  "actions.cancel": "Cancel",
 
   "login.pageTitle": "Login",
   "login.submitButton": "Login",

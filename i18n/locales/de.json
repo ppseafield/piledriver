@@ -13,6 +13,9 @@
   "a": "auauaua",
 
   "actions.save": "Speichern",
+  "actions.saveDraft": "Entwurf Speichern",
+  "actions.edit": "Bearbeiten",
+  "actions.cancel": "Abbrechen",
   
   "login.pageTitle": "Anmelden",
   "login.submitButton": "Anmelden",

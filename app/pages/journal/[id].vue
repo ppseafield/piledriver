@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import { renderToHTMLString } from '@tiptap/static-renderer/pm/html-string'
+import type { CheckboxGroupItem, CheckboxGroupValue } from "@nuxt/ui"
+import type { Task } from "#shared/types/database/tasks"
 
 defineI18nRoute({
   paths: {
@@ -44,6 +47,38 @@ const postHTML = computed(() => {
   })
 })
 
+const editing = ref<boolean>(false)
+
+const editor = useEditor({
+  content: js.current.json_body,
+  editorProps: {
+    attributes: {
+      'class': 'min-h-[50vh] mt-2 p-2 pb-4 ring ring-inset ring-inset-2 rounded-md',
+      id: 'journal-body-editor'
+    }
+  },
+  extensions: [StarterKit]
+})
+
+const toggleEdit = () => {
+  if (editing.value) {
+    editing.value = false
+    // Reset body text
+    editor.value.commands.setContent(js.current.json_body)
+  } else {
+    editing.value = true
+  }
+}
+
+const updateJournal = async () => {
+  await js.update({
+    id: js.current.id,
+    // TODO: update title
+    text_body: editor.value.getText(),
+    json_body: editor.value.getJSON()
+  })
+}
+// TODO: edit the tasks associated with the journal.
 </script>
 
 <template>
@@ -59,10 +94,29 @@ const postHTML = computed(() => {
 	</template>
 	
 	<template #right>
-	  <UButton
-	    :label="t('actions.save')"
-	    icon="i-carbon-save"
-	  />
+	  <template v-if="editing">
+	    <UButton
+	      :label="t('actions.save')"
+	      icon="i-carbon-save"
+	      @click="updateJournal"
+	    />
+	    <UButton
+	      :label="t('actions.saveDraft')"
+	      icon="i-carbon-rule-draft"
+	    />
+	    <UButton
+	      :label="t('actions.cancel')"
+	      icon="i-carbon-close"
+	      @click="toggleEdit"
+	    />
+	  </template>
+	  <template v-else>
+	    <UButton
+	      :label="t('actions.edit')"
+	      icon="i-carbon-edit"
+	      @click="toggleEdit"
+	    />
+	  </template>
 	</template>
       </UDashboardNavbar>
     </template>
@@ -73,7 +127,12 @@ const postHTML = computed(() => {
       >
         <UPageBody>
 	  <p>{{ shortDate(js.current.created_at) }}</p>
+	  <EditorContent
+	    v-if="editing"
+	    :editor="editor"
+	  />
 	  <div
+	    v-else
 	    class="journal-editor flex flex-col"
 	    v-html="postHTML"
 	  />

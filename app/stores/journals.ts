@@ -37,6 +37,19 @@ export const useJournalStore = defineStore('journal', () => {
     return response.journal
   }
 
+  const update = async (j: JournalUpdate) => {
+    const requestFetch = useRequestFetch()
+    const response = await requestFetch<Journal>('/api/journals', {
+      method: 'PUT',
+      body: j
+    })
+    // TODO: update journals list
+    if (current.value.id === j.id) {
+      current.value = { ...current.value, ...response }
+    }
+    return response
+  }
+
   return {
     journals,
     current,
@@ -44,6 +57,7 @@ export const useJournalStore = defineStore('journal', () => {
 
     fetch,
     fetchSingle,
-    create
+    create,
+    update
   }
 })
