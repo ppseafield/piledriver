@@ -5,6 +5,7 @@ import type { Task } from '../../../shared/types/database/tasks'
 const { task } = defineProps<{ task: Task }>()
 
 const ts = useTasksStore()
+const sts = useSubtasksStore()
 const { t } = useI18n()
 
 const editing = ref<boolean>(false)
@@ -17,6 +18,10 @@ watch(() => task, () => {
   if (task.title) {
     titleText.value = task.title
   }
+})
+
+const subtaskList = computed(() => {
+  return sts.mapping?.[task.id] ?? []
 })
 
 onMounted(() => {
