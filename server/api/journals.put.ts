@@ -8,8 +8,7 @@ export default defineEventHandler(async (event) => {
   if (!user?.id) {
     throw createError({
       statusCode: 401,
-      statusMessage: 'errors.network.notAuthorized',
-      message: JSON.stringify(session)
+      statusMessage: 'errors.network.notAuthorized'
     })
   } else {
     const { success, output, issues } = await readValidatedBody(event, body => {
@@ -20,16 +19,17 @@ export default defineEventHandler(async (event) => {
       throw createError({
 	statusCode: 400,
 	statusMessage: 'Invalid Request',
-	message: { issues }
+	message: JSON.stringify(issues)
       })
     } else {
-      const { id, updated_at, ...taskUpdates } = output
+      const { id, ...taskUpdates } = output
       return await db
-	.update('journals')
+	.updateTable('journals')
 	.set({
 	  ...taskUpdates,
 	  updated_at: nowTemporal()
 	})
+	.where('id', '=', output.id)
 	.returningAll()
 	.executeTakeFirstOrThrow()
     }

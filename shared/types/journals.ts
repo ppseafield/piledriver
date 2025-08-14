@@ -24,9 +24,11 @@ export interface JournalCreateResponse {
   updated_tasks: Array<{ id: string, journaled_by: string }>
 }
 
-export const JournalUpdateSchema = v.intersect([
-  v.object({ id: v.pipe(v.string(), v.uuid()) }),
-  v.omit(JournalBodySchema, ['id'])
-])
+export const JournalUpdateSchema = v.object({
+  id: v.pipe(v.string(), v.uuid()),
+  title: v.pipe(v.string(), v.minLength(1), v.maxLength(120)),
+  text_body: v.pipe(v.string(), v.minLength(1)),
+  json_body: v.any()
+})
 
 export type JournalUpdate = v.InferOutput<typeof JournalUpdateSchema>

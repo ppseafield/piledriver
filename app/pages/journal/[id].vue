@@ -48,6 +48,7 @@ const postHTML = computed(() => {
 })
 
 const editing = ref<boolean>(false)
+const title = ref<string>(js.current.title)
 
 const editor = useEditor({
   content: js.current.json_body,
@@ -73,12 +74,16 @@ const toggleEdit = () => {
 const updateJournal = async () => {
   await js.update({
     id: js.current.id,
-    // TODO: update title
+    title: title.value,
     text_body: editor.value.getText(),
     json_body: editor.value.getJSON()
   })
+  editing.value = false
 }
 // TODO: edit the tasks associated with the journal.
+// TODO: draft functionality?
+// TODO: dropdown menu for buttons
+// TODO: component that takes list of actions and makes both desktop buttons and mobile dropdown
 </script>
 
 <template>
@@ -100,10 +105,10 @@ const updateJournal = async () => {
 	      icon="i-carbon-save"
 	      @click="updateJournal"
 	    />
-	    <UButton
+	    <!-- <UButton
 	      :label="t('actions.saveDraft')"
 	      icon="i-carbon-rule-draft"
-	    />
+	      /> -->
 	    <UButton
 	      :label="t('actions.cancel')"
 	      icon="i-carbon-close"
@@ -127,6 +132,26 @@ const updateJournal = async () => {
       >
         <UPageBody>
 	  <p>{{ shortDate(js.current.created_at) }}</p>
+	  <p
+	    v-if="!editing && js.current.updated_at > js.current.created_at"
+	  >
+	    {{ shortDate(js.current.updated_at) }}
+	  </p>
+	  <div
+	    v-if="editing"
+	    class="flex flex-col"
+	  >
+	    <label for="title" class="text-sm font-bold mb-2">
+	      {{ t('journalNew.titleLabel') }}
+	    </label>
+            <UInput
+	      v-model="title"
+	      name="title"
+	      id="title"
+	      :ui="{ base: 'w-100 grow' }"
+            />
+	  </div>
+
 	  <EditorContent
 	    v-if="editing"
 	    :editor="editor"
