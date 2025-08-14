@@ -7,6 +7,7 @@ export const TaskBodySchema = v.object({
   journaled_by: v.optional(v.uuid()),
   created_at: v.optional(v.isoTimestamp()),
   updated_at: v.optional(v.isoTimestamp()),
+  completed_at: v.optional(v.isoTimestamp()),
   archived_at: v.optional(v.isoTimestamp()),
   task_order: v.nullable(v.pipe(v.number(), v.integer())),
   title: v.pipe(v.string(), v.minLength(1))

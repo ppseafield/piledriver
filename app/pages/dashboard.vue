@@ -15,7 +15,8 @@ defineI18nRoute({
 const { t } = useI18n()
 const localePath = useLocalePath()
 const ts = useTasksStore()
-await ts.fetch()
+const sts = useSubtasksStore()
+await Promise.all([ts.fetch(), sts.fetch()])
 
 // TODO: sometimes checkboxes get VERY strange
 // when checking unchecking quickly
