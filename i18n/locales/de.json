@@ -37,6 +37,7 @@
   "dashboard.taskItem.menu.edit": "Überarbeiten",
   "dashboard.taskItem.menu.reorder": "Neu Ordnen",
   "dashboard.taskItem.menu.delete": "Löschen",
+  "dashboard.deleteItemPrompt": "'{taskName}' löschen?",
 
   "routines.pageTitle": "Routinen",
 

@@ -164,6 +164,29 @@ export const useTasksStore = defineStore('tasks', () => {
     }
   }
 
+  const archiveTask = async (archive_task_id: string, isCompleted: boolean) => {
+    // Call the endpoint to archive the task, fetching the new task orders.
+    const response = await $fetch<ArchiveTaskResult>(`/api/tasks?archive_task_id=${archive_task_id}`, {
+      method: 'DELETE'
+    })
+
+    // Update the tasks in the store to reflect the new order.
+    const updates: Record<string, number> = Object.fromEntries(
+      response.map(atr => [atr.id, atr])
+    )
+    const taskList = isCompleted ? completed : waiting
+    for (const [i, task] of waiting.value.entries()) {
+      if (updates[task.id]) {
+	taskList.value[i].task_order = updates[task.id].task_order
+	taskList.value[i].archived_at = updates[task.id].archived_at
+      }
+    }
+
+    // Remove the archived task from our list.
+    const i = taskList.value.findIndex(t => t.id === archive_task_id)
+    taskList.value.splice(i, 1)
+  }
+
   /**
    * Open the task order modal for reordering without drag & drop.
    *
@@ -185,6 +208,7 @@ export const useTasksStore = defineStore('tasks', () => {
     saveTask,
     setTaskCompletion,
     reorderTask,
+    archiveTask,
     openReorderModal
   }
 })

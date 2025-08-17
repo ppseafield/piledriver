@@ -22,6 +22,7 @@ export default defineEventHandler(async (event) => {
       .selectAll()
       .where('user_id', '=', sql<string>`${user.id}`)
       .where('journaled_by', 'is', null)
+      .where('archived_at', 'is', null)
       .where((eb) => eb.or([
 	eb('completed_at', 'is', null),
 	eb('completed_at', '>=', sql`now() - interval '2 weeks'`)

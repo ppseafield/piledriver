@@ -36,6 +36,7 @@
   "dashboard.taskItem.menu.edit": "Edit",
   "dashboard.taskItem.menu.reorder": "Reorder",
   "dashboard.taskItem.menu.delete": "Delete",
+  "dashboard.deleteItemPrompt": "Delete '{taskName}'?",
   
   "routines.pageTitle": "Routines",
 

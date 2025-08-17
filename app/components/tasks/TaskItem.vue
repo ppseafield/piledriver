@@ -48,7 +48,15 @@ const taskDropdownItems: DropdownMenuItem[][] = [
   ],
   [
     { label: t('dashboard.taskItem.menu.delete'),
-      icon: 'i-carbon-trash-can'
+      icon: 'i-carbon-trash-can',
+      onSelect: () => {
+	const taskName = task.completed_at === null
+		       ? `#${task.task_order}: '${task.title}'`
+		       : `'${task.title}'`
+	if (window.confirm( t('dashboard.deleteItemPrompt', { taskName }) )) {
+	  ts.archiveTask(task.id, task.completed_at !== null)
+	}
+      }
     }
   ]
 ]
@@ -57,13 +65,13 @@ const taskDropdownItems: DropdownMenuItem[][] = [
 const textSize = computed(() => taskTextSize(task?.task_order ?? 7))
 const wrapperClass = computed(() => {
   const classes = 'flex flex-column gap-1 lg:gap-3 p-1 lg:p-2 hover:bg-crocodile-200'
-  return classes
-})
+	  return classes
+	})
 
-/**
- * Save the task with the updated title text.
- */
-const saveTask = async () => {
+	  /**
+	   * Save the task with the updated title text.
+	   */
+	  const saveTask = async () => {
   // TODO: validate title text
   await ts.saveTask({
     ...task,

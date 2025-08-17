@@ -45,3 +45,13 @@ export interface CompleteTaskResult {
 export const UncompleteTaskRequestSchema = v.object({
   task_id: v.pipe(v.string(), v.uuid())
 })
+
+export const ArchiveTaskSchema = v.object({
+  archive_task_id: v.pipe(v.string(), v.uuid())
+})
+
+export interface ArchiveTaskResult {
+  task_id: string
+  updated_order: number | null
+  updated_archived_at: string | null
+}
