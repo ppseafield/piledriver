@@ -16,7 +16,7 @@ const sortable = useSortable(ul, ts.waiting, {
   onEnd: (event: any) => {
     event.preventDefault()
     if (event.newIndex !== event.oldIndex) {
-      ts.reorderTask(event.item.dataset.taskId, event.newIndex + 1)
+      nextTick(() => ts.reorderTask(event.item.dataset.taskId, event.newIndex + 1))
     }
   }
 })
