@@ -7,6 +7,8 @@ export const useTasksStore = defineStore('tasks', () => {
   const completed = ref<Task[]>([])
   const current = ref<Task | null>(null)
 
+  const unsavedTaskIDs = reactive<Set<string>>(new Set())
+  
   const reorder = reactive({
     open: false,
     task: null as Task | null
@@ -35,7 +37,7 @@ export const useTasksStore = defineStore('tasks', () => {
   const addEmptyTask = async () => {
     const { user } = useUserSession()
     const now = new Date()
-    waiting.value.push({
+    const empty = {
       id: uuid(),
       user_id: (user.value?.id) as string,
       routine_from: null,
@@ -46,39 +48,36 @@ export const useTasksStore = defineStore('tasks', () => {
       archived_at: null,
       task_order: waiting.value.length + 1,
       title: ''
-    })
+    }
+    waiting.value.push(empty)
+    // Flag this one as a new (unsaved) task
+    unsavedTaskIDs.add(empty.id)
   }
 
   /** Save a task (does not consider completion) */
   const saveTask = async(task: Partial<Task>) => {
-    if (task?.created_at) {
-      // Update the task and add those changes to this.tasks.
-      const updatedTask = await $fetch('/api/tasks', {
-        method: 'PUT',
-	body: [task]
-      })
-      if (updatedTask?.[0]) {
-          const updated = updatedTask[0]
-          if (updated.completed_at === null) {
-      const i = waiting.value.findIndex(t => t.id === updated.id)
-      waiting.value.splice(i, 1, updated)
-    } else {
-      const i = completed.value.findIndex(t => t.id === updated.id)
-      completed.value.splice(i, 1, updated)
-    }
-        }
+    // Update the task and add those changes to the appropriate list
+    const method = unsavedTaskIDs.has(task.id) ? 'POST': 'PUT'
+
+    const updatedTask = await $fetch('/api/tasks', {
+      method,
+      body: [task]
+    })
+    if (updatedTask?.[0]) {
+      const updated = updatedTask[0]
+      if (updated.completed_at === null) {
+	const i = waiting.value.findIndex(t => t.id === updated.id)
+	Object.assign(waiting.value[i], updated)
       } else {
-        // Create a new task and replace the placeholder.
-        const newTask = await $fetch<Task[]>('/api/tasks', {
-    method: 'POST',
-    body: [task]
-        })
-        if (newTask?.[0]) {
-    waiting.value.push(newTask[0])
-        }
+	const i = completed.value.findIndex(t => t.id === updated.id)
+	Object.assign(completed.value[i], updated)
+      }
+      if (method === 'POST') {
+	unsavedTaskIDs.delete(task.id)
       }
     }
-
+  }
+  
   /**
    * Completes or uncompletes a task, then updates the completed_at and task_orders.
    *
