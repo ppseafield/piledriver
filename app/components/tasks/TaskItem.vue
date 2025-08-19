@@ -78,13 +78,17 @@ const wrapperClass = computed(() => {
 /**
  * Save the task with the updated title text.
  */
-const saveTask = async () => {
-  // TODO: validate title text
-  await ts.saveTask({
-    ...task,
-    title: titleText.value
-  })
-  editing.value = false
+const saveTask = async (event: any) => {
+  console.log('keyup event:', event)
+  const title = titleText.value.trim()
+  if (title.length > 1) {
+    await ts.saveTask({ ...task, title })
+    editing.value = false
+
+    if (event.shiftKey) {
+      ts.addEmptyTask()
+    }
+  }
 }
 
 const updateTaskCompletion = (completed: boolean | "indeterminate") => {
@@ -113,10 +117,10 @@ const updateTaskCompletion = (completed: boolean | "indeterminate") => {
       <template v-if="editing">
 	<UInput
 	  v-model="titleText"
-		   :ui="{ base: textSize }"
-		   class="grow"
-		   @keyup.enter="saveTask"
-		   :autofocus="true"
+	  :ui="{ base: textSize }"
+	  class="grow"
+	  :autofocus="true"
+	  @keyup.enter="saveTask"
 	/>
 	<UButtonGroup>
 	  <UButton
