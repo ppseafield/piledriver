@@ -27,6 +27,8 @@ const breadcrumbs = [
 ]
 
 const title = ref<string>('')
+const otherCompletedTasks = ref<string[]>([])
+const newRemainingTasks = ref<string[]>([])
 
 const editor = useEditor({
   content: '',
@@ -86,7 +88,7 @@ const selectedTasks = ref<CheckboxGroupValue[]>(
 
     <template #body>
       <UPage
-        :ui="{ center: 'lg:col-span-7' }"
+        :ui="{ center: 'lg:col-span-6', right: 'lg:col-span-4' }"
       >
         <UPageBody>
 	  <div class="flex flex-col">
@@ -114,15 +116,71 @@ const selectedTasks = ref<CheckboxGroupValue[]>(
         </UPageBody>
 
         <template #right>
-          <UPageAside>
-            <UCheckboxGroup
-	      v-if="completedTasks.length > 0"
-              v-model="selectedTasks"
-              :items="completedTasks"
-              :legend="t('journalNew.completedTasksLegend')"
-            />
-	    <div v-else>
-	      <p>{{ t('journalNew.noUnjournaledTasks') }}</p>
+          <UPageAside :ui="{ root: 'lg:col-span-4', container: 'flex flex-col gap-y-18 w-100 lg' }">
+	    <div class="w-100">
+              <UCheckboxGroup
+		v-if="completedTasks.length > 0"
+		v-model="selectedTasks"
+		:items="completedTasks"
+		:legend="t('journalNew.completedTasksLegend')"
+              />
+	      <p v-else>{{ t('journalNew.noUnjournaledTasks') }}</p>
+	    </div>
+
+	    <div class="w-100">
+	      <fieldset class="flex flex-col gap-x-2 gap-y-1 w-100">
+		<legend class="mb-1 block font-medium text-sm">
+		  {{ t('journalNew.otherCompletedTasks') }}
+		  <UPopover
+		    mode="hover"
+		    color="secondary"
+		    :open-delay="500"
+		    :close-delay="300"
+		    :content="{ side: 'top' }"
+		    :ui="{ content: 'p-2 max-w-sm' }"
+		  >
+		    <UButton
+		      icon="i-carbon-information"
+		      size="sm"
+		    />
+		    <template #content>
+		      <p>{{ t('journalNew.info.otherCompletedTasks') }}</p>
+		    </template>
+		  </UPopover>
+		</legend>
+
+		<UInput
+		  class="w-100"
+		/>
+	      </fieldset>
+	    </div>
+
+	    <div>
+	      <fieldset class="flex flex-col gap-x-2 gap-y-1">
+		<legend class="mb-1 block font-medium text-sm">
+		  {{ t('journalNew.newRemainingTasks') }}
+		  <UPopover
+		    mode="hover"
+		    color="secondary"
+		    :open-delay="500"
+		    :close-delay="300"
+		    :content="{ side: 'top' }"
+		    :ui="{ content: 'p-2 max-w-sm' }"
+		  >
+		    <UButton
+		      icon="i-carbon-information"
+		      size="sm"
+		    />
+		    <template #content>
+		      <p>{{ t('journalNew.info.newRemainingTasks') }}</p>
+		    </template>
+		  </UPopover>
+		</legend>
+
+		<UInput
+		  class="w-100"
+		/>
+	      </fieldset>
 	    </div>
           </UPageAside>
         </template>

@@ -8,6 +8,7 @@ export default defineAppConfig({
   ui: {
     colors: {
       primary: 'bamboo',
+      secondary: 'energy-yellow',
       neutral: 'crocodile'
     },
     input: {

@@ -51,6 +51,7 @@
     --color-mariner-950: #202d4b;
 
     --ui-primary: var(--color-bamboo-600);
+    --ui-secondary: var(--color-energy-yellow-400);
 }
 
 .dark {

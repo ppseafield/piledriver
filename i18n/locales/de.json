@@ -26,7 +26,7 @@
   "login.error.accountNotFound": "Zu Ihren Angaben konnte kein Benutzerkonto gefunden werden.",
 
   "logout.pageTitle": "Abmelden",
-  "logout.loggedOutMessage": "Sie haben abgemeldet.",
+  "logout.loggedOutMessage": "Sie haben sich abgemeldet.",
 
   "dashboard.pageTitle": "Dashboard",
   "dashboard.journalTasksButton": "Über Ausgeführten Tagebuch führen",
@@ -48,5 +48,9 @@
   "journalNew.titleLabel": "Titel",
   "journalNew.entryLabel": "Eintrag",
   "journalNew.completedTasksLegend": "Ausgeführte Aufgaben",
-  "journalNew.noUnjournaledTasks": "Keine ausgeführte uneingetragene Aufgaben."
+  "journalNew.noUnjournaledTasks": "Keine ausgeführten uneingetragenen Aufgaben.",
+  "journalNew.otherCompletedTasks": "Weitere ausgeführte Aufgaben",
+  "journalNew.newRemainingTasks": "Zusåtzliche neue Aufgaben",
+  "journalNew.info.otherCompletedTasks": "Aufgaben, dass Sie tagsüber ausgeführt haben und nicht aufgeschrieben wurden. Die werden erstellt werden und Ihrem Tagebucheintrag zugewissen werden.",
+  "journalNew.info.newRemainingTasks": "Neue Afugaben für später. Die werden auf deinem Dashboard erscheinen."
 }

@@ -47,5 +47,9 @@
   "journalNew.titleLabel": "Title",
   "journalNew.entryLabel": "Entry",
   "journalNew.completedTasksLegend": "Completed Tasks",
-  "journalNew.noUnjournaledTasks": "No completed unjournaled tasks."
+  "journalNew.noUnjournaledTasks": "No completed unjournaled tasks.",
+  "journalNew.otherCompletedTasks": "Other Completed Tasks",
+  "journalNew.newRemainingTasks": "New Remaining Tasks",
+  "journalNew.info.otherCompletedTasks": "Tasks that you completed during the day and didn't write down. They will be created and assigned to this journal entry.",
+  "journalNew.info.newRemainingTasks": "New tasks for later. These will appear on your task dashboard."
 }
