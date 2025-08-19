@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui'
 import type { Task } from '../../../shared/types/database/tasks'
+import SubtaskList from './SubtaskList.vue'
 
 const { task } = defineProps<{ task: Task }>()
 
@@ -20,9 +21,7 @@ watch(() => task, () => {
   }
 })
 
-const subtaskList = computed(() => {
-  return sts.mapping?.[task.id] ?? []
-})
+const subtaskList = computed(() => sts.mapping?.[task.id] ?? [])
 
 onMounted(() => {
   // If this is a new task, just start editing.
@@ -64,14 +63,14 @@ const taskDropdownItems: DropdownMenuItem[][] = [
 // Styles
 const textSize = computed(() => taskTextSize(task?.task_order ?? 7))
 const wrapperClass = computed(() => {
-  const classes = 'flex flex-column gap-1 lg:gap-3 p-1 lg:p-2 hover:bg-crocodile-200'
-	  return classes
-	})
+  const classes = 'flex flex-column gap-1 lg:gap-3 p-1 lg:p-2 hover:bg-crocodile-200 dark:hover:bg-crocodile-800'
+  return classes
+})
 
-	  /**
-	   * Save the task with the updated title text.
-	   */
-	  const saveTask = async () => {
+/**
+ * Save the task with the updated title text.
+ */
+const saveTask = async () => {
   // TODO: validate title text
   await ts.saveTask({
     ...task,
@@ -91,57 +90,63 @@ const updateTaskCompletion = (completed: boolean | "indeterminate") => {
   <li
     ref="li-body"
     :data-task-id="task.id"
-    :class="wrapperClass"
   >
-    <UCheckbox
-      :modelValue="taskCompleted"
-      :ui="{ label: textSize }"
-      size="lg"
-      icon="i-carbon-checkmark"
-      :label="task?.task_order?.toString()"
-      :disabled="editing"
-      @update:modelValue="updateTaskCompletion"
-    />
-
-    <template v-if="editing">
-      <UInput
-	v-model="titleText"
-	:ui="{ base: textSize }"
-	class="grow"
-	@keyup.enter="saveTask"
-	:autofocus="true"
+    <div :class="wrapperClass">
+      <UCheckbox
+	:modelValue="taskCompleted"
+	:ui="{ label: textSize }"
+	size="lg"
+	icon="i-carbon-checkmark"
+	:label="task?.task_order?.toString()"
+	:disabled="editing"
+	@update:modelValue="updateTaskCompletion"
       />
-      <UButtonGroup>
-	<UButton
-	  icon="i-carbon-close"
-	  :aria-label="t('dashboard.taskItem.menu.delete')"
-	  @click="editing = false; titleText = task.title"
+
+      <template v-if="editing">
+	<UInput
+	  v-model="titleText"
+		   :ui="{ base: textSize }"
+		   class="grow"
+		   @keyup.enter="saveTask"
+		   :autofocus="true"
 	/>
-	<UButton
-	  icon="i-carbon-checkmark"
-	  :aria-label="t('dashboard.taskItem.menu.edit')"
-	  @click="saveTask"
-	/>
-      </UButtonGroup>
-    </template>
-    <template v-else>
-      <div :class="`flex flex-column grow ${textSize}`">
-	<span
-	  class="mx-1 lg:mx-2 grow"
-	  @dblclick="editing = true"
+	<UButtonGroup>
+	  <UButton
+	    icon="i-carbon-close"
+	    :aria-label="t('dashboard.taskItem.menu.delete')"
+	    @click="editing = false; titleText = task.title"
+	  />
+	  <UButton
+	    icon="i-carbon-checkmark"
+	    :aria-label="t('dashboard.taskItem.menu.edit')"
+	    @click="saveTask"
+	  />
+	</UButtonGroup>
+      </template>
+      <template v-else>
+	<div :class="`flex flex-column grow ${textSize}`">
+	  <span
+	    class="mx-1 lg:mx-2 grow"
+	    @dblclick="editing = true"
+	  >
+	    {{ titleText }}
+	  </span>
+	</div>
+	<UDropdownMenu
+	  :items="taskDropdownItems"
+		    class="h-9"
 	>
-	  {{ titleText }}
-	</span>
-      </div>
-      <UDropdownMenu
-	:items="taskDropdownItems"
-	class="h-9"
-      >
-	<UButton
-	  icon="i-carbon-overflow-menu-horizontal"
-	  :aria-label="t('dashboard.taskItem.menu.taskMenuLabel')"
-	/>
-      </UDropdownMenu>
-    </template>
+	  <UButton
+	    icon="i-carbon-overflow-menu-horizontal"
+	    :aria-label="t('dashboard.taskItem.menu.taskMenuLabel')"
+	  />
+	</UDropdownMenu>
+      </template>
+    </div>
+    <SubtaskList
+      v-if="subtaskList.length > 0 && task.completed_at === null"
+      :task="task"
+      :subtaskList="subtaskList"
+    />
   </li>
 </template>
