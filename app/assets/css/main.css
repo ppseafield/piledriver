@@ -53,6 +53,11 @@
     --ui-primary: var(--color-bamboo-600);
 }
 
+.dark {
+    --ui-primary: var(--color-bamboo-800);
+}
+
+
 .app-title {
     font-family: 'Montserrat Alternates', Arial;
     font-weight: bold;
