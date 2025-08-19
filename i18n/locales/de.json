@@ -36,8 +36,10 @@
   "dashboard.taskItem.menu.taskMenuLabel": "Aufgabe-Aktionen",
   "dashboard.taskItem.menu.edit": "Überarbeiten",
   "dashboard.taskItem.menu.reorder": "Neu Ordnen",
+  "dashboard.taskItem.menu.split": "Aufgabe aufspalten",
   "dashboard.taskItem.menu.delete": "Löschen",
-  "dashboard.deleteItemPrompt": "'{taskName}' löschen?",
+  "dashboard.deleteTaskPrompt": "Aufgabe '{taskName}' löschen?",
+  "dashboard.deleteSubtaskPrompt": "Teilaufgabe '{subtaskName}' löschen?",
 
   "routines.pageTitle": "Routinen",
 

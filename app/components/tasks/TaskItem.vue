@@ -25,7 +25,7 @@ const subtaskList = computed(() => sts.mapping?.[task.id] ?? [])
 
 onMounted(() => {
   // If this is a new task, just start editing.
-  if (!task.id || task.title === '') {
+  if (ts.unsavedTaskIDs.has(task.id)) {
     editing.value = true
     liBody.value?.scrollIntoView({ behavior: 'smooth' })
   }
@@ -34,6 +34,8 @@ onMounted(() => {
 /** Completed value for task based on completed_at value. */
 const taskCompleted = computed(() => task.completed_at !== null)
 
+// TODO: turn into computed that checks that there are subtasks and
+// and some but not all subtasks are completed.
 const taskDropdownItems: DropdownMenuItem[][] = [
   [
     { label: t('dashboard.taskItem.menu.edit'),
@@ -43,6 +45,12 @@ const taskDropdownItems: DropdownMenuItem[][] = [
     { label: t('dashboard.taskItem.menu.reorder'),
       icon: 'i-carbon-arrows-vertical',
       onSelect: () => ts.openReorderModal(task)
+    },
+    { label: t('dashboard.taskItem.menu.split'),
+      // TODO: Get icon correct!
+      // icon: 'i-custom-split-task',
+      icon: 'i-carbon-zos-sysplex',
+      onSelect: () => console.log('TODO: split')
     }
   ],
   [
@@ -52,7 +60,7 @@ const taskDropdownItems: DropdownMenuItem[][] = [
 	const taskName = task.completed_at === null
 		       ? `#${task.task_order}: '${task.title}'`
 		       : `'${task.title}'`
-	if (window.confirm( t('dashboard.deleteItemPrompt', { taskName }) )) {
+	if (window.confirm( t('dashboard.deleteTaskPrompt', { taskName }) )) {
 	  ts.archiveTask(task.id, task.completed_at !== null)
 	}
       }

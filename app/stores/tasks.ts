@@ -7,7 +7,7 @@ export const useTasksStore = defineStore('tasks', () => {
   const completed = ref<Task[]>([])
   const current = ref<Task | null>(null)
 
-  const unsavedTaskIDs = reactive<Set<string>>(new Set())
+  const unsavedTaskIDs = ref<Set<string>>(new Set())
   
   const reorder = reactive({
     open: false,
@@ -51,13 +51,13 @@ export const useTasksStore = defineStore('tasks', () => {
     }
     waiting.value.push(empty)
     // Flag this one as a new (unsaved) task
-    unsavedTaskIDs.add(empty.id)
+    unsavedTaskIDs.value.add(empty.id)
   }
 
   /** Save a task (does not consider completion) */
   const saveTask = async(task: Partial<Task>) => {
     // Update the task and add those changes to the appropriate list
-    const method = unsavedTaskIDs.has(task.id) ? 'POST': 'PUT'
+    const method = unsavedTaskIDs.value.has(task.id) ? 'POST': 'PUT'
 
     const updatedTask = await $fetch('/api/tasks', {
       method,
@@ -73,7 +73,7 @@ export const useTasksStore = defineStore('tasks', () => {
 	Object.assign(completed.value[i], updated)
       }
       if (method === 'POST') {
-	unsavedTaskIDs.delete(task.id)
+	unsavedTaskIDs.value.delete(task.id)
       }
     }
   }
@@ -201,6 +201,7 @@ export const useTasksStore = defineStore('tasks', () => {
     completed,
     current,
     reorder,
+    unsavedTaskIDs,
 
     fetch,
     addEmptyTask,

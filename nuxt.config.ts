@@ -38,6 +38,14 @@ export default defineNuxtConfig({
     defaultLocale: 'en',
   },
 
+  icon: {
+    customCollections: [
+      { prefix: 'custom',
+	dir: './assets/icons'
+      }
+    ]
+  },
+
   storybook: {
     enabled: false
   }

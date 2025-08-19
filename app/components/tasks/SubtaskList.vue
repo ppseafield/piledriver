@@ -6,7 +6,7 @@ import SubtaskItem from './SubtaskItem.vue'
 
 const { task, subtaskList } = defineProps<{ task: Task, subtaskList: Subtask[] }>()
 const ul = useTemplateRef<HTMLElement>('subtaskList')
-
+// TODO: sortable, write reorder_subtask
 </script>
 
 <template>

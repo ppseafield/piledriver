@@ -35,8 +35,10 @@
   "dashboard.taskItem.menu.taskMenuLabel": "Task Actions",
   "dashboard.taskItem.menu.edit": "Edit",
   "dashboard.taskItem.menu.reorder": "Reorder",
+  "dashboard.taskItem.menu.split": "Split Task",
   "dashboard.taskItem.menu.delete": "Delete",
-  "dashboard.deleteItemPrompt": "Delete '{taskName}'?",
+  "dashboard.deleteTaskPrompt": "Delete Task '{taskName}'?",
+  "dashboard.deleteSubtaskPrompt": "Delete Subtask '{subtaskName}'?",
   
   "routines.pageTitle": "Routines",
 
