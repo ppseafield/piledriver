@@ -11,6 +11,11 @@ defineI18nRoute({
     de: '/tagebuch/[id]'
   }
 })
+
+definePageMeta({
+  middleware: 'auth'
+})
+
 const { t, d } = useI18n()
 const localePath = useLocalePath()
 const js = useJournalStore()

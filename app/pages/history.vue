@@ -7,7 +7,11 @@ defineI18nRoute({
   }
 })
 
-// TODO: paginated table of all tasks
+definePageMeta({
+  middleware: 'auth'
+})
+
+// TODO: paginated table of all things
 </script>
 
 <template>

@@ -5,6 +5,11 @@ defineI18nRoute({
     de: '/routinen'
   }
 })
+
+definePageMeta({
+  middleware: 'auth'
+})
+
 const { t } = useI18n()
 </script>
 
