@@ -17,6 +17,7 @@ definePageMeta({
 
 const { t } = useI18n()
 const localePath = useLocalePath()
+const session = useUserSession()
 
 const state = reactive<Partial<LoginRequest>>({
   username: undefined,
@@ -42,6 +43,7 @@ function validate(state: any): FormError[] {
 
 async function onSubmit(payload: FormSubmitEvent<LoginRequest>) {
   console.log('submitted:', payload)
+  const localePath = useLocalePath()
   try {
     await $fetch<{ user: User | null, session: any }>('/api/login', {
       method: 'POST',
@@ -50,6 +52,7 @@ async function onSubmit(payload: FormSubmitEvent<LoginRequest>) {
       },
       body: payload.data
     })
+    await session.fetch()
     navigateTo({ path: localePath('dashboard') })
   } catch (e) {
     // formwide error: error issue
