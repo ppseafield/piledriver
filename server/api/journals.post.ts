@@ -16,9 +16,10 @@ export default defineEventHandler(async (event) => {
       message: { issues: JSON.stringify(issues) }
     })
   } else {
-    const { journal, task_ids } = output
+    const { journal, task_ids, other_completed, new_remaining } = output
     const newJournal = { ...journal, user_id: user.id } as NewJournal
 
+    // Create the journal.
     const updated_at = nowTemporal()
     const createdJournal: Journal = await db
       .insertInto('journals')
@@ -26,6 +27,7 @@ export default defineEventHandler(async (event) => {
       .returningAll()
       .executeTakeFirstOrThrow()
 
+    // Assign the existing tasks to this new journal.
     const journaled_by = createdJournal.id
     const updatedTaskIDs = await db
       .updateTable('tasks')
@@ -34,9 +36,54 @@ export default defineEventHandler(async (event) => {
       .returning('id', 'journaled_by')
       .execute()
 
+    // Create other completed tasks and assign them to this journal.
+    let otherCompletedTasks = []
+    if (other_completed.length > 0) {
+      const completed_at = nowTemporal()
+      otherCompletedTasks = await db
+	.insertInto('tasks')
+	.values(
+	  other_completed.map(title => ({
+	    user_id: user.id, title, journaled_by, completed_at
+	  }))
+	)
+	.returningAll()
+	.execute()
+    }
+
+    // Find the max task_order + 1 so we can create waiting tasks.
+    let newRemainingTasks = []
+    if (new_remaining.length > 0) {
+      const { max_task_order } = await db
+	.selectFrom('tasks')
+	.select(({ fn }) => [fn.max<number>('task_order').as('max_task_order')])
+	.where('user_id', '=', user.id)
+	.where('journaled_by', 'is', null)
+	.where('archived_at', 'is', null)
+	.where((eb) => eb.or([
+	  eb('completed_at', 'is', null),
+	  eb('completed_at', '>=', sql`now() - interval '2 weeks'`)
+	]))
+	.executeTakeFirstOrThrow()
+      
+      // Create new tasks that are not complete.
+      const max = max_task_order + 1
+      const values = Object.entries(new_remaining).map(
+	([i, title]) => ({ title, user_id: user.id, task_order: max + i })
+      )
+
+      newRemainingTasks = await db
+	.insertInto('tasks')
+	.values(values)
+	.returningAll()
+	.execute()
+    }
+
     return {
       journal: createdJournal,
-      task_ids: updatedTaskIDs
+      task_ids: updatedTaskIDs,
+      other_completed: otherCompletedTasks,
+      new_remaining: newRemainingTasks
     }
   }
 })

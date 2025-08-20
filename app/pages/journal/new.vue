@@ -27,8 +27,8 @@ const breadcrumbs = [
 ]
 
 const title = ref<string>('')
-const otherCompletedTasks = ref<string[]>([])
-const newRemainingTasks = ref<string[]>([])
+const otherCompletedText = ref<string>('')
+const newRemainingText = ref<string>('')
 
 const editor = useEditor({
   content: '',
@@ -41,19 +41,6 @@ const editor = useEditor({
   extensions: [StarterKit]
 })
 
-const saveJournal = async () => {
-  // TODO validate contents
-  const newJournal = await js.create({
-    journal: {
-      title: title.value,
-      text_body: editor.value.getText(),
-      json_body: editor.value.getJSON()
-    },
-    task_ids: selectedTasks.value
-  })
-  navigateTo(localePath({ name: 'journal-id', params: { id: newJournal.id } }))
-}
-
 // Specify the selected completed tasks for the sidebar.
 const completedTasks : CheckboxGroupItem[] = ts.completed.map(t => ({
   label: t.title,
@@ -62,6 +49,22 @@ const completedTasks : CheckboxGroupItem[] = ts.completed.map(t => ({
 const selectedTasks = ref<CheckboxGroupValue[]>(
   ts.completed.map((task: Task) => task.id)
 )
+
+const saveJournal = async () => {
+  // TODO validate contents
+  const newJournal = await js.create({
+    journal: {
+      title: title.value,
+      text_body: editor.value.getText(),
+      json_body: editor.value.getJSON()
+    },
+    task_ids: selectedTasks.value,
+    other_completed: otherCompletedText.value.split("\n").map(oct => oct.trim()).filter(oct => oct.length > 0),
+    new_remaining: newRemainingText.value.split("\n").map(nrt => nrt.trim()).filter(nrt => nrt.length > 0)
+  })
+  navigateTo(localePath({ name: 'journal-id', params: { id: newJournal.id } }))
+}
+// TODO: Possibly? Swap <UTextarea /> with <EditorContent /> (add numbers, style text more)
 </script>
 
 <template>
@@ -123,6 +126,7 @@ const selectedTasks = ref<CheckboxGroupValue[]>(
 		v-model="selectedTasks"
 		:items="completedTasks"
 		:legend="t('journalNew.completedTasksLegend')"
+		:ui="{ legend: 'font-bold' }"
               />
 	      <p v-else>{{ t('journalNew.noUnjournaledTasks') }}</p>
 	    </div>
@@ -130,7 +134,7 @@ const selectedTasks = ref<CheckboxGroupValue[]>(
 	    <div class="w-100">
 	      <fieldset class="flex flex-col gap-x-2 gap-y-1 w-100">
 		<legend class="mb-1 block font-medium text-sm">
-		  {{ t('journalNew.otherCompletedTasks') }}
+		  <span class="font-bold me-2">{{ t('journalNew.otherCompletedTasks') }}</span>
 		  <UPopover
 		    mode="hover"
 		    color="secondary"
@@ -149,8 +153,11 @@ const selectedTasks = ref<CheckboxGroupValue[]>(
 		  </UPopover>
 		</legend>
 
-		<UInput
-		  class="w-100"
+		<UTextarea
+		  v-model="otherCompletedText"
+		  :rows="4"
+		  autoresize
+		  :ui="{ base: '' }"
 		/>
 	      </fieldset>
 	    </div>
@@ -158,7 +165,7 @@ const selectedTasks = ref<CheckboxGroupValue[]>(
 	    <div>
 	      <fieldset class="flex flex-col gap-x-2 gap-y-1">
 		<legend class="mb-1 block font-medium text-sm">
-		  {{ t('journalNew.newRemainingTasks') }}
+		  <span class="font-bold me-2">{{ t('journalNew.newRemainingTasks') }}</span>
 		  <UPopover
 		    mode="hover"
 		    color="secondary"
@@ -177,8 +184,10 @@ const selectedTasks = ref<CheckboxGroupValue[]>(
 		  </UPopover>
 		</legend>
 
-		<UInput
-		  class="w-100"
+		<UTextarea
+		  v-model="newRemainingText"
+		  :rows="4"
+		  autoresize
 		/>
 	      </fieldset>
 	    </div>

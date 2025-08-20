@@ -159,6 +159,7 @@ const updateTaskCompletion = (completed: boolean | "indeterminate") => {
       v-if="subtaskList.length > 0 && task.completed_at === null"
       :task="task"
       :subtaskList="subtaskList"
+      :parentOrder="task.task_order.toString()"
     />
   </li>
 </template>

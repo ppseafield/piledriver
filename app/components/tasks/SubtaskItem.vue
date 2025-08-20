@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { task, subtask } = defineProps<{ task: Task, subtask: Subtask }>()
+const { task, subtask, parentOrder } = defineProps<{ task: Task, subtask: Subtask, parentOrder: string }>()
 
 const ts = useTasksStore()
 const sts = useSubtasksStore()
@@ -25,6 +25,7 @@ onMounted(() => {
 })
 
 const subtaskCompleted = computed(() => subtask.completed_at !== null)
+const orderLabel = computed(() => `${parentOrder}.${subtask.task_order}`)
 
 const subtaskDropdownItems: DropdownMenuItem[][] = [
   [
@@ -68,12 +69,13 @@ const saveSubtask = () => {
 <template>
   <li
     ref="li-body"
+    class="ms-4"
   >
     <div class="flex flex-column gap-1 lg:gap-3 p-1 lg:p-2 hover:bg-crocodile-200 dark:hover:bg-crocodile-800">
       <UCheckbox
 	size="lg"
 	icon="i-carbon-checkmark"
-	:label="subtask?.task_order?.toString()"
+	:label="orderLabel"
 	:disabled="editing"
 	@update:modelValue="updateSubtaskCompletion"
       />
