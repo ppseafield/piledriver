@@ -67,10 +67,17 @@ export default defineEventHandler(async (event) => {
 	.executeTakeFirstOrThrow()
       
       // Create new tasks that are not complete.
-      const max = max_task_order + 1
-      const values = Object.entries(new_remaining).map(
-	([i, title]) => ({ title, user_id: user.id, task_order: max + i })
+      const nextTaskOrder = Number(max_task_order) + 1
+      console.log("\n\n")
+      console.log(`max_task_order from kysely: [${typeof max_task_order}]: ${max_task_order}`)
+      console.log(`nextTaskOrder from me: [${typeof nextTaskOrder}]: ${nextTaskOrder}`)
+      console.log("\n\n")
+
+      const values = Array.from(new_remaining.entries()).map(
+	([i, title]) => ({ title, user_id: user.id, task_order: nextTaskOrder + i })
       )
+      console.log('values sent to postgres:', JSON.stringify(values))
+      console.log("\n\n")
 
       newRemainingTasks = await db
 	.insertInto('tasks')
