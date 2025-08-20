@@ -34,6 +34,7 @@
   "dashboard.completed.sectionTitle": "Completed Tasks",
   "dashboard.taskItem.menu.taskMenuLabel": "Task Actions",
   "dashboard.taskItem.menu.edit": "Edit",
+  "dashboard.taskItem.menu.addSubtask": "Add Subtask",
   "dashboard.taskItem.menu.reorder": "Reorder",
   "dashboard.taskItem.menu.split": "Split Task",
   "dashboard.taskItem.menu.delete": "Delete",

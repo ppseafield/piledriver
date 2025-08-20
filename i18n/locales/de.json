@@ -30,11 +30,12 @@
 
   "dashboard.pageTitle": "Dashboard",
   "dashboard.journalTasksButton": "Über Ausgeführten Tagebuch führen",
-  "dashboard.addTaskButton": "Neue Aufgabe hinzufügen",
+  "dashboard.addTaskButton": "Neue Aufgabe zufügen",
   "dashboard.mobileMenuButton": "Menü",
   "dashboard.completed.sectionTitle": "Ausgeführte Aufgaben",
   "dashboard.taskItem.menu.taskMenuLabel": "Aufgabe-Aktionen",
   "dashboard.taskItem.menu.edit": "Überarbeiten",
+  "dashboard.taskItem.menu.addSubtask": "Teilaufgabe zufügen",
   "dashboard.taskItem.menu.reorder": "Neu Ordnen",
   "dashboard.taskItem.menu.split": "Aufgabe aufspalten",
   "dashboard.taskItem.menu.delete": "Löschen",

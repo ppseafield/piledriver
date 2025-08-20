@@ -68,11 +68,6 @@ export default defineEventHandler(async (event) => {
       
       // Create new tasks that are not complete.
       const nextTaskOrder = Number(max_task_order) + 1
-      console.log("\n\n")
-      console.log(`max_task_order from kysely: [${typeof max_task_order}]: ${max_task_order}`)
-      console.log(`nextTaskOrder from me: [${typeof nextTaskOrder}]: ${nextTaskOrder}`)
-      console.log("\n\n")
-
       const values = Array.from(new_remaining.entries()).map(
 	([i, title]) => ({ title, user_id: user.id, task_order: nextTaskOrder + i })
       )

@@ -13,15 +13,15 @@ watch(() => subtask, () => {
   // When the subtask updates its title text, we should update our
   // form title text as well.
   if (subtask.title) {
-    titleText.value = task.title
+    titleText.value = subtask.title
   }
 })
 onMounted(() => {
-  // If this is a new task, just start editing.
-  // if (sts.unsavedSubtaskIDs.has(subtask.id)) {
-  //   editing.value = true
-  //   liBody.value?.scrollIntoView({ behavior: 'smooth' })
-  // }
+  //If this is a new task, just start editing.
+  if (sts.unsavedSubtaskIDs.has(subtask.id)) {
+    editing.value = true
+    liBody.value?.scrollIntoView({ behavior: 'smooth' })
+  }
 })
 
 const subtaskCompleted = computed(() => subtask.completed_at !== null)
@@ -59,9 +59,17 @@ const updateSubtaskCompletion = (completed: boolean | "indeterminate") => {
   console.log('update subtask completion:', completed)
 }
 
-const saveSubtask = () => {
-  // TODO: Save subtask
-  console.log('save subtask')
+const saveSubtask = async (event: any) => {
+  const title = titleText.value.trim()
+  // TODO: proper validation, error toast?
+  if (title.length > 1) {
+    await sts.saveSubtask({ ...subtask, title })
+    editing.value = false
+
+    if (event.shiftKey) {
+      sts.addEmptySubtask(task.id)
+    }
+  }
 }
 
 </script>
@@ -83,14 +91,14 @@ const saveSubtask = () => {
 	<UInput
 	  v-model="titleText"
 	  class="grow"
-	  keyup.enter="saveSubtask"
 	  :autofocus="true"
+	  @keyup.enter="saveSubtask"
 	/>
 	<UButtonGroup>
 	  <UButton
 	    icon="i-carbon-close"
 	    :aria-label="t('dashboard.taskItem.menu.delete')"
-	    @click="editing = false; titleText = task.title"
+	    @click="editing = false; titleText = subtask.title"
 	  />
 	  <UButton
 	    icon="i-carbon-checkmark"
@@ -113,6 +121,7 @@ const saveSubtask = () => {
 	  class="h-9"
 	>
 	  <UButton
+	    variant="subtle"
 	    icon="i-carbon-overflow-menu-horizontal"
 	    :aria-label="t('dashboard.taskItem.menu.taskMenuLabel')"
 	  />

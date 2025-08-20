@@ -42,18 +42,22 @@ const taskDropdownItems: DropdownMenuItem[][] = [
       icon: 'i-carbon-edit',
       onSelect: () => editing.value = true
     },
+    { label: t('dashboard.taskItem.menu.addSubtask'),
+      icon: 'i-carbon-add-child-node',
+      onSelect: () => sts.addEmptySubtask(task.id)
+    },
     { label: t('dashboard.taskItem.menu.reorder'),
       icon: 'i-carbon-arrows-vertical',
       onSelect: () => ts.openReorderModal(task)
-    },
+    }
+  ],
+  [
     { label: t('dashboard.taskItem.menu.split'),
       // TODO: Get icon correct!
       // icon: 'i-custom-split-task',
       icon: 'i-carbon-zos-sysplex',
       onSelect: () => console.log('TODO: split')
-    }
-  ],
-  [
+    },
     { label: t('dashboard.taskItem.menu.delete'),
       icon: 'i-carbon-trash-can',
       onSelect: () => {
@@ -79,7 +83,7 @@ const wrapperClass = computed(() => {
  * Save the task with the updated title text.
  */
 const saveTask = async (event: any) => {
-  console.log('keyup event:', event)
+  // TODO: proper validation, error toast?
   const title = titleText.value.trim()
   if (title.length > 1) {
     await ts.saveTask({ ...task, title })
@@ -146,7 +150,7 @@ const updateTaskCompletion = (completed: boolean | "indeterminate") => {
 	</div>
 	<UDropdownMenu
 	  :items="taskDropdownItems"
-		    class="h-9"
+	  class="h-9"
 	>
 	  <UButton
 	    icon="i-carbon-overflow-menu-horizontal"
