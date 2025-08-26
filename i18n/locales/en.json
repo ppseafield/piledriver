@@ -24,8 +24,21 @@
   "login.password.tooShort": "Password must be at least 10 characters.",
   "login.error.accountNotFound": "No account found with that user and password combination.",
 
-  "logout.pageTitle": "Log out",
+  "logout.pageTitle": "Log Out",
   "logout.loggedOutMessage": "You have been logged out.",
+
+  "profile.pageTitle": "Profile",
+  "profile.username": "Username",
+  "profile.email": "Email",
+  "profile.invalid.email": "Invalid Email",
+  "profile.avatar": "Avatar",
+  "profile.actions.uplaodAvatar": "Upload Avatar",
+  "profile.password": "Password",
+  "profile.invalid.currentPassword": "Invalid Current Password",
+  "profile.newPassword": "New Password",
+  "profile.newPasswordRepeated": "Repeat New Password",
+  "profile.invalid.notMatchingPasswords": "New password entries must match.",
+  "profile.actions.changePassword": "Change Password",
 
   "dashboard.pageTitle": "Dashboard",
   "dashboard.journalTasksButton": "Journal Completed Tasks",

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui'
 const { t } = useI18n()
+const localePath = useLocalePath()
 const { loggedIn, user } = useUserSession()
 
 const profileTag = computed(() => {
@@ -16,7 +17,14 @@ const accountActions = computed<DropdownMenuItem[][]>(() => {
     return [
       [
 	{ label: t('layout.profile.profileLink'),
-	  icon: 'i-carbon-user-avatar-filled-alt'
+	  icon: 'i-carbon-user-avatar-filled-alt',
+	  to: localePath('/profile')
+	}
+      ],
+      [
+	{ label: t('logout.pageTitle'),
+	  icon: 'i-carbon-logout',
+	  to: localePath('/logout')
 	}
       ]
     ]

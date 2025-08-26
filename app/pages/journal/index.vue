@@ -11,7 +11,7 @@ definePageMeta({
 })
 
 const { t } = useI18n()
-const localePath= useLocalePath()
+const localePath = useLocalePath()
 const js = useJournalStore()
 
 const breadcrumbs = [{
