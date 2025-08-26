@@ -26,6 +26,7 @@
 
   "logout.pageTitle": "Log Out",
   "logout.loggedOutMessage": "You have been logged out.",
+  "logout.loginMessage": "Log in again",
 
   "profile.pageTitle": "Profile",
   "profile.username": "Username",

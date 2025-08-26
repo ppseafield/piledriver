@@ -27,6 +27,7 @@
 
   "logout.pageTitle": "Abmelden",
   "logout.loggedOutMessage": "Sie haben sich abgemeldet.",
+  "logout.loginMessage": "Noch mal anmelden",
 
   "profile.pageTitle": "Benutzerprofil",
   "profile.username": "Benutzername",

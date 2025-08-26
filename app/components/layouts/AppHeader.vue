@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { en, de } from '@nuxt/ui/locale'
+import logo from '/assets/images/piledriver-bulldozer-32.png'
+
+const { loggedIn } = useUserSession()
 const { t, setLocale } = useI18n()
+const localePath = useLocalePath()
+const route = useRoute()
 
 // TODO: implement other pages
 // const navItems = computed(() => [
@@ -14,11 +19,17 @@ watch(locale, () => {
   setLocale(locale.value)
 })
 
+const showLogin = computed(() => route.path !== localePath('/login'))
 </script>
 
 <template>
   <UHeader>
     <template #left>
+      <img
+	:src="logo"
+	:alt="t('layout.piledriverLogoText')"
+      />
+
       <NuxtLink to="/">
         {{ t('layout.siteTitle')}}
       </NuxtLink>
@@ -32,10 +43,24 @@ watch(locale, () => {
 
 
     <template #right>
+      <UColorModeButton />
       <ULocaleSelect
           v-model="locale"
           :locales="[en, de]"
           class="hidden lg:block"
+      />
+
+      <UButton
+	v-if="loggedIn"
+	:label="t('dashboard.pageTitle')"
+	icon="i-carbon-image-store-local"
+	:to="localePath('/dashboard')"
+      />	
+      <UButton
+	v-else-if="showLogin"
+	:label="t('login.pageTitle')"
+	icon="i-carbon-login"
+	:to="localePath('/login')"
       />
     </template>
 
