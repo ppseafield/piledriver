@@ -36,13 +36,11 @@ function validate(state: any): FormError[] {
       name: issue.path?.[0].key ?? 'field',
       message: t(issue.message)
     } as FormError))
-    console.log('issues:', issues)
     return issues
   }
 }
 
 async function onSubmit(payload: FormSubmitEvent<LoginRequest>) {
-  console.log('submitted:', payload)
   const localePath = useLocalePath()
   try {
     await $fetch<{ user: User | null, session: any }>('/api/login', {

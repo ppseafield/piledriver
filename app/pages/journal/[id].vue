@@ -37,7 +37,6 @@ const breadcrumbs = computed(() => [
 ])
 
 const postDate = computed(() => {
-  console.log('js current:', js.current)
   if (js.current) {
     return dateFromTimestamptz(js.current.created_at)
   } else {

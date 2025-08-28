@@ -15,7 +15,6 @@ const route = useRoute()
 
 const locale = ref<'en' | 'de'>('en')
 watch(locale, () => {
-  console.log('locale changed:', locale.value)
   setLocale(locale.value)
 })
 

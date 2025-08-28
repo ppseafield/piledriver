@@ -71,8 +71,6 @@ export default defineEventHandler(async (event) => {
       const values = Array.from(new_remaining.entries()).map(
 	([i, title]) => ({ title, user_id: user.id, task_order: nextTaskOrder + i })
       )
-      console.log('values sent to postgres:', JSON.stringify(values))
-      console.log("\n\n")
 
       newRemainingTasks = await db
 	.insertInto('tasks')

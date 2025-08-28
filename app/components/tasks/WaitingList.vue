@@ -25,7 +25,6 @@ watch(mobileSized, (isMobile) => {
   sortable.option('disabled', isMobile)
 })
 
-console.log('sortable:', sortable)
 </script>
 
 <template>
