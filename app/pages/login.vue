@@ -14,6 +14,9 @@ definePageMeta({
 })
 
 // TODO: Why does the login button not have any color?
+const route = useRoute()
+
+console.log('route query:', route.query)
 
 const { t } = useI18n()
 const localePath = useLocalePath()
@@ -51,7 +54,9 @@ async function onSubmit(payload: FormSubmitEvent<LoginRequest>) {
       body: payload.data
     })
     await session.fetch()
-    navigateTo({ path: localePath('dashboard') })
+    navigateTo({
+      path: route.params?.returnTo ?? localePath('dashboard')
+    })
   } catch (e) {
     // formwide error: error issue
     console.log('error: ', e)
