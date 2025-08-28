@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
       const [user] = passwordCheck
 
       // Create a session for the user.
-      const session = await db
+      const secure = await db
 	.insertInto('pd_session')
 	.values({
 	  user_id: user.id
@@ -42,13 +42,18 @@ export default defineEventHandler(async (event) => {
       // Initialize the nuxt-auth user session
       await setUserSession(event, {
 	user,
-	secure: session
+	session: {
+	  created_at: secure.created_at,
+	  refreshed_at: secure.created_at, // TODO: add refreshed at to DB?
+	  expires_at: secure.expires_at
+	},
+	secure
       })
 
       // Return the user & session
       return {
 	user,
-	session
+	session: secure
       }
     }
   }

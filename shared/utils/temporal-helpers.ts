@@ -22,6 +22,29 @@ export function twoWeeksAgo(): string {
 }
 
 /**
+ * Returns a postgres `timestamptz` value for two weeks from now.
+ *
+ * @returns The timestamp for two weeks from now
+ */
+export function twoWeeksFromNow(): string {
+  return Temporal.Now.zonedDateTimeISO()
+    .add({ days: 14 })
+    .toString({ timeZoneName: 'never' })
+}
+
+/**
+ * Returns a postgres `timestamptz` value for ten minutes ago.
+ *
+ * @returns The timestamp for ten minutes ago
+ */
+export function tenMinutesAgo(): string {
+  return Temporal.Now.zonedDateTimeISO()
+    .subtract({ seconds: 5 })
+    // .subtract({ minutes: 10 })
+    .toString({ timeZoneName: 'never' })
+}
+
+/**
  * Takes a postgres timestamp with timezone and returns a nice, localized formatted date.
  * @param datestring - timestamp with timezone from postgres
  * @returns a nice formatted date

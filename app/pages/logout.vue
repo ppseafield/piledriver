@@ -10,7 +10,8 @@ definePageMeta({
   layout: 'public'
 })
 
-await $fetch('/api/logout')
+const { clear } = useUserSession()
+await clear()
 
 const { t } = useI18n()
 const localePath = useLocalePath()

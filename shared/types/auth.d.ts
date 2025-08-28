@@ -12,6 +12,12 @@ declare module '#auth-utils' {
   }
 
   interface UserSession {
+    created_at: string
+    refreshed_at: string
+    expires_at: string
+  }
+
+  interface SecureSesionData {
     id: string
     user_id: string
     created_at: string
