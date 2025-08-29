@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     // 2b) Tasks that were completed more than two weeks ago.
     return await db
       .selectFrom('task_subtasks')
-      .selectAll()
+      .selectAll('task_subtasks')
       .innerJoin(
 	(eb) =>
 	  eb.selectFrom('tasks')

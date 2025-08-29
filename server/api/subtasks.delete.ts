@@ -22,8 +22,9 @@ export default defineEventHandler(async (event) => {
 	message: JSON.stringify({ issues })
       })
     } else {
-      const results = await sql<ArchiveSubtaskResult[]>`SELECT subtask_id, updated_order, updated_archived_at FROM public.archive_subtask(${user.id}, ${output.archive_task_id});`
+      const results = await sql<ArchiveSubtaskResult[]>`SELECT subtask_id, updated_order, updated_archived_at FROM public.archive_subtask(${user.id}, ${output.archive_subtask_id});`
         .execute(db)
+      console.log('archive subtask rows:', results)
       return results.rows
     }
   }
