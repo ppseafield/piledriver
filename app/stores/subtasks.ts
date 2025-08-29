@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { v7 as uuid } from 'uuid'
+import type { Task } from '../../shared/types/database/tasks'
 import type { Subtask } from '../../shared/types/database/subtasks'
 
 export const useSubtasksStore = defineStore('subtasks', () => {
@@ -20,7 +21,7 @@ export const useSubtasksStore = defineStore('subtasks', () => {
     subtasks.value = response
     const m = {}
     for (const st of response) {
-      if (m[st.parent_subtask_id]) {
+      if (st.parent_subtask_id !== null && m[st.parent_subtask_id]) {
 	m[st.parent_subtask_id].push(st)
       } else if (m[st.task_id]) {
 	m[st.task_id].push(st)
@@ -64,7 +65,7 @@ export const useSubtasksStore = defineStore('subtasks', () => {
     unsavedSubtaskIDs.value.add(empty.id)
   }
 
-  /** Save a subtask (does not consider completion) */
+  /** Save a subtask (does not consider chained completion) */
   const saveSubtask = async (subtask: Subtask) => {
     const method = unsavedSubtaskIDs.value.has(subtask.id) ? 'POST' : 'PUT'
     const updatedSubtask = await $fetch<Subtask[]>('/api/subtasks', {
@@ -85,6 +86,50 @@ export const useSubtasksStore = defineStore('subtasks', () => {
     }
   }
 
+  /** Archive a subtask and remove it from the dashboard. */
+  const archiveSubtask = async (archiveSubtask: Subtask) => {
+    if (!unsavedSubtaskIDs.value.has(archiveSubtask.id)) {
+      const response = await $fetch<ArchiveSubtaskResult[]>(`/api/subtasks?archive_subtask_id=${archiveSubtask.id}`, {
+	method: 'DELETE'
+      })
+
+      const updates: Record<string, ArchiveSubtaskResult> = Object.fromEntries(
+	response.map(asr => [asr.subtask_id, asr])
+      )
+
+      // Update subtask master list.
+      for (const [i, subtask] of subtasks.value.entries()) {
+	if (updates[subtask.id]) {
+	  subtasks.value[i].task_order = updates[subtask.id].updated_order
+
+	  if (subtask?.id && subtasks.value[i] && updates[subtask.id]?.updated_archived_at) {
+	    subtasks.value[i].archived_at = new Date(updates[subtask.id]?.updated_archived_at as string)
+	  } else {
+	    // ooooo typescript, you make me so frustrated sometimes...
+	    (subtasks.value[i] as Subtask).archived_at = null
+	  }
+	}
+      }
+
+      const i = subtasks.value.findIndex(st => st.id === archiveSubtask.id)
+      subtasks.value.splice(i, 1)
+
+      // Update the list of child subtasks.
+      const parent_id = archiveSubtask.parent_subtask_id ?? archiveSubtask.task_id
+      if (mapping.value[parent_id]) {
+	for (const [i, subtask] of mapping.value[parent_id].entries()) {
+	  if (updates[subtask.id]) {
+	    mapping.value[parent_id][i].task_order = updates[subtask.id].updated_order
+	    mapping.value[parent_id][i].archived_at = updates[subtask.id].updated_archived_at
+	  }
+	}
+
+	const mi = mapping.value[parent_id].findIndex(st => st.id === archiveSubtask.id)
+	mapping.value[parent_id].splice(mi, 1)
+      }
+    }
+  }
+
   return {
     subtasks,
     reorder,
@@ -93,6 +138,7 @@ export const useSubtasksStore = defineStore('subtasks', () => {
 
     fetch,
     addEmptySubtask,
-    saveSubtask
+    saveSubtask,
+    archiveSubtask
   }
 })

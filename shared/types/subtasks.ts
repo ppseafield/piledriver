@@ -27,6 +27,7 @@ export interface ReorderSubtaskResult {
   updated_order: number
 }
 
+// TODO: Not used until subtasks can be nested
 // Complete subtask
 export const CompleteSubtaskRequestSchema = v.object({
   completed_subtask_id: v.pipe(v.string(), v.uuid())
@@ -34,7 +35,6 @@ export const CompleteSubtaskRequestSchema = v.object({
 
 export interface CompleteSubtaskResult {
   subtask_id: string
-  updated_order: number | null
   updated_completed_at: string | null
 }
 
@@ -42,3 +42,13 @@ export interface CompleteSubtaskResult {
 export const UncompleteSubtaskRequestSchema = v.object({
   subtask_id: v.pipe(v.string(), v.uuid())
 })
+
+export const ArchiveSubtaskSchema = v.object({
+  archive_subtask_id: v.pipe(v.string(), v.uuid())
+})
+
+export interface ArchiveSubtaskResult {
+  subtask_id: string
+  updated_order: number | null
+  updated_archived_at: string | null
+}

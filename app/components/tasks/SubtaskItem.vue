@@ -46,8 +46,7 @@ const subtaskDropdownItems: DropdownMenuItem[][] = [
 			  ? `#${subtask.task_order}: '${subtask.title}'`
 			  : `'${subtask.title}'`
 	if (window.confirm( t('dashboard.deleteSubtaskPrompt', { subtaskName }) )) {
-	  // TODO: sts.archiveSubtask(subtask.id, subtask.completed_at !== null)
-	  console.log('archive subtask')
+	  sts.archiveSubtask(subtask)
 	}
       }
     }

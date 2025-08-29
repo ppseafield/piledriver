@@ -170,7 +170,7 @@ export const useTasksStore = defineStore('tasks', () => {
     })
 
     // Update the tasks in the store to reflect the new order.
-    const updates: Record<string, number> = Object.fromEntries(
+    const updates: Record<string, ArchiveTaskResult> = Object.fromEntries(
       response.map(atr => [atr.task_id, atr])
     )
     const taskList = isCompleted ? completed : waiting

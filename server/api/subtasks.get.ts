@@ -33,6 +33,7 @@ export default defineEventHandler(async (event) => {
 	    .as('tasks'),
 	(join) =>
 	  join.onRef('task_subtasks.task_id', '=', 'tasks.id'))
+      .where('archived_at', 'is', null)
       .orderBy('task_id')
       .orderBy('task_order')
       .orderBy('completed_at')
