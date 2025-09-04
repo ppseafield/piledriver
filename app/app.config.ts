@@ -27,15 +27,15 @@ export default defineAppConfig({
   uiPro: {
     header: {
       slots: {
-	root: 'bg-energy-yellow-300 dark:bg-energy-yellow-950',
-	header: 'bg-energy-yellow-300 dark:bg-energy-yellow-950'
+	root: 'bg-energy-yellow-300 dark:bg-crocodile-900',
+	header: 'bg-crocodile-900 dark:bg-crocodile-900'
       }
     },
     dashboardSidebar: {
       // man, dark yellow is crappy brown. need another color
       slots: {
-	root: 'bg-energy-yellow-300 dark:bg-energy-yellow-950',
-	header: 'bg-energy-yellow-300 dark:bg-energy-yellow-950 app-title text-bold text-xl content-center'
+	root: 'bg-energy-yellow-300 dark:bg-crocodile-900',
+	header: 'bg-energy-yellow-300 dark:bg-crocodile-900 app-title text-bold text-xl content-center'
       }
     },
     dashboardPanel: {
