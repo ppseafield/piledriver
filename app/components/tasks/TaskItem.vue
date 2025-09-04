@@ -34,43 +34,53 @@ onMounted(() => {
 /** Completed value for task based on completed_at value. */
 const taskCompleted = computed(() => task.completed_at !== null)
 
-// TODO: turn into computed that checks that there are subtasks and
-// and some but not all subtasks are completed.
-const taskDropdownItems: DropdownMenuItem[][] = [
-  [
-    { label: t('dashboard.taskItem.menu.edit'),
-      icon: 'i-carbon-edit',
-      onSelect: () => editing.value = true
-    },
-    { label: t('dashboard.taskItem.menu.addSubtask'),
-      icon: 'i-carbon-add-child-node',
-      onSelect: () => sts.addEmptySubtask(task.id)
-    },
-    { label: t('dashboard.taskItem.menu.reorder'),
-      icon: 'i-carbon-arrows-vertical',
-      onSelect: () => ts.openReorderModal(task)
+const taskDropdownItems: Computed<DropdownMenuItem[][]> = computed(() => {
+  // Show the Split action only if there are some (but not all) completed subtasks.
+  const splitItem = []
+  if (subtaskList.value.length > 0) {
+    const complete = subtaskList.value.filter(st => st.completed_at !== null)
+    if (complete.length > 0 && complete.length < subtaskList.value.length) {
+      splitItem.push({
+ 	label: t('dashboard.taskItem.menu.split'),
+ 	// TODO: Get icon correct!
+ 	// icon: 'i-custom-split-task',
+ 	icon: 'i-carbon-zos-sysplex',
+ 	onSelect: () => console.log('TODO: split')
+      })
     }
-  ],
-  [
-    { label: t('dashboard.taskItem.menu.split'),
-      // TODO: Get icon correct!
-      // icon: 'i-custom-split-task',
-      icon: 'i-carbon-zos-sysplex',
-      onSelect: () => console.log('TODO: split')
-    },
-    { label: t('dashboard.taskItem.menu.delete'),
-      icon: 'i-carbon-trash-can',
-      onSelect: () => {
-	const taskName = task.completed_at === null
-		       ? `#${task.task_order}: '${task.title}'`
-		       : `'${task.title}'`
-	if (window.confirm( t('dashboard.deleteTaskPrompt', { taskName }) )) {
-	  ts.archiveTask(task.id, task.completed_at !== null)
+  }
+
+  return [
+    [
+      { label: t('dashboard.taskItem.menu.edit'),
+	icon: 'i-carbon-edit',
+	onSelect: () => editing.value = true
+      },
+      { label: t('dashboard.taskItem.menu.addSubtask'),
+	icon: 'i-carbon-add-child-node',
+	onSelect: () => sts.addEmptySubtask(task.id)
+      },
+      { label: t('dashboard.taskItem.menu.reorder'),
+	icon: 'i-carbon-arrows-vertical',
+	onSelect: () => ts.openReorderModal(task)
+      }
+    ],
+    [
+      ...splitItem,
+      { label: t('dashboard.taskItem.menu.delete'),
+	icon: 'i-carbon-trash-can',
+	onSelect: () => {
+	  const taskName = task.completed_at === null
+			 ? `#${task.task_order}: '${task.title}'`
+			 : `'${task.title}'`
+	  if (window.confirm( t('dashboard.deleteTaskPrompt', { taskName }) )) {
+	    ts.archiveTask(task.id, task.completed_at !== null)
+	  }
 	}
       }
-    }
+    ]
   ]
-]
+})
 
 // Styles
 const textSize = computed(() => taskTextSize(task?.task_order ?? 7))
