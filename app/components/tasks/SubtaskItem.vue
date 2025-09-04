@@ -54,8 +54,11 @@ const subtaskDropdownItems: DropdownMenuItem[][] = [
 ]
 
 const updateSubtaskCompletion = (completed: boolean | "indeterminate") => {
-  // TODO: update subtask completion
-  console.log('update subtask completion:', completed)
+  console.log('completed: ', completed)
+  sts.saveSubtask({
+    ...subtask,
+    completed_at: completed === true ? nowTemporal() : null
+  })
 }
 
 const saveSubtask = async (event: any) => {
@@ -80,6 +83,7 @@ const saveSubtask = async (event: any) => {
   >
     <div class="flex flex-column gap-1 lg:gap-3 p-1 lg:p-2 hover:bg-crocodile-200 dark:hover:bg-crocodile-800">
       <UCheckbox
+	:modelValue="subtaskCompleted"
 	size="lg"
 	icon="i-carbon-checkmark"
 	:label="orderLabel"

@@ -4,4 +4,5 @@ export interface Database {
   pd_session: SessionTable
   tasks: TasksTable,
   journals: JournalsTable
+  task_subtasks: SubtasksTable
 }

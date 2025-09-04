@@ -8,6 +8,7 @@ export const SubtaskBodySchema = v.object({
   created_at: v.optional(v.isoTimestamp()),
   updated_at: v.nullable(v.isoTimestamp()),
   archived_at: v.nullable(v.isoTimestamp()),
+  completed_at: v.nullable(v.isoTimestamp()),
   task_order: v.nullable(v.pipe(v.number(), v.integer())),
   title: v.pipe(v.string(), v.minLength(1))
 })

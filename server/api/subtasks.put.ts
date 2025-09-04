@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
       })
     } else {
       const updates = output.map(st => ({ ...st, user_id: user.id })) as NewSubtask[]
-      const keys = Object.keys(output[0]) as (keyof UpdateSubtask)[]
+      const keys = Object.keys(output[0]).filter(k => k !== 'id' && k !== 'user_id') as (keyof UpdateSubtask)[]
       const updated_at = nowTemporal()
       // TODO: Reevaluate whether to accept one object or n objects in post/put handlers.
       return await db
