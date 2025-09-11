@@ -33,6 +33,17 @@ const mobileMenu: DropdownMenuItem[] = [
   { label: t('dashboard.journalTasksButton'),
     icon: 'i-carbon-notebook-reference',
     to: localePath('/journal/new')
+  },
+  { label: t('dashboard.addTaskFromRoutineButton'),
+    icon: 'i-carbon-exam-mode',
+    onSelect: () => console.log('todo: task from routine')
+  }
+]
+
+const addTaskMenu: DropdownMenuItem[] = [
+  { label: t('dashboard.fromRoutineButton'),
+    icon: 'i-carbon-exam-mode',
+    onSelect: () => console.log('todo: task from routine')
   }
 ]
 </script>
@@ -55,11 +66,19 @@ const mobileMenu: DropdownMenuItem[] = [
 	      :to="localePath('/journal/new')"
 	      class="me-2"
 	    />
-	    <UButton
-	      :label="t('dashboard.addTaskButton')"
-	      icon="i-carbon-add-filled"
-	      @click="ts.addEmptyTask()"
-	    />
+	    <UButtonGroup>
+	      <UButton
+		:label="t('dashboard.addTaskButton')"
+		icon="i-carbon-add-filled"
+		@click="ts.addEmptyTask()"
+	      />
+	      <UDropdownMenu :items="addTaskMenu">
+		<UButton
+		  :aria-label="t('dashboard.addTaskFromRoutineButton')"
+		  icon="i-carbon-chevron-down"
+		/>
+	      </UDropdownMenu>
+	    </UButtonGroup>
 	  </div>
 	  <div class="lg:hidden">
 	    <UDropdownMenu :items="mobileMenu">

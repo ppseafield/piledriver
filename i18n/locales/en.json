@@ -44,6 +44,8 @@
   "dashboard.pageTitle": "Dashboard",
   "dashboard.journalTasksButton": "Journal Completed Tasks",
   "dashboard.addTaskButton": "Add New Task",
+  "dashboard.fromRoutineButton": "From Routine",
+  "dashboard.addTaskFromRoutineButton": "Add Task From Routine",
   "dashboard.mobileMenuButton": "Menu",
   "dashboard.completed.sectionTitle": "Completed Tasks",
   "dashboard.taskItem.menu.taskMenuLabel": "Task Actions",
@@ -56,6 +58,7 @@
   "dashboard.deleteSubtaskPrompt": "Delete Subtask '{subtaskName}'?",
   
   "routines.pageTitle": "Routines",
+  "routinesNew.pageTitle": "New Routine",
 
   "journal.pageTitle": "Journal",
   "journalNew.pageTitle": "New Journal Entry",

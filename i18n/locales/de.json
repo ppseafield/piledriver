@@ -45,6 +45,8 @@
   "dashboard.pageTitle": "Dashboard",
   "dashboard.journalTasksButton": "Über Ausgeführten Tagebuch führen",
   "dashboard.addTaskButton": "Neue Aufgabe zufügen",
+  "dashboard.fromRoutineButton": "Aus einer Routine",
+  "dashboard.addTaskFromRoutineButton": "Neue Aufgabe aus einer Routine zufügen",
   "dashboard.mobileMenuButton": "Menü",
   "dashboard.completed.sectionTitle": "Ausgeführte Aufgaben",
   "dashboard.taskItem.menu.taskMenuLabel": "Aufgabe-Aktionen",
@@ -57,6 +59,7 @@
   "dashboard.deleteSubtaskPrompt": "Teilaufgabe '{subtaskName}' löschen?",
 
   "routines.pageTitle": "Routinen",
+  "routinesNew.pageTitle": "Neue Routine",
 
   "journal.pageTitle": "Tagebuch",
   "journalNew.pageTitle": "Neue Tagebucheintrag",

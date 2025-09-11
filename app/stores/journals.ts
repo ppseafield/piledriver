@@ -15,7 +15,7 @@ export const useJournalStore = defineStore('journal', () => {
   /** Fetches the dashboard's tasks. */
   const fetch = async () => {
     const requestFetch = useRequestFetch()
-    const response = await requestFetch<Task[]>('/api/journals')
+    const response = await requestFetch<Journal[]>('/api/journals')
     journals.value = response
   }
 
