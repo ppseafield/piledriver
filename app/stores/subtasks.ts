@@ -65,6 +65,17 @@ export const useSubtasksStore = defineStore('subtasks', () => {
     unsavedSubtaskIDs.value.add(empty.id)
   }
 
+  /**
+   * Reorder a subtask.
+   *
+   * @param move_subtask_id - The subtask to reorder.
+   * @param move_new_order - The new order for the subtask
+   * @param rearrange - Whether to move the subtask in the subtaskList. (i.e. sortable or no)
+   */
+  const reorderSubtask = async (move_subtask_id: string, move_new_order, rearrange: boolean) => {
+    console.log('TODO: reorderSubtask')
+  }
+
   /** Save a subtask (does not consider chained completion) */
   const saveSubtask = async (subtask: Subtask) => {
     const method = unsavedSubtaskIDs.value.has(subtask.id) ? 'POST' : 'PUT'

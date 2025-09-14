@@ -5,8 +5,20 @@ import { useSortable } from '@vueuse/integrations/useSortable'
 import SubtaskItem from './SubtaskItem.vue'
 
 const { task, subtaskList } = defineProps<{ task: Task, subtaskList: Subtask[], parentOrder: string }>()
+
+const gs = useGlobalStore()
+const sts = useSubtasksStore()
 const ul = useTemplateRef<HTMLElement>('subtaskList')
-// TODO: sortable, write reorder_subtask
+
+const sortable = useSortable(ul, subtaskList, {
+  disabled: gs.mobileSized,
+  onEnd: (event: any) => {
+    event.preventDefault()
+    if (event.newIndex !== event.oldIndex) {
+      nextTick(() => sts.reorderSubtask(event.item.dataset.subtaskId, event.newIndex + 1)
+    }
+  }
+})
 </script>
 
 <template>

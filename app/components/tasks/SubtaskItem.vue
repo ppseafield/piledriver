@@ -80,6 +80,7 @@ const saveSubtask = async (event: any) => {
   <li
     ref="li-body"
     class="ms-4"
+    :data-subtask-id="subtask.id"
   >
     <div class="flex flex-column gap-1 lg:gap-3 p-1 lg:p-2 hover:bg-crocodile-200 dark:hover:bg-crocodile-800">
       <UCheckbox

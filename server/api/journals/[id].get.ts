@@ -5,6 +5,8 @@ export default defineEventHandler(async (event) => {
   const session = await getUserSession(event)
   const { user } = session
 
+  // todo: requireUserSession
+  // todo: safeParse( req.query)
   if (!user?.id) {
     throw createError({
       statusCode: 401,
@@ -16,6 +18,7 @@ export default defineEventHandler(async (event) => {
       .selectFrom('journals')
       .selectAll()
       .where('user_id', '=', user.id)
+    // TODO: where id = req.query.id
       .orderBy('created_at', 'desc')
       .executeTakeFirstOrThrow()
 
