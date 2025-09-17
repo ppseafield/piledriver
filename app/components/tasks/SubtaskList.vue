@@ -15,7 +15,7 @@ const sortable = useSortable(ul, subtaskList, {
   onEnd: (event: any) => {
     event.preventDefault()
     if (event.newIndex !== event.oldIndex) {
-      nextTick(() => sts.reorderSubtask(event.item.dataset.subtaskId, event.newIndex + 1)
+      nextTick(() => sts.reorderSubtask(event.item.dataset.subtaskId, event.newIndex + 1))
     }
   }
 })
