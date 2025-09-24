@@ -1,31 +1,10 @@
-import { safeParse } from 'valibot'
 import { sql } from 'kysely'
 import { db } from '../database'
 
 export default defineEventHandler(async (event) => {
-  const session = await getUserSession(event)
-  const { user } = session
-
-  if (!user?.id) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: 'errors.network.notAuthorized',
-      message: JSON.stringify(session)
-    })
-  } else {
-    const { success, output, issues } = await getValidatedQuery(event, query => safeParse(ArchiveSubtaskSchema, query))
-    if (!success) {
-      // TODO: write a util that wraps readValidatedBody / createError.
-      throw createError({
-	statusCode: 400,
-	statusMessage: 'Invalid Request',
-	message: JSON.stringify({ issues })
-      })
-    } else {
-      const results = await sql<ArchiveSubtaskResult[]>`SELECT subtask_id, updated_order, updated_archived_at FROM public.archive_subtask(${user.id}, ${output.archive_subtask_id});`
-        .execute(db)
-      console.log('archive subtask rows:', results)
-      return results.rows
-    }
-  }
+  const { user, query } = await requireUserAndValidatedQuery(event, ArchiveSubtaskSchema)
+  const results = await sql<ArchiveSubtaskResult[]>`SELECT subtask_id, updated_order, updated_archived_at FROM public.archive_subtask(${user.id}, ${query.archive_subtask_id});`
+    .execute(db)
+  
+  return results.rows
 })

@@ -18,8 +18,8 @@ definePageMeta({
 
 const { t, d } = useI18n()
 const localePath = useLocalePath()
-const js = useJournalStore()
 const route = useRoute()
+const js = useJournalStore()
 
 await js.fetchSingle(route.params.id)
 
@@ -32,7 +32,7 @@ const breadcrumbs = computed(() => [
     to: localePath('/journal')
   },
   { label: js.current?.title ?? '',
-    to: localePath('/journal/new')
+    to: localePath(`/journal/${route.params.id}`)
   }
 ])
 

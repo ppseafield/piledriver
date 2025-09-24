@@ -8,6 +8,7 @@
   "layout.profile.settingsLink": "Settings",
   "layout.profile.accountActionsLabel": "Account Actions",
   "errors.network.notAuthorized": "Unauthorized Request",
+  "errors.request.invalid": "Invalid Request",
   "welcome": "Welcome",
   "a": "ahahaha",
 

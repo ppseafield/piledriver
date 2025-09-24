@@ -9,6 +9,7 @@
   "layout.profile.settingsLink": "Einstellungen",
   "layout.profile.accountActionsLabel": "Konten-Aktionen",
   "errors.network.notAuthorized": "Unbefugt Anfrage",
+  "errors.request.invalid": "TODO: Invalid Request",
   "welcome": "Wilkommen",
   "a": "auauaua",
 
