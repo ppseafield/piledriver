@@ -1,4 +1,4 @@
-import { db } from '../database'
+import { db } from '@@/server/database'
 import { ReorderTaskRequestSchema } from '@@/shared/types/tasks'
 import { reorder_task } from '@@/shared/types/database/table_functions'
 

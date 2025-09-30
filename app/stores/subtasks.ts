@@ -82,7 +82,7 @@ export const useSubtasksStore = defineStore('subtasks', () => {
     const { task_order: oldOrder, task_id, parent_subtask_id } = subtasks.value.find(st => st.id === move_subtask_id) as Subtask
     const parentID = parent_subtask_id ?? task_id
 
-    const response = await $fetch<ReorderSubtaskResult[]>('/api/reorder_subtask', {
+    const response = await $fetch<ReorderSubtaskResult[]>('/api/reorder/subtask', {
       method: 'POST',
       body: {
 	move_subtask_id,

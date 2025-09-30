@@ -138,7 +138,7 @@ export const useTasksStore = defineStore('tasks', () => {
     const oldOrder = waiting.value.find(t => t.id === move_task_id).task_order
 
     // Call the endpoint to update the task order, fetching the new task orders.
-    const response = await $fetch<ReorderTaskResult[]>('/api/reorder_task', {
+    const response = await $fetch<ReorderTaskResult[]>('/api/reorder/task', {
       method: 'POST',
       body: {
 	move_task_id,
