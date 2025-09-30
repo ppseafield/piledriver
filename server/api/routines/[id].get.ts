@@ -17,6 +17,7 @@ export default defineEventHandler(async (event) => {
       .selectAll()
       .where('user_id', '=', sql<string>`${user.id}`)
       .where('routine_id', '=', routine.id)
+      .where('archived_at', 'is', null)
       .orderBy('task_order')
       .execute()
 
