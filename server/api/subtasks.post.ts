@@ -4,8 +4,13 @@ import { db } from '../database'
 export default defineEventHandler(async (event) => {
   const { user, body } = await requireUserAndValidatedBody(event, SubtaskBodyArraySchema)
 
-  const newSubtasks = body.map(st => ({ ...st, user_id: user.id })) as NewSubtask[]
   const updated_at = nowTemporal()
+  const newSubtasks = body.map(st => ({
+    ...st,
+    updated_at,
+    user_id: user.id
+  })) as NewSubtask[]
+
   return await db
     .insertInto('task_subtasks')
     .values(newSubtasks)

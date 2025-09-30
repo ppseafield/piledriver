@@ -1,5 +1,6 @@
 import { Temporal } from '@js-temporal/polyfill'
 
+console.log('Temporal:', Temporal)
 /**
  * Returns a postgres `timestamptz` value for the current time.
  *

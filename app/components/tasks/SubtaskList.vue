@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useTemplateRef } from 'vue'
-import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
 import { useSortable } from '@vueuse/integrations/useSortable'
 import SubtaskItem from './SubtaskItem.vue'
 

@@ -30,6 +30,7 @@ export const useRoutineStore = defineStore('routines', () => {
   return {
     routines,
     current,
+    relatedSubtasks,
 
     fetch,
     fetchSingle

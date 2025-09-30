@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import RoutineSubtaskList from '@/components/routines/RoutineSubtaskList.vue'
+
 defineI18nRoute({
   paths: {
     en: '/routines/[id]',
@@ -17,6 +19,10 @@ const rs = useRoutineStore()
 
 await rs.fetchSingle(route.params.id)
 
+useHead({
+  title: rs.current.title
+})
+
 const breadcrumbs = [
   { label: t('routines.pageTitle'),
     to: localePath('/routines')
@@ -25,7 +31,6 @@ const breadcrumbs = [
     to: localePath(`/routines/${route.params.id}`)
   }
 ]
-
 
 </script>
 
@@ -45,7 +50,10 @@ const breadcrumbs = [
 
     <template #body>
       <UPage>
-	page
+	<RoutineSubtaskList
+	  :routine="rs.current"
+	  :subtaskList="rs.relatedSubtasks"
+	/>
       </UPage>
     </template>
   </UDashboardPanel>

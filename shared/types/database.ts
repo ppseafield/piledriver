@@ -6,4 +6,5 @@ export interface Database {
   journals: JournalsTable
   task_subtasks: SubtasksTable
   routines: RoutinesTable
+  routine_subtasks: RoutineSubtasksTable
 }
