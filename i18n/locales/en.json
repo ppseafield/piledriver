@@ -60,6 +60,9 @@
   
   "routines.pageTitle": "Routines",
   "routinesNew.pageTitle": "New Routine",
+  "routine.addSubtask": "Add Subtask",
+  "routine.addSubtaskOptions": "Add Subtask Options",
+  "routine.copyFromRoutine": "Copy From Routine",
 
   "journal.pageTitle": "Journal",
   "journalNew.pageTitle": "New Journal Entry",

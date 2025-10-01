@@ -61,6 +61,9 @@
 
   "routines.pageTitle": "Routinen",
   "routinesNew.pageTitle": "Neue Routine",
+  "routine.addSubtask": "--TODO",
+  "routine.addSubtaskOptions": "--TODO",
+  "routine.copyFromRoutine": "--TODO",
 
   "journal.pageTitle": "Tagebuch",
   "journalNew.pageTitle": "Neue Tagebucheintrag",

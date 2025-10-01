@@ -88,18 +88,18 @@ export const useRoutineStore = defineStore('routines', () => {
   }
 
   const saveSubtask = async (routine_subtask: RoutineSubtask) => {
-    const method = unsavedSubtaskIDs.value.has(task.id) ? 'POST': 'PUT'
+    const method = unsavedSubtaskIDs.value.has(routine_subtask.id) ? 'POST': 'PUT'
     const updatedRST = await $fetch('/api/routine_subtasks', {
       method,
       body: [routine_subtask]
     })
     if (updatedRST?.[0]) {
       const updated = updatedRST[0]
-      const i = relatedSubtasks.value.find(rst => rst.id === routine_subtask.id)
+      const i = relatedSubtasks.value.findIndex(rst => rst.id === updated.id)
       Object.assign(relatedSubtasks.value[i], updated)
     }
     if (method === 'POST') {
-      unsavedSubtaskIDs.delete(routine_subtask.id)
+      unsavedSubtaskIDs.value.delete(routine_subtask.id)
     }
   }
 

@@ -32,6 +32,13 @@ const breadcrumbs = [
   }
 ]
 
+const addSubtaskMenu: DropdownMenuItem[] = [
+  { label: t('routine.copyFromRoutine'),
+    icon: 'i-carbon-exam-mode',
+    onSelect: () => console.log('todo: task from routine')
+  }
+]
+
 </script>
 
 <template>
@@ -44,6 +51,24 @@ const breadcrumbs = [
 
 	<template #title>
 	  <UBreadcrumb :items="breadcrumbs" />
+	</template>
+
+	<template #right>
+	  <div class="hidden lg:block">
+	    <UButtonGroup>
+	      <UButton
+		:label="t('routine.addSubtask')"
+		icon="i-carbon-add-filled"
+		@click="rs.addEmptySubtask(rs.current?.id)"
+	      />
+	      <UDropdownMenu :items="addSubtaskMenu">
+		<UButton
+		  :aria-label="t('routine.addSubtaskOptions')"
+		  icon="i-carbon-chevron-down"
+		/>
+	      </UDropdownMenu>
+	    </UButtonGroup>
+	  </div>
 	</template>
       </UDashboardNavbar>
     </template>

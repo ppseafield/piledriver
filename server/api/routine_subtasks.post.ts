@@ -2,7 +2,7 @@ import { sql } from 'kysely'
 import { db } from '../database'
 
 export default defineEventHandler(async (event) => {
-  const { user, body } = await requireUserAndValidatedBody(event, null)
+  const { user, body } = await requireUserAndValidatedBody(event, RoutineSubtaskArraySchema)
 
   const updated_at = nowTemporal()
   const newRoutineSubtasks = body.map(rst => ({

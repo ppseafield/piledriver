@@ -37,10 +37,10 @@ watch(() => subtask, () => {
 })
 onMounted(() => {
   //If this is a new task, just start editing.
-  // if (rs.unsavedSubtaskIDs.has(subtask.id)) {
-  //   editing.value = true
-  //   rsBody.value?.scrollIntoView({ behavior: 'smooth' })
-  // }
+  if (rs.unsavedSubtaskIDs.has(subtask.id)) {
+    editing.value = true
+    rsBody.value?.scrollIntoView({ behavior: 'smooth' })
+  }
 })
 
 const subtaskDropdownItems: DropdownMenuItem[][] = [
@@ -70,9 +70,19 @@ const subtaskDropdownItems: DropdownMenuItem[][] = [
 ]
 
 
-const saveSubtask = async () => {
-  console.log('todo: save subtask')
+const saveSubtask = async (event: any) => {
+  const title = titleText.value.trim()
+  // TODO: proper validation, error toast?
+  if (title.length > 1) {
+    await rs.saveSubtask({ ...subtask, title })
+    editing.value = false
+
+    if (event.shiftKey) {
+      rs.addEmptySubtask(subtask.routine_id)
+    }
+  }
 }
+
 </script>
 <template>
   <li
@@ -91,6 +101,18 @@ const saveSubtask = async () => {
 	  :autofocus="true"
 	  @keyup.enter="saveSubtask"
 	/>
+	<UButtonGroup>
+	  <UButton
+	    icon="i-carbon-close"
+	    :aria-label="t('actions.cancel')"
+	    @click="editing = false; titleText = subtask.title"
+	  />
+	  <UButton
+	    icon="i-carbon-checkmark"
+	    :aria-label="t('actions.save')"
+	    @click="saveSubtask"
+	  />
+	</UButtonGroup>
       </template>
       <template v-else>
 	<div class="flex flex-column grow">
