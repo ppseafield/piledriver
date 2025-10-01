@@ -10,4 +10,10 @@ export default defineEventHandler(async (event) => {
     updated_at,
     user_id: user.id
   })) as NewRoutineSubtask[]
+
+  return await db
+    .insertInto('routine_subtasks')
+    .values(newRoutineSubtasks)
+    .returningAll()
+    .execute()
 })

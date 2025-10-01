@@ -1,10 +1,12 @@
 import { sql } from 'kysely'
 import { db } from '../database'
+import { archive_task } from '@@/shared/types/database/table_functions'
 
 export default defineEventHandler(async (event) => {
   const { user, query } = await requireUserAndValidatedQuery(event, ArchiveTaskSchema)
 
-  const results = await sql<CompleteTaskResult[]>`SELECT task_id, updated_order, updated_archived_at FROM public.archive_task(${user.id}, ${query.archive_task_id});`
-    .execute(db)
-  return results.rows
+  return await db
+    .select_from(archive_task(user.id, query.archive_task_id))
+    .select(['task_id', 'updated_order', 'updated_archived_at'])
+    .execute()
 })

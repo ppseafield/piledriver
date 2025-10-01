@@ -38,10 +38,10 @@ export const useSubtasksStore = defineStore('subtasks', () => {
   }
 
   /** Add an empty subtask to a task's subtask list. */
-  const addEmptySubtask = async (task_id: string) => {
+  const addEmptySubtask = async (task_id: string) => { // TODO: remove async
     // TODO: nested subtasks
     const { user } = useUserSession()
-    const now = new Date()
+    const now = new Date() // TODO: nowTemporal()
     const task_order = Math.max(
       0,
       ...subtasks.value
@@ -78,7 +78,6 @@ export const useSubtasksStore = defineStore('subtasks', () => {
    * @param rearrange - Whether to move the subtask in the subtaskList. (i.e. sortable or no)
    */
   const reorderSubtask = async (move_subtask_id: string, move_new_order: number, rearrange: boolean) => {
-    console.log('TODO: reorderSubtask')
     const { task_order: oldOrder, task_id, parent_subtask_id } = subtasks.value.find(st => st.id === move_subtask_id) as Subtask
     const parentID = parent_subtask_id ?? task_id
 
