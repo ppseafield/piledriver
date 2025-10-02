@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
   const { user, query } = await requireUserAndValidatedQuery(event, ArchiveTaskSchema)
 
   return await db
-    .select_from(archive_task(user.id, query.archive_task_id))
+    .selectFrom(archive_task(user.id, query.archive_task_id))
     .select(['task_id', 'updated_order', 'updated_archived_at'])
     .execute()
 })

@@ -16,6 +16,8 @@
   "actions.saveDraft": "Save Draft",
   "actions.edit": "Edit",
   "actions.cancel": "Cancel",
+  "actions.close": "Close",
+  "actions.create": "Create",
 
   "login.pageTitle": "Login",
   "login.submitButton": "Login",
@@ -63,6 +65,11 @@
   "routine.addSubtask": "Add Subtask",
   "routine.addSubtaskOptions": "Add Subtask Options",
   "routine.copyFromRoutine": "Copy From Routine",
+
+  "modal.fromRoutine.modalTitle": "Create Task From Routine",
+  "modal.fromRoutine.routine": "Routine",
+  "modal.fromRoutine.taskTitle": "Task Title",
+  "modal.fromRoutine.order": "Order",
 
   "journal.pageTitle": "Journal",
   "journalNew.pageTitle": "New Journal Entry",

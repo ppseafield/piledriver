@@ -59,7 +59,6 @@ export const useRoutineStore = defineStore('routines', () => {
    * @param rearrange - Whether to move the subtask in the subtaskList. (i.e. sortable or no)
    */
   const reorderSubtask = async (move_routine_subtask_id: string, move_new_order: number, rearrange: boolean) => {
-    console.log('related subtasks:', relatedSubtasks.value)
     const { task_order: oldOrder } = relatedSubtasks.value.find(rst => rst.id === move_routine_subtask_id)
     // TODO: when nested subtasks appear, allow nesting here too.
 

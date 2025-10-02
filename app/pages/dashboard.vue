@@ -1,9 +1,12 @@
 <script async setup lang="ts">
+import type { Computed } from 'vue'
 import type { DropdownMenuItem } from '@nuxt/ui'
+import type { Routine } from '@@/shared/types/database/routine'
 import { Temporal } from '@js-temporal/polyfill'
 import WaitingList from '@/components/tasks/WaitingList.vue'
 import CompletedList from '@/components/tasks/CompletedList.vue'
 import ReorderModal from '@/components/tasks/ReorderModal.vue'
+import TaskFromRoutineModal from '@/components/tasks/TaskFromRoutineModal.vue'
 
 defineI18nRoute({
   paths: {
@@ -20,7 +23,8 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 const ts = useTasksStore()
 const sts = useSubtasksStore()
-await Promise.all([ts.fetch(), sts.fetch()])
+const rs = useRoutineStore()
+await Promise.all([ts.fetch(), sts.fetch(), rs.fetch()])
 
 // TODO: sometimes checkboxes get VERY strange
 // when checking unchecking quickly
@@ -40,12 +44,19 @@ const mobileMenu: DropdownMenuItem[] = [
   }
 ]
 
-const addTaskMenu: DropdownMenuItem[] = [
-  { label: t('dashboard.fromRoutineButton'),
-    icon: 'i-carbon-exam-mode',
-    onSelect: () => console.log('todo: task from routine')
-  }
-]
+const addTaskMenu: Computed<DropdownMenuItem[]> = computed(() => {
+  const routineItems = rs.routines.map((r: Routine) => ({
+    label: r.title,
+    onSelect: () => ts.openFromRoutineModal(r)
+  }))
+  return [
+    { label: t('dashboard.fromRoutineButton'),
+      icon: 'i-carbon-exam-mode',
+      onSelect: () => console.log('todo: task from routine modal'),
+      children: routineItems
+    }
+  ]
+})
 </script>
 
 <template>
@@ -102,4 +113,5 @@ const addTaskMenu: DropdownMenuItem[] = [
     </template>
   </UDashboardPanel>
   <ReorderModal />
+  <TaskFromRoutineModal />
 </template>

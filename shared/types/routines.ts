@@ -23,3 +23,19 @@ export interface RoutineCreateResponse {
   routine: Routine,
   routine_subtasks: string[]
 }
+
+export const TaskFromRoutineRequestSchema = v.object({
+  routine_id: v.pipe(v.string(), v.uuid()),
+  title: v.pipe(v.string(), v.minLength(1), v.maxLength(120)),
+  // TODO: new task at user specified position <..>
+  task_order: v.pipe(v.number(), v.integer())
+})
+
+export type TaskFromRoutineRequest = v.InferOutput<typeof TaskFromRoutineRequestSchema>
+
+export interface TaskFromRoutineResponse {
+  task: Task
+  subtasks: Subtask[]
+  // TODO: new task at position <..>
+  // updated_orders: ReorderTaskResult[]
+}

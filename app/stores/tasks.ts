@@ -14,6 +14,11 @@ export const useTasksStore = defineStore('tasks', () => {
     task: null as Task | null
   })
 
+  const fromRoutine = reactive({
+    open: false,
+    routine: null as Task | null
+  })
+
   /** Fetches the dashboard's tasks. */
   const fetch = async () => {
     const requestFetch = useRequestFetch()
@@ -186,6 +191,19 @@ export const useTasksStore = defineStore('tasks', () => {
     taskList.value.splice(i, 1)
   }
 
+  const createTaskFromRoutine = async (tfr: TaskFromRoutineRequest) => {
+    const requestFetch = useRequestFetch()
+    const response = await requestFetch<TaskFromRoutineResponse>('/api/tasks/from_routine', {
+      method: 'POST',
+      body: tfr
+    })
+
+    fromRoutine.open = false
+    fromRoutine.routine = null
+    // TODO: add the task and its subtasks in place
+    window.location.reload(true)
+  }
+
   /**
    * Open the task order modal for reordering without drag & drop.
    *
@@ -196,11 +214,20 @@ export const useTasksStore = defineStore('tasks', () => {
     reorder.open = true
   }
 
+  const openFromRoutineModal = (routine: Routine) => {
+    fromRoutine.routine = routine
+    /// WTACTUALF !!!
+    nextTick(() => {
+      fromRoutine.open = true
+    })
+  }
+
   return {
     waiting,
     completed,
     current,
     reorder,
+    fromRoutine,
     unsavedTaskIDs,
 
     fetch,
@@ -209,6 +236,8 @@ export const useTasksStore = defineStore('tasks', () => {
     setTaskCompletion,
     reorderTask,
     archiveTask,
-    openReorderModal
+    createTaskFromRoutine,
+    openReorderModal,
+    openFromRoutineModal
   }
 })

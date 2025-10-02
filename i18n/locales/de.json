@@ -17,6 +17,8 @@
   "actions.saveDraft": "Entwurf Speichern",
   "actions.edit": "Bearbeiten",
   "actions.cancel": "Abbrechen",
+  "actions.close": "--TODO: Close",
+  "actions.create": "--TODO: Create",
   
   "login.pageTitle": "Anmelden",
   "login.submitButton": "Anmelden",
@@ -64,6 +66,12 @@
   "routine.addSubtask": "--TODO",
   "routine.addSubtaskOptions": "--TODO",
   "routine.copyFromRoutine": "--TODO",
+
+  "modal.fromRoutine.title": "--TODO: Create Task From Routine",
+  "modal.fromRoutine.routine": "--TODO: Routine",
+  "modal.fromRoutine.taskTitle": "--TODO: Task Title",
+  "modal.fromRoutine.order": "--TODO: Order",
+
 
   "journal.pageTitle": "Tagebuch",
   "journalNew.pageTitle": "Neue Tagebucheintrag",
