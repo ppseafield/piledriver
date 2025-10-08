@@ -51,6 +51,28 @@ export const useRoutineStore = defineStore('routines', () => {
     unsavedSubtaskIDs.value.add(empty.id)
   }
 
+  const create = async (r: { title: string, description: string | null }) => {
+    const { user } = useUserSession()
+    const now = nowTemporal()
+    const response = await $fetch('/api/routines', {
+      method: 'POST',
+      body: {
+	routine: {
+	  id: uuid(),
+	  user_id: user.value?.id,
+	  created_at: now,
+	  updated_at: now,
+	  archived_at: null,
+	  title: r.title,
+	  description: r?.description ?? null
+	},
+	// TODO: create new subtasks at the same time?
+	routine_subtasks: []
+      }
+    })
+    return response?.[0]
+  }
+
   /**
    * Reorder a subtask.
    *
@@ -133,6 +155,7 @@ export const useRoutineStore = defineStore('routines', () => {
 
     fetch,
     fetchSingle,
+    create,
     addEmptySubtask,
     reorderSubtask,
     saveSubtask,

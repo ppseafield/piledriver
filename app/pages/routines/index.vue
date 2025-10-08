@@ -43,8 +43,8 @@ const entries = computed(() => {
 	
 	<template #right>
 	  <UButton
-	    :label="t('routinesNew.pageTitle')"
-	    icon="i-carbon-notebook-reference"
+	    :label="t('routineNew.pageTitle')"
+	    icon="i-carbon-add-filled"
 	    :to="localePath('/routines/new')"
 	  />
 	</template>

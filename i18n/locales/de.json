@@ -62,16 +62,17 @@
   "dashboard.deleteSubtaskPrompt": "Teilaufgabe '{subtaskName}' löschen?",
 
   "routines.pageTitle": "Routinen",
-  "routinesNew.pageTitle": "Neue Routine",
   "routine.addSubtask": "--TODO",
   "routine.addSubtaskOptions": "--TODO",
   "routine.copyFromRoutine": "--TODO",
+  "routineNew.pageTitle": "Neue Routine",
+  "routineNew.routineTitle": "Titel",
+  "routineNew.descriptionTitle": "Beschreibung",
 
   "modal.fromRoutine.title": "--TODO: Create Task From Routine",
   "modal.fromRoutine.routine": "--TODO: Routine",
   "modal.fromRoutine.taskTitle": "--TODO: Task Title",
   "modal.fromRoutine.order": "--TODO: Order",
-
 
   "journal.pageTitle": "Tagebuch",
   "journalNew.pageTitle": "Neue Tagebucheintrag",

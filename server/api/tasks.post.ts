@@ -1,4 +1,3 @@
-
 import { sql } from 'kysely'
 import { db } from '../database'
 

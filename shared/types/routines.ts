@@ -7,7 +7,7 @@ export const RoutineBodySchema = v.object({
   user_id: v.optional(v.pipe(v.string(), v.uuid())),
   created_at: v.optional(v.pipe(v.string(), v.isoTimestamp())),
   updated_at: v.optional(v.pipe(v.string(), v.isoTimestamp())),
-  archived_at: v.optional(v.pipe(v.string(), v.isoTimestamp())),
+  archived_at: v.nullable(v.pipe(v.string(), v.isoTimestamp())),
   title: v.pipe(v.string(), v.minLength(1), v.maxLength(120)),
   description: v.nullable(v.pipe(v.string(), v.minLength(1), v.maxLength(120))),
 })
@@ -39,3 +39,7 @@ export interface TaskFromRoutineResponse {
   // TODO: new task at position <..>
   // updated_orders: ReorderTaskResult[]
 }
+
+export const ArchiveRoutineSchema = v.object({
+  archive_routine_id: v.pipe(v.string(), v.uuid())
+})
