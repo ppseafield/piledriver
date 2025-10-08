@@ -19,6 +19,10 @@ export default defineEventHandler(async (event) => {
       eb('completed_at', 'is', null),
       eb('completed_at', '>=', sql`now() - interval '2 weeks'`)
     ]))
+    .where((eb) => eb.or([
+      eb('project_id', 'is', null),
+      eb('project_assigned', 'is not', null)
+    ]))
     .orderBy('task_order')
     .orderBy('completed_at')
     .execute()

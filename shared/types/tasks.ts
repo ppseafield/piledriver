@@ -10,7 +10,9 @@ export const TaskBodySchema = v.object({
   completed_at: v.optional(v.isoTimestamp()),
   archived_at: v.optional(v.isoTimestamp()),
   task_order: v.nullable(v.pipe(v.number(), v.integer())),
-  title: v.pipe(v.string(), v.minLength(1))
+  title: v.pipe(v.string(), v.minLength(1)),
+  project_id: v.nullable(v.uuid()),
+  project_assigned: v.nullable(v.isoTimestamp())
 })
 
 export type TaskBody = v.InferOutput<typeof TaskBodySchema>

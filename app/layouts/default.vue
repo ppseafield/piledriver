@@ -14,6 +14,10 @@ const links = [
     to: localePath('/routines'),
     icon: 'i-carbon-exam-mode'
   },
+  { label: t('projects.pageTitle'),
+    to: localePath('/projects'),
+    icon: 'i-carbon-plan'
+  },
   { label: t('journal.pageTitle'),
     to: localePath('/journal'),
     icon: 'i-carbon-notebook'

@@ -70,9 +70,11 @@
   "routineNew.descriptionTitle": "Beschreibung",
 
   "modal.fromRoutine.title": "--TODO: Create Task From Routine",
-  "modal.fromRoutine.routine": "--TODO: Routine",
-  "modal.fromRoutine.taskTitle": "--TODO: Task Title",
-  "modal.fromRoutine.order": "--TODO: Order",
+  "modal.fromRoutine.routine": "Routine",
+  "modal.fromRoutine.taskTitle": "Aufgabe Title",
+  "modal.fromRoutine.order": "Ordnung",
+
+  "projects.pageTitle": "Projekte",
 
   "journal.pageTitle": "Tagebuch",
   "journalNew.pageTitle": "Neue Tagebucheintrag",

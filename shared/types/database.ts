@@ -7,4 +7,5 @@ export interface Database {
   task_subtasks: SubtasksTable
   routines: RoutinesTable
   routine_subtasks: RoutineSubtasksTable
+  projects: ProjectsTable
 }
