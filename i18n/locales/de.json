@@ -75,6 +75,8 @@
   "modal.fromRoutine.order": "Ordnung",
 
   "projects.pageTitle": "Projekte",
+  "projectNew.pageTitle": "Neues Projekt",
+  "project.addTask": "Neue Aufgabe zufügen",
 
   "journal.pageTitle": "Tagebuch",
   "journalNew.pageTitle": "Neue Tagebucheintrag",

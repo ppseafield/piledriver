@@ -6,31 +6,27 @@ import ReorderModal from './ReorderModal.vue'
 
 const gs = useGlobalStore()
 const ts = useTasksStore()
-const ul = useTemplateRef<HTMLElement>('waitingList')
+const ps = useProjectStore()
+const ul = useTemplateRef<HTMLElement>('projectTaskList')
 
-const sortable = useSortable(ul, ts.waiting, {
+const sortable = useSortable(ul, ts.relatedTasks, {
   disabled: gs.mobileSized,
   onEnd: (event: any) => {
     event.preventDefault()
     if (event.newIndex !== event.oldIndex) {
-      nextTick(() => ts.reorderTask(event.item.dataset.taskId, event.newIndex + 1))
+      nextTick(() => ps.reorderTask(event.item.dataset.taskId, event.newIndex + 1))
     }
   }
 })
-
-watch(() => gs.mobileSized, (isMobile) => {
-  sortable.option('disabled', isMobile)
-})
-
 </script>
 
 <template>
-  <ol ref="waitingList">
+  <ol ref="projectTaskList">
     <TaskItem
-      v-if="ts.waiting.length > 0"
-      v-for="task in ts.waiting"
+      v-if="ps.relatedTasks.length > 0"
+      v-for="task in ps.relatedTasks"
       :key="task.id"
-      :project="null"
+      :project="ps.current"
       :task="task"
     />
   </ol>

@@ -11,8 +11,9 @@ const ts = useTasksStore()
     <TaskItem
       v-if="ts.completed.length > 0"
       v-for="task in ts.completed"
-	     :key="task.id"
-	     :task="task"
+      :key="task.id"
+      :project="null"
+      :task="task"
     />
   </ul>
 </template>

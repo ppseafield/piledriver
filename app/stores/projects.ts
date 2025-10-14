@@ -35,6 +35,10 @@ export const useProjectStore = defineStore('projects', () => {
   // TODO: add task
   // TODO: assign task -- requires sql function (changing task order)
   // TODO: unassign task -- requires sql function (changing task order)
+  // TODO: reorder task -- requires sql function (changing task order)
+  const reorderTask = async (taskId: string, newIndex: number) => {
+    console.log('todo: reorderTask')
+  }
 
   return {
     projects,
@@ -42,6 +46,7 @@ export const useProjectStore = defineStore('projects', () => {
     relatedTasks,
 
     fetch,
-    fetchSingle
+    fetchSingle,
+    reorderTask
   }
 })

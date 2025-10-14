@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import type { DropdownMenuItem } from '@nuxt/ui'
 import type { Task } from '../../../shared/types/database/tasks'
+import type { Project } from '@@/shared/types/database/projects'
 import SubtaskList from './SubtaskList.vue'
 
-const { task } = defineProps<{ task: Task }>()
+const { task, project } = defineProps<{ task: Task, project: Project | null }>()
 
 const ts = useTasksStore()
 const sts = useSubtasksStore()
@@ -106,8 +107,17 @@ const saveTask = async (event: any) => {
 }
 
 const updateTaskCompletion = (completed: boolean | "indeterminate") => {
+  if (project !== null) {
+    return
+  }
   if (completed !== "indeterminate") {
     ts.setTaskCompletion(task, completed)
+  }
+}
+
+const toggleEdit = () => {
+  if (project === null) {
+    editing.value = true
   }
 }
 </script>
@@ -124,7 +134,7 @@ const updateTaskCompletion = (completed: boolean | "indeterminate") => {
 	size="lg"
 	icon="i-carbon-checkmark"
 	:label="task?.task_order?.toString()"
-	:disabled="editing"
+	:disabled="editing || project !== null"
 	@update:modelValue="updateTaskCompletion"
       />
 
@@ -153,7 +163,7 @@ const updateTaskCompletion = (completed: boolean | "indeterminate") => {
 	<div :class="`flex flex-column grow ${textSize}`">
 	  <span
 	    class="mx-1 lg:mx-2 grow"
-	    @dblclick="editing = true"
+	    @dblclick="toggleEdit"
 	  >
 	    {{ titleText }}
 	  </span>
@@ -165,6 +175,7 @@ const updateTaskCompletion = (completed: boolean | "indeterminate") => {
 	  <UButton
 	    icon="i-carbon-overflow-menu-horizontal"
 	    :aria-label="t('dashboard.taskItem.menu.taskMenuLabel')"
+	    :disabled="project !== null"
 	  />
 	</UDropdownMenu>
       </template>

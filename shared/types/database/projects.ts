@@ -13,6 +13,7 @@ export interface ProjectsTable {
   archived_at: ColumnType<Date | null, string | undefined, never>
   title: string
   description: string | null
+  // TODO: color: string
 }
 
 export type Project = Selectable<ProjectsTable>

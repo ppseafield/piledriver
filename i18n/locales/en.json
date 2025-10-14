@@ -74,6 +74,8 @@
   "modal.fromRoutine.order": "Order",
 
   "projects.pageTitle": "Projects",
+  "projectNew.pageTitle": "New Project",
+  "project.addTask": "Add New Task",
   
   "journal.pageTitle": "Journal",
   "journalNew.pageTitle": "New Journal Entry",
