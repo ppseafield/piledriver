@@ -52,6 +52,7 @@ const breadcrumbs = [
 	    <UButton
 	      :label="t('project.addTask')"
               icon="i-carbon-add-filled"
+	      :disabled="true"
 	      @click="ps.addEmptySubtask(rs.current?.id)"
 	    />
 	  </div>

@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
     .selectAll()
     .where('user_id', '=', user.id)
     .where('project_id', '=', project.id)
-    .orderBy('title')
+    .orderBy('project_order')
     .execute()
 
   return {
