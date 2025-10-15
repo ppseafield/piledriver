@@ -18,6 +18,7 @@ export interface TasksTable {
   title: string
   project_id: string | null
   project_assigned: ColumnType<Date | null, string | undefined, never>
+  project_order: number | null
 }
 
 export type Task = Selectable<TasksTable>

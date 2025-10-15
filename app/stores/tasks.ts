@@ -52,7 +52,10 @@ export const useTasksStore = defineStore('tasks', () => {
       completed_at: null,
       archived_at: null,
       task_order: waiting.value.length + 1,
-      title: ''
+      title: '',
+      project_id: null,
+      project_assigned: null,
+      project_order: null
     }
     waiting.value.push(empty)
     // Flag this one as a new (unsaved) task
