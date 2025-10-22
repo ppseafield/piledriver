@@ -18,8 +18,8 @@ export default defineNuxtConfig({
     'nuxt-auth-utils',
     '@nuxtjs/html-validator',
     '@nuxtjs/seo',
-    '@nuxtjs/storybook',
     '@pinia/nuxt'
+    // , '@nuxtjs/storybook'
   ],
 
   css: ['~/assets/css/main.css'],
@@ -39,7 +39,7 @@ export default defineNuxtConfig({
   icon: {
     customCollections: [
       { prefix: 'custom',
-	dir: './assets/icons'
+    dir: './assets/icons'
       }
     ]
   },
@@ -48,9 +48,5 @@ export default defineNuxtConfig({
     session: {
       maxAge: 60 * 60 * 24 * 14
     }
-  },
-
-  storybook: {
-    enabled: false
   }
 })
