@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { v7 as uuid } from 'uuid'
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import type { CheckboxGroupItem, CheckboxGroupValue } from "@nuxt/ui"
@@ -57,8 +58,15 @@ const selectedTasks = ref<CheckboxGroupValue[]>(
 
 const saveJournal = async () => {
   // TODO validate contents
-  const newJournal = await js.create({
+  const { user } = useUserSession()
+  const now = nowTemporal()
+  const cj = {
     journal: {
+      id: uuid(),
+      user_id: user.value.id,
+      created_at: now,
+      updated_at: now,
+      archived_at: null,
       title: title.value,
       text_body: editor.value.getText(),
       json_body: editor.value.getJSON()
@@ -66,7 +74,9 @@ const saveJournal = async () => {
     task_ids: selectedTasks.value,
     other_completed: otherCompletedText.value.split("\n").map(oct => oct.trim()).filter(oct => oct.length > 0),
     new_remaining: newRemainingText.value.split("\n").map(nrt => nrt.trim()).filter(nrt => nrt.length > 0)
-  })
+  }
+  console.log('cj:', cj)
+  const newJournal = await js.create(cj)
   navigateTo(localePath({ name: 'journal-id', params: { id: newJournal.id } }))
 }
 // TODO: Possibly? Swap <UTextarea /> with <EditorContent /> (add numbers, style text more)

@@ -1,11 +1,11 @@
 import * as v from 'valibot'
 
 export const JournalBodySchema = v.object({
-  id: v.optional(v.pipe(v.string(), v.uuid())),
-  user_id: v.optional(v.pipe(v.string(), v.uuid())),
-  created_at: v.optional(v.isoTimestamp()),
-  updated_at: v.optional(v.isoTimestamp()),
-  archived_at: v.optional(v.isoTimestamp()),
+  id: v.pipe(v.string(), v.uuid()),
+  user_id: v.pipe(v.string(), v.uuid()),
+  created_at: v.isoTimestamp(),
+  updated_at: v.isoTimestamp(),
+  archived_at: v.nullable(v.isoTimestamp()),
   title: v.pipe(v.string(), v.minLength(1), v.maxLength(120)),
   text_body: v.pipe(v.string(), v.minLength(1)),
   json_body: v.any()

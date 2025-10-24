@@ -18,6 +18,6 @@ export interface JournalsTable {
 }
 
 export type Journal = Selectable<JournalsTable>
-export type NewJournal = Omit<Insertable<JournalsTable>, 'id' | 'created_at' | 'updated_at' | 'archived_at'>
+export type NewJournal = Insertable<JournalsTable>
 export type UpdateJournal = Updateable<JournalsTable>
 
