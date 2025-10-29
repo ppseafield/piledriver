@@ -18,8 +18,8 @@ export default defineNuxtConfig({
     'nuxt-auth-utils',
     '@nuxtjs/html-validator',
     '@nuxtjs/seo',
-    '@pinia/nuxt'
-    // , '@nuxtjs/storybook'
+    '@pinia/nuxt',
+    '@nuxtjs/storybook'
   ],
 
   css: ['~/assets/css/main.css'],
@@ -48,5 +48,13 @@ export default defineNuxtConfig({
     session: {
       maxAge: 60 * 60 * 24 * 14
     }
+  },
+
+  storybook: {
+    // Storybook tries to run during npm run dev, but complains about
+    // Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: Package subpath './preset'
+    // is not defined by "exports" in {..}/@storybook-vue/nuxt/pakcage.json,
+    // so just run it separately
+    enabled: false
   }
 })

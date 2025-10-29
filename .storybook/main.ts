@@ -1,4 +1,4 @@
-import type { StorybookConfig } from '@storybook-vue/nuxt';
+import type { StorybookConfig } from '@nuxtjs/storybook';
 
 const config: StorybookConfig = {
   "stories": [
@@ -6,7 +6,7 @@ const config: StorybookConfig = {
     "../components/**/*.stories.@(js|jsx|ts|tsx|mdx)"
   ],
   "addons": [
-    "@chromatic-com/storybook",
+    "@storybook/addon-links",
     "@storybook/addon-docs",
     "@storybook/addon-a11y",
     "@storybook/addon-vitest"
@@ -14,6 +14,9 @@ const config: StorybookConfig = {
   "framework": {
     "name": "@storybook-vue/nuxt",
     "options": {}
+  },
+  "docs": {
+    "autodocs": "tag"
   }
 };
 export default config;
