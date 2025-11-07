@@ -11,6 +11,7 @@ interface ProjectSingle {
 
 export const useProjectStore = defineStore('projects', () => {
   const projects = ref<Project[]>([])
+  const mapping = ref<Record<string, Project>>({})
   const current = ref<Project | null>(null)
   const relatedTasks = ref<Tasks[]>([])
 
@@ -19,6 +20,12 @@ export const useProjectStore = defineStore('projects', () => {
     const requestFetch = useRequestFetch()
     const response = await requestFetch<Project[]>('/api/projects')
     projects.value = response
+
+    const newMapping = {}
+    for (const p of response) {
+      newMapping[p.id] = p
+    }
+    mapping.value = newMapping
   }
 
   /** Fetch a single project and its tasks */
@@ -42,6 +49,7 @@ export const useProjectStore = defineStore('projects', () => {
 
   return {
     projects,
+    mapping,
     current,
     relatedTasks,
 

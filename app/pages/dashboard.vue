@@ -24,7 +24,8 @@ const localePath = useLocalePath()
 const ts = useTasksStore()
 const sts = useSubtasksStore()
 const rs = useRoutineStore()
-await Promise.all([ts.fetch(), sts.fetch(), rs.fetch()])
+const ps = useProjectStore()
+await Promise.all([ts.fetch(), sts.fetch(), rs.fetch(), ps.fetch()])
 
 // TODO: sometimes checkboxes get VERY strange
 // when checking unchecking quickly

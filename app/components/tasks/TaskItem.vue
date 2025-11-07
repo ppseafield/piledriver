@@ -5,6 +5,7 @@ import type { Project } from '@@/shared/types/database/projects'
 import SubtaskList from './SubtaskList.vue'
 
 const { task, project } = defineProps<{ task: Task, project: Project | null }>()
+// TODO: on project page, show assign/unassign toggle
 
 const ts = useTasksStore()
 const sts = useSubtasksStore()
@@ -36,17 +37,39 @@ onMounted(() => {
 const taskCompleted = computed(() => task.completed_at !== null)
 
 const taskDropdownItems: Computed<DropdownMenuItem[][]> = computed(() => {
+  const extras = []
   // Show the Split action only if there are some (but not all) completed subtasks.
   const splitItem = []
   if (subtaskList.value.length > 0) {
     const complete = subtaskList.value.filter(st => st.completed_at !== null)
     if (complete.length > 0 && complete.length < subtaskList.value.length) {
-      splitItem.push({
+      extras.push({
  	label: t('dashboard.taskItem.menu.split'),
  	// TODO: Get icon correct!
  	// icon: 'i-custom-split-task',
  	icon: 'i-carbon-zos-sysplex',
  	onSelect: () => console.log('TODO: split')
+      })
+    }
+  }
+
+  // If there's a project attached 
+  if (project !== null) {
+    if (task.project_assigned === null) {
+      extras.push({
+	label: t('dashboard.taskItem.menu.assign'),
+	icon: 'i-carbon-edit',
+	onSelect: () => {
+	  if (task.project_id !== null) {
+	    ts.saveTask({ ...task, project_assigned: nowTemporal() })
+	  }
+	}
+      })
+    } else {
+      extras.push({
+	label: t('dashboard.taskItem.menu.unaassign'),
+	icon: 'i-carbon-edit',
+	onSelect: () => ts.unassignTask(task)
       })
     }
   }
@@ -82,6 +105,10 @@ const taskDropdownItems: Computed<DropdownMenuItem[][]> = computed(() => {
     ]
   ]
 })
+
+// Currently the detail row is just for showing projects, but it will potentially
+// show tags, due dates, flagged/important/starred, etc. later.
+const showDetailRow = computed<boolean>(() => project !== null)
 
 // Styles
 const textSize = computed(() => taskTextSize(task?.task_order ?? 7))
@@ -180,6 +207,14 @@ const toggleEdit = () => {
 	</UDropdownMenu>
       </template>
     </div>
+
+    <div
+      v-if="showDetailRow"
+      class="ms-5 lg:ms-10 mb-2"
+    >
+      project: {{ project.title }}
+    </div>
+
     <SubtaskList
       v-if="subtaskList.length > 0 && task.completed_at === null"
       :task="task"

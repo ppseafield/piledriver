@@ -194,6 +194,21 @@ export const useTasksStore = defineStore('tasks', () => {
     taskList.value.splice(i, 1)
   }
 
+  // Unassign a task from a project and (if relevant) remove from the waiting list.
+  const unassignTask = async (task: Task) => {
+    await saveTask({
+      ...task,
+      project_id: null,
+      project_assigned_null
+    })
+    if (task.completed_at === null) {
+      const i = waiting.value.findIndex(t => t.id === task.id)
+      if (i >= 0) {
+	waiting.value.splice(i, 1)
+      }
+    }
+  }
+
   const createTaskFromRoutine = async (tfr: TaskFromRoutineRequest) => {
     const requestFetch = useRequestFetch()
     const response = await requestFetch<TaskFromRoutineResponse>('/api/tasks/from_routine', {
@@ -239,6 +254,7 @@ export const useTasksStore = defineStore('tasks', () => {
     setTaskCompletion,
     reorderTask,
     archiveTask,
+    unassignTask,
     createTaskFromRoutine,
     openReorderModal,
     openFromRoutineModal

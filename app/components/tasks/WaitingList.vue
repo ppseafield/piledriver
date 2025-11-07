@@ -6,6 +6,7 @@ import ReorderModal from './ReorderModal.vue'
 
 const gs = useGlobalStore()
 const ts = useTasksStore()
+const ps = useProjectStore()
 const ul = useTemplateRef<HTMLElement>('waitingList')
 
 const sortable = useSortable(ul, ts.waiting, {
@@ -30,7 +31,7 @@ watch(() => gs.mobileSized, (isMobile) => {
       v-if="ts.waiting.length > 0"
       v-for="task in ts.waiting"
       :key="task.id"
-      :project="null"
+      :project="task?.project_id ? ps.mapping[task.project_id] : null"
       :task="task"
     />
   </ol>

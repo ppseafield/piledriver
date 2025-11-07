@@ -57,6 +57,8 @@
   "dashboard.taskItem.menu.addSubtask": "Teilaufgabe zufügen",
   "dashboard.taskItem.menu.reorder": "Neu Ordnen",
   "dashboard.taskItem.menu.split": "Aufgabe aufspalten",
+  "dashboard.taskItem.menu.assign": "Zuweisen",
+  "dashboard.taskItem.menu.unassign": "Zuweisung aufheben",
   "dashboard.taskItem.menu.delete": "Löschen",
   "dashboard.deleteTaskPrompt": "Aufgabe '{taskName}' löschen?",
   "dashboard.deleteSubtaskPrompt": "Teilaufgabe '{subtaskName}' löschen?",
@@ -86,6 +88,6 @@
   "journalNew.noUnjournaledTasks": "Keine ausgeführten uneingetragenen Aufgaben.",
   "journalNew.otherCompletedTasks": "Weitere ausgeführte Aufgaben",
   "journalNew.newRemainingTasks": "Zusåtzliche neue Aufgaben",
-  "journalNew.info.otherCompletedTasks": "Aufgaben, dass Sie tagsüber ausgeführt haben und nicht aufgeschrieben wurden. Die werden erstellt werden und Ihrem Tagebucheintrag zugewissen werden.",
+  "journalNew.info.otherCompletedTasks": "Aufgaben, dass Sie tagsüber ausgeführt haben und noch nicht aufgeschrieben wurden. Die werden erstellt werden und Ihrem Tagebucheintrag zugewissen werden.",
   "journalNew.info.newRemainingTasks": "Neue Afugaben für später. Die werden auf deinem Dashboard erscheinen."
 }
