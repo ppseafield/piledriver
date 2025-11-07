@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxt/image',
     '@nuxt/scripts',
-    '@nuxt/test-utils',
+    // '@nuxt/test-utils',
     '@nuxt/ui-pro',
     '@nuxtjs/i18n',
     '@nuxt/test-utils/module',

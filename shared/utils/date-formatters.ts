@@ -18,9 +18,6 @@ export const formatters = {
   'd': new Intl.DateTimeFormat(undefined, {
     day: 'numeric'
   }),
-  'd': new Intl.DateTimeFormat(undefined, {
-    day: 'numeric'
-  }),
   'wd': new Intl.DateTimeFormat(undefined, {
     weekday: 'short'
   }),
