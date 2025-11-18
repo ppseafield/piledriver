@@ -3,6 +3,7 @@
   "layout.piledriverLogoText": "logo",
   "layout.aboutLink": "About",
   "layout.blogLink": "Blog",
+  "layout.accountNotLoggedInTitle": "Account",
   "layout.profile.notLoggedInTitle": "Account",
   "layout.profile.profileLink": "Profile",
   "layout.profile.settingsLink": "Settings",
