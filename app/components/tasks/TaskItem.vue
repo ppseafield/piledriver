@@ -67,7 +67,7 @@ const taskDropdownItems: Computed<DropdownMenuItem[][]> = computed(() => {
       })
     } else {
       extras.push({
-	label: t('dashboard.taskItem.menu.unaassign'),
+	label: t('dashboard.taskItem.menu.unassign'),
 	icon: 'i-carbon-edit',
 	onSelect: () => ts.unassignTask(task)
       })

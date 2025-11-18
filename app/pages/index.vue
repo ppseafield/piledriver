@@ -11,8 +11,5 @@ definePageMeta({ layout: 'public' })
 	      {{ locale.name }}
       </li>
     </ul>
-    <div>
-      <ExampleComponent />
-    </div>
   </div>
 </template>

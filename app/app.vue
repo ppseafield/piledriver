@@ -2,6 +2,7 @@
 import { useDocumentVisibility } from '@vueuse/core'
 import * as locales from '@nuxt/ui-pro/locale'
 
+const { $pwa } = useNuxtApp()
 const { locale } = useI18n()
 
 const visibility = useDocumentVisibility()
@@ -20,9 +21,18 @@ watch(() => visibility, (visible) => {
   }
 })
 
+onMounted(() => {
+  if ($pwa.offlineReady) {
+    console.log('success: pwa ready offline')
+  } else {
+    console.log('failure: pwa not ready offline', $pwa)
+  }
+})
+
 </script>
 
 <template>
+  <NuxtPwaAssets />
   <UApp :locale="locales[locale]">
     <NuxtLoadingIndicator
       color="repeating-linear-gradient(to right,#95350b 0%,#dd6802 50%,#ffb120 100%)"

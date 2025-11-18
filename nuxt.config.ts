@@ -19,7 +19,8 @@ export default defineNuxtConfig({
     '@nuxtjs/html-validator',
     '@nuxtjs/seo',
     '@pinia/nuxt',
-    '@nuxtjs/storybook'
+    '@nuxtjs/storybook',
+    '@vite-pwa/nuxt'
   ],
 
   css: ['~/assets/css/main.css'],
@@ -42,6 +43,10 @@ export default defineNuxtConfig({
     dir: './assets/icons'
       }
     ]
+  },
+
+  pwa: {
+    
   },
 
   runtimeConfig: {
