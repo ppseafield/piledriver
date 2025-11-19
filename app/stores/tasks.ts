@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { v7 as uuid } from 'uuid'
 import type { Task } from '../../shared/types/database/tasks'
+import type { Subtask } from '@@/shared/types/database/subtasks'
 
 export const useTasksStore = defineStore('tasks', () => {
   const waiting = ref<Task[]>([])
@@ -11,7 +12,8 @@ export const useTasksStore = defineStore('tasks', () => {
   
   const reorder = reactive({
     open: false,
-    task: null as Task | null
+    task: null as Task | null,
+    subtask: null as Subtask | null
   })
 
   const fromRoutine = reactive({
@@ -227,8 +229,9 @@ export const useTasksStore = defineStore('tasks', () => {
    *
    * @param task - The task to be reordered.
    */
-  const openReorderModal = (task: Task) => {
+  const openReorderModal = (task: Task, subtask?: Subtask | null) => {
     reorder.task = task
+    reorder.subtask = subtask ?? null
     reorder.open = true
   }
 

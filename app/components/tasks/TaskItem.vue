@@ -89,8 +89,8 @@ const taskDropdownItems: Computed<DropdownMenuItem[][]> = computed(() => {
 	onSelect: () => ts.openReorderModal(task)
       }
     ],
+    ...(extras.length > 0 ? [extras] : []),
     [
-      ...splitItem,
       { label: t('dashboard.taskItem.menu.delete'),
 	icon: 'i-carbon-trash-can',
 	onSelect: () => {
@@ -161,7 +161,7 @@ const toggleEdit = () => {
 	size="lg"
 	icon="i-carbon-checkmark"
 	:label="task?.task_order?.toString()"
-	:disabled="editing || project !== null"
+	:disabled="editing"
 	@update:modelValue="updateTaskCompletion"
       />
 
@@ -202,7 +202,6 @@ const toggleEdit = () => {
 	  <UButton
 	    icon="i-carbon-overflow-menu-horizontal"
 	    :aria-label="t('dashboard.taskItem.menu.taskMenuLabel')"
-	    :disabled="project !== null"
 	  />
 	</UDropdownMenu>
       </template>
