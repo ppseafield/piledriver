@@ -55,7 +55,7 @@ const addSubtaskMenu: DropdownMenuItem[] = [
 
 	<template #right>
 	  <div class="hidden lg:block">
-	    <UButtonGroup>
+	    <UFieldGroup>
 	      <UButton
 		:label="t('routine.addSubtask')"
 		icon="i-carbon-add-filled"
@@ -67,7 +67,7 @@ const addSubtaskMenu: DropdownMenuItem[] = [
 		  icon="i-carbon-chevron-down"
 		/>
 	      </UDropdownMenu>
-	    </UButtonGroup>
+	    </UFieldGroup>
 	  </div>
 	</template>
       </UDashboardNavbar>

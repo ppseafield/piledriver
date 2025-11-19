@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDocumentVisibility } from '@vueuse/core'
-import * as locales from '@nuxt/ui-pro/locale'
+import * as locales from '@nuxt/ui/locale'
 
 const { $pwa } = useNuxtApp()
 const { locale } = useI18n()

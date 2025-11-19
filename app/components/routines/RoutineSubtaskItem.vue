@@ -101,7 +101,7 @@ const saveSubtask = async (event: any) => {
 	  :autofocus="true"
 	  @keyup.enter="saveSubtask"
 	/>
-	<UButtonGroup>
+	<UFieldGroup>
 	  <UButton
 	    icon="i-carbon-close"
 	    :aria-label="t('actions.cancel')"
@@ -112,7 +112,7 @@ const saveSubtask = async (event: any) => {
 	    :aria-label="t('actions.save')"
 	    @click="saveSubtask"
 	  />
-	</UButtonGroup>
+	</UFieldGroup>
       </template>
       <template v-else>
 	<div class="flex flex-column grow">

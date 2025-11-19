@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import * as locales from '@nuxt/ui-pro/locale'
+import * as locales from '@nuxt/ui/locale'
 import logo from '/assets/images/piledriver-bulldozer-32.png'
 
 const { locale, t } = useI18n()

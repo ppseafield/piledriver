@@ -22,9 +22,7 @@ export default defineAppConfig({
       slots: {
 	link: 'data-[active]:font-bold'
       }
-    }
-  },
-  uiPro: {
+    },
     header: {
       slots: {
 	root: 'bg-energy-yellow-300 dark:bg-crocodile-900',

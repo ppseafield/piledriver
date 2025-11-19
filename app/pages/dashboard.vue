@@ -78,7 +78,7 @@ const addTaskMenu: Computed<DropdownMenuItem[]> = computed(() => {
 	      :to="localePath('/journal/new')"
 	      class="me-2"
 	    />
-	    <UButtonGroup>
+	    <UFieldGroup>
 	      <UButton
 		:label="t('dashboard.addTaskButton')"
 		icon="i-carbon-add-filled"
@@ -90,7 +90,7 @@ const addTaskMenu: Computed<DropdownMenuItem[]> = computed(() => {
 		  icon="i-carbon-chevron-down"
 		/>
 	      </UDropdownMenu>
-	    </UButtonGroup>
+	    </UFieldGroup>
 	  </div>
 	  <div class="lg:hidden">
 	    <UDropdownMenu :items="mobileMenu">

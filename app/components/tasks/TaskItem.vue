@@ -173,7 +173,7 @@ const toggleEdit = () => {
 	  :autofocus="true"
 	  @keyup.enter="saveTask"
 	/>
-	<UButtonGroup>
+	<UFieldGroup>
 	  <UButton
 	    icon="i-carbon-close"
 	    :aria-label="t('dashboard.taskItem.menu.delete')"
@@ -184,7 +184,7 @@ const toggleEdit = () => {
 	    :aria-label="t('dashboard.taskItem.menu.edit')"
 	    @click="saveTask"
 	  />
-	</UButtonGroup>
+	</UFieldGroup>
       </template>
       <template v-else>
 	<div :class="`flex flex-column grow ${textSize}`">
