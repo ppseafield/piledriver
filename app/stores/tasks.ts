@@ -21,6 +21,11 @@ export const useTasksStore = defineStore('tasks', () => {
     routine: null as Task | null
   })
 
+  const split = reactive({
+    open: false,
+    task: null as Task | null
+  })
+
   /** Fetches the dashboard's tasks. */
   const fetch = async () => {
     const requestFetch = useRequestFetch()
@@ -225,6 +230,24 @@ export const useTasksStore = defineStore('tasks', () => {
   }
 
   /**
+   * Split a task into two: one completed with completed subtasks, and
+   * another with the remaining, incomplete subtasks.
+   *
+   * @param task - The task to be reordered.
+   */
+  const splitTask = async (task: Task) => {
+    console.log('TODO: split task')
+    // call split task api
+    // get results
+    // update existing to completed
+    // add new one in its place
+    // update subtask children in subtask store / mapping
+    // close modal
+    split.task = null
+    split.open = false
+  }
+
+  /**
    * Open the task order modal for reordering without drag & drop.
    *
    * @param task - The task to be reordered.
@@ -238,8 +261,17 @@ export const useTasksStore = defineStore('tasks', () => {
   const openFromRoutineModal = (routine: Routine) => {
     fromRoutine.routine = routine
     /// WTACTUALF !!!
+    /// what was the wtf?
     nextTick(() => {
       fromRoutine.open = true
+    })
+  }
+
+  const openSplitTaskModal = (task: Task) => {
+    console.log('split task modal open:', task)
+    split.task = task
+    nextTick(() => {
+      split.open = true
     })
   }
 
@@ -249,6 +281,7 @@ export const useTasksStore = defineStore('tasks', () => {
     current,
     reorder,
     fromRoutine,
+    split,
     unsavedTaskIDs,
 
     fetch,
@@ -259,7 +292,9 @@ export const useTasksStore = defineStore('tasks', () => {
     archiveTask,
     unassignTask,
     createTaskFromRoutine,
+    splitTask,
     openReorderModal,
-    openFromRoutineModal
+    openFromRoutineModal,
+    openSplitTaskModal
   }
 })

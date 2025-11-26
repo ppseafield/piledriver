@@ -1,4 +1,5 @@
 import { ExpressionWrapper, sql } from 'kysely'
+import type { Task } from '@@/shared/types/database/tasks'
 import type { ReorderTaskResult, ArchiveTaskResult } from '@@/shared/types/tasks'
 import type { ReorderSubtaskResult, ArchiveSubtaskResult } from '@@/shared/types/subtasks'
 import type { ReorderRoutineSubtaskResult, ArchiveRoutineSubtaskResult } from '@@/shared/types/routine_subtasks'
@@ -40,4 +41,9 @@ export const archive_routine_subtask = (pd_user_id: string, archive_routine_subt
   ).as('ast')
 }
 
+export const split_task = (pd_user_id: string, split_task_id: string) => {
+return new ExpressionWrapper<'split_task', 'toString', Task[]>(
+    sql<Task[]>`public.split_task(${pd_user_id}, ${split_task_id})`.toOperationNode()
+  ).as('st')
+}
 // TODO: then replace all of the usages in `/server/api` with those wrappers.

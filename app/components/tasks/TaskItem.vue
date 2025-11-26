@@ -39,16 +39,13 @@ const taskCompleted = computed(() => task.completed_at !== null)
 const taskDropdownItems: Computed<DropdownMenuItem[][]> = computed(() => {
   const extras = []
   // Show the Split action only if there are some (but not all) completed subtasks.
-  const splitItem = []
   if (subtaskList.value.length > 0) {
     const complete = subtaskList.value.filter(st => st.completed_at !== null)
     if (complete.length > 0 && complete.length < subtaskList.value.length) {
       extras.push({
  	label: t('dashboard.taskItem.menu.split'),
- 	// TODO: Get icon correct!
- 	// icon: 'i-custom-split-task',
  	icon: 'i-carbon-zos-sysplex',
- 	onSelect: () => console.log('TODO: split')
+ 	onSelect: () => ts.openSplitTaskModal(task)
       })
     }
   }

@@ -71,10 +71,21 @@
   "routineNew.routineTitle": "Titel",
   "routineNew.descriptionTitle": "Beschreibung",
 
+  "modal.reorder.title": "--TODO Reorder Task",
+  "modal.reoder.bodyHeading": "--TODO Move {title}",
+  "modal.reorder.bodyDescription": "--TODO Move {task_order}",
+  "modal.reorder.actions.reorder": "--TODO Reorder",
+  "modal.reorder.alt.toIcon": "--TODO to",
+
   "modal.fromRoutine.title": "--TODO: Create Task From Routine",
   "modal.fromRoutine.routine": "Routine",
   "modal.fromRoutine.taskTitle": "Aufgabe Title",
   "modal.fromRoutine.order": "Ordnung",
+
+  "modal.splitTask.title": "--TODO Split Task",
+  "modal.splitTask.bodyHeading": "--TODO Split '{title}'?",
+  "modal.splitTask.bodyDescription": "--TODO The task will become two tasks: one completed task with all of its completed subtasks, and a second incomplete task with all of its incomplete subtasks.",
+  "modal.splitTask.actions.split": "--TODO Split",
 
   "projects.pageTitle": "Projekte",
   "projectNew.pageTitle": "Neues Projekt",

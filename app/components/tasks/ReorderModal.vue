@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { t } = useI18n()
+
 const ts = useTasksStore()
 const { reorder } = storeToRefs(ts)
 
@@ -31,19 +33,22 @@ function handleUpdateOpen(value: boolean) {
 <template>
   <UModal
     v-model:open="reorder.open"
-    :title="`Reorder ${reorder.task?.title}`"
+    :title="t('modal.reorder.title')"
     close-icon="i-carbon-close"
     :update-open="handleUpdateOpen"
     :overlay="true"
     :ui="{ overlay: 'bg-crocodile-300 opacity-50' }"
   >
     <template #body>
+      <h1>
+	{{ t('modal.reorder.bodyHeading', { title: reorder.task?.title }) }}
+      </h1>
+
       <div>
-	move
-	{{ reorder.task?.task_order ?? '' }}
+	{{ t('modal.reorder.bodyDescription', { task_order: reorder.task?.task_order ?? '' }) }}
 	<UIcon
 	  name="i-carbon-arrow-right"
-	  alt="to"
+	  :alt="t('modal.reoder.alt.toIcon')"
 	/>
 	<USelectMenu
 	  v-model="selected"
@@ -56,16 +61,14 @@ function handleUpdateOpen(value: boolean) {
     <template #footer>
       <UButton
 	icon="i-carbon-close"
-      >
-	Close
-      </UButton>
+	:label="t('actions.close')"
+      />
       <UButton
 	icon="i-carbon-checkmark"
+	:label="t('modal.reorder.actions.reorder')"
 	:disabled="disabled"
 	@click="reorderTask"
-      >
-	Reorder
-      </UButton>
+      />
     </template>
   </UModal>
 </template>

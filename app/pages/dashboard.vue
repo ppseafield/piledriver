@@ -7,6 +7,7 @@ import WaitingList from '@/components/tasks/WaitingList.vue'
 import CompletedList from '@/components/tasks/CompletedList.vue'
 import ReorderModal from '@/components/tasks/ReorderModal.vue'
 import TaskFromRoutineModal from '@/components/tasks/TaskFromRoutineModal.vue'
+import SplitTaskModal from '@/components/tasks/SplitTaskModal.vue'
 
 defineI18nRoute({
   paths: {
@@ -115,4 +116,5 @@ const addTaskMenu: Computed<DropdownMenuItem[]> = computed(() => {
   </UDashboardPanel>
   <ReorderModal />
   <TaskFromRoutineModal />
+  <SplitTaskModal />
 </template>

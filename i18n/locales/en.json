@@ -71,10 +71,21 @@
   "routineNew.routineTitle": "Title",
   "routineNew.descriptionTitle": "Description",
 
+  "modal.reorder.title": "Reorder Task",
+  "modal.reoder.bodyHeading": "Reorder {title}",
+  "modal.reorder.bodyDescription": "Move {task_order}",
+  "modal.reorder.actions.reorder": "Reorder",
+  "modal.reorder.alt.toIcon": "to",
+
   "modal.fromRoutine.modalTitle": "Create Task From Routine",
   "modal.fromRoutine.routine": "Routine",
   "modal.fromRoutine.taskTitle": "Task Title",
   "modal.fromRoutine.order": "Order",
+
+  "modal.splitTask.title": "Split Task",
+  "modal.splitTask.bodyHeading": "Split '{title}'?",
+  "modal.splitTask.bodyDescription": "The task will become two tasks: one completed task with all of its completed subtasks, and a second incomplete task with all of its incomplete subtasks.",
+  "modal.splitTask.actions.split": "Split",
 
   "projects.pageTitle": "Projects",
   "projectNew.pageTitle": "New Project",
